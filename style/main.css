@@ -1,0 +1,244 @@
+
+/********** HOLY GRAIL START **********/
+body {
+  min-width: 400px;      /* 2x LC width + RC width */
+}
+#container {
+	clear:both;
+  padding-left: 200px;   /* LC width */
+}
+#container .post_list, #container .post {
+  position: relative;
+  float: left;
+  width: 100%;
+}
+#container aside.post_list_info, #container aside.post_info{
+  position: relative;
+  float: left;
+  width: 200px;          /* LC width */
+  right: 200px;          /* LC width */
+  margin-left: -100%;
+}
+footer { clear: both; }
+/********** HOLY GRAIL END **********/
+
+
+
+/********** GLOBAL START **********/
+body{
+	background-color: #222222;
+	color: white;
+}
+a{ color: #ffaaae; }
+a:visited{ color: #ee8887; }
+
+a img{ border:none; } /* annoying IE (and firefox?) behaviour */
+
+/********** GLOBAL END **********/
+
+
+/********** HEADER START **********/
+header nav ul, header nav ul li{ margin:0; padding:0; list-style:none; }
+
+header nav ul li{ float: left; }
+header nav ul li{
+	padding: 0 5px 5px 0;
+	border-radius:5px;
+}
+/********** HEADER END **********/
+
+
+/********** Front page START **********/
+#front h1{
+	text-align:center;
+}
+#front img{
+	display:block;
+	margin: 20px auto;
+}
+/********** Front page END **********/
+
+
+
+/********** POST LIST START **********/
+.post_list ul, .post_list ul li{ margin:0; padding:0; list-style:none; }
+.post_list li .details{ display:none; }
+.post_list li a, .post_list li a img{ display:block; }
+.post_list li a img{
+	width:150px;
+	height:150px;
+	/* TODO: doesn't work in other browsers! */
+	-o-object-fit:contain;
+}
+.post_list li a:hover img{
+	-o-object-fit:none;
+	position:relative;
+	z-index:100;
+}
+.post_list li{
+	float:left;
+}
+.post_list li a{
+	margin: 0 5px 5px 0;
+	border:2px solid gray;
+	padding:5px;
+	border-radius:5px;
+}
+.post_list li a:visited{
+	background-color:rgba( 255, 0,0, 0.5 );
+}
+
+
+/*** post relations ***/
+.post_list ul li.has_parent a{ border-color:yellow; }
+.post_list ul li.has_children a{ border-color:green; }
+.post_list ul li.is_pending a{ border-color:blue; }
+.post_list ul li.is_flagged a{ border-color:red; }
+
+.post_list ul li.has_parent a{ border-left-color:yellow; border-top-color:yellow; }
+.post_list ul li.has_children a{ border-left-color:green; border-bottom-color:green; }
+.post_list ul li.is_pending a{ border-right-color:blue; border-bottom-color:blue; }
+.post_list ul li.is_flagged a{ border-right-color:red; border-top-color:red; }
+
+.post_list ul li.has_parent a{ border-top-color:yellow; }
+/********** POST LIST END **********/
+
+
+/********** POST LIST DETAILS START **********/
+/* Start overriding stuff from POST LIST*/
+.post_list_details li{
+	float:none;
+	clear:both;
+	min-height: 160px;
+	border-top: 2px solid red;
+	margin:0;
+}
+.post_list_details li a img{
+	-o-object-fit:none;
+	width:auto;
+	height:auto;
+}
+.post_list_details li a{
+	border:none; margin:0;
+}
+.post_list_details li section.details{
+	display:block;
+	padding: 5px;
+}
+.post_list_details li section p{
+	padding:0;
+	margin:0 0 3px 0;
+}
+
+
+.post_list_details li a{
+	float:left;
+}
+
+.post_list .details :before{ font-weight:bold; }
+.post_list .details .img_tags:before{ content:"Tags: "; }
+.post_list .details .img_size:before{ content:"Dimensions: "; }
+.post_list .details .img_filesize:before{ content:"Filesize: "; }
+
+/********** POST LIST DETAILS END **********/
+
+
+
+/********** POST START **********/
+.post_parent img, .post_children img{
+	max-width:150px;
+	max-height:150px;
+}
+.post_parent img:hover, .post_children img:hover{
+/*	max-width:none;
+	max-height:none; */
+	-o-object-fit:none;
+	-o-object-position:left center;
+	position:relative;
+	z-index:100;
+}
+
+.post .container{
+	display:inline-block;
+	position:relative;
+	max-width:100%;
+}
+.post .container  img{
+	max-width:100%;
+}
+.post .container object{
+	display:block;
+}
+.post .container div{
+	display:block;
+	position:absolute;
+	background-color:#ffffee;
+	background-color:rgba(255,255,238,0.5);
+	border:1px solid black;
+}
+.post .container div div{ display:none; }
+.post .container div:hover div{
+	display:inline;
+	z-index:1;
+	top:100%;
+	left:0;
+	color:black;
+	background-color:#ffffee;
+	width:auto;
+	max-width:200px;
+}
+/********** POST END **********/
+
+
+
+/********** PAGE NAV START **********/
+nav.page_nav{
+	clear:both;
+
+	float:right;
+	position:relative;
+	left:-50%;
+	text-align:left;
+}
+nav.page_nav ul{ 
+	position:relative;
+	left:50%;
+}
+nav.page_nav li{
+	display:block;
+	float:left;
+	clear:none;
+	margin: 0 5px 0 0;
+	padding: 5px;
+	
+	line-height: 30px;
+	min-height: 30px;
+	height: 30px;
+	width: 30px;
+	text-align:center;
+	
+	border: 2px solid red;
+	border-radius: 2px;
+}
+nav.page_nav a{
+	float:none;
+	border: none;
+	padding:0;
+	margin:0;
+}
+/********** PAGE NAV END **********/
+
+
+
+/********** TAGS START **********/
+.tagtype1{ color: #cccc00; }
+.tagtype1:hover { color: #33CFFF; }
+.tagtype5{ color: #FF2020; }
+.tagtype5:hover { color: #33CFFF; }
+.tagtype2{ color: #0bb; }	/*guess...*/
+.tagtype2:hover { color: #33CFFF; }
+.tagtype4{ color: #0A0; }
+.tagtype4:hover { color: #33CFFF; }
+.tagtype3{ color: #D0D; }
+.tagtype3:hover { color: #33CFFF; }
+/********** TAGS END **********/
