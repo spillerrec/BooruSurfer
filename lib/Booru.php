@@ -19,6 +19,10 @@
 			$this->code = $this->api->get_code();
 		}
 		
+		public function get_page_amount(){
+			return $this->post_amount ? ceil( $this->post_amount / $this->fetch_amount ) : NULL;
+		}
+		
 		public function index( $search = NULL, $page = 1 ){
 			//No caching here yet : \
 			$data = $this->api->index( $search, $page, $this->fetch_amount );

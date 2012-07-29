@@ -1,5 +1,6 @@
 <?php
 	require_once "lib/header.php";
+	require_once "lib/links.php";
 	
 	require_once "lib/Booru.php";
 	$site = new Booru( $_GET['site'] );
@@ -70,7 +71,9 @@
 	}
 	$layout->main->content[] =& $list;
 	
-//	$layout->main->content[] = create_page_links( $page, $page_amount, $search, $limit );
+	$page_links = create_page_links( $site, $search, $page );
+	if( $page_links )
+		$layout->main->content[] = $page_links;
 	
 	
 	//Side-panel
