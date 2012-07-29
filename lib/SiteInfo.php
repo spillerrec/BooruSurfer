@@ -48,7 +48,7 @@
 			$info->set( 'id', $api->get_code() );
 			$info->set( 'name', $api->get_name() );
 			$info->set( 'class', $class );
-			$info->db_save();
+			$info->db_save( false );
 		}
 		
 		public static function sites(){

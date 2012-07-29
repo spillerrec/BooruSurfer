@@ -16,6 +16,11 @@
 		
 		public function table_exists( $name ){
 			$stmt = $this->db->query( "SELECT * FROM sqlite_master WHERE name = " . $this->db->quote( $name ) );
+			return $this->has_rows( $stmt );
+		}
+		
+		//Checks if a query returned any rows
+		public function has_rows( $stmt ){
 			return $stmt !== false && $stmt->fetch( PDO::FETCH_ASSOC );
 		}
 	}

@@ -134,9 +134,18 @@
 		}
 		
 		//Save the contents in the database
-		public function db_save(){
-			$db = Database::get_instance()->db;
+		public function db_save( $overwrite = true ){
+			$con = Database::get_instance();
+			$db = $con->db;
 			
+			//If overwriting is turned off, exit if row exists
+			if( !$overwrite ){
+				$stmt = $db->query( "SELECT * FROM $this->name WHERE id = " . $db->quote( $this->get( 'id' ) ) );
+				if( $con->has_rows( $stmt ) )
+					return;
+			}
+			
+			//Insert or overwrite data
 			$columns = $this->sql_columns();
 			$stmt = $db->prepare( "INSERT OR REPLACE INTO $this->name ( $columns ) VALUES ("
 				.	$this->pdo_values() . ")"
