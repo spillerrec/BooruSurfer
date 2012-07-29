@@ -74,8 +74,8 @@
 			return "/$this->code/post/$post_id/";
 		}
 		
-		public function index_link( $page = 1, $search = NULL ){
-			$url = "/$this->code/index/";
+		public function site_index_link( $code, $page = 1, $search = NULL ){
+			$url = "/$code/index/";
 			
 			if( $page > 1 || $this->fetch_amount !== Booru::default_fetch ){
 				$url .= $page;
@@ -90,6 +90,11 @@
 				$url .= $search;
 			
 			return $url;
+		}
+		
+		
+		public function index_link( $page = 1, $search = NULL ){
+			return Booru::site_index_link( $this->code, $page, $search );
 		}
 	}
 ?>

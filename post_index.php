@@ -41,16 +41,12 @@
 		$layout->page->html->addSequence( "next", $site->index_link( $page+1, $search ) );
 	
 	//Add links to other sites in the nav bar
-	/* TODO
-	$site_org = $site;
+	$sites = SiteInfo::sites();
 	foreach( $sites as $key=>$sub_site ){
-		$site = $key;
 		$layout->navigation->addItem(
-				new htmlLink( $site->index_link( 1, $search ), $sub_site[0] )
+				new htmlLink( $site->site_index_link( $key, 1, $search ), $sub_site )
 			);
 	}
-	$site = $site_org;
-	*/
 	
 	$list = new htmlList();
 	
