@@ -14,12 +14,10 @@
 	$page = $_GET["page"];
 	$index = $site->index( $search, $page );
 	
-	/* TODO
-	$page_amount = $index->get_page_amount();
+	$page_amount = $site->get_page_amount();
 	if( $page_amount < 2 ){
 		//TODO:
 	}
-	*/
 	
 	$layout = new mainLayout( "Konachan", "kona" );
 	
@@ -38,7 +36,7 @@
 	if( $page > 1 )
 		$layout->page->html->addSequence( "prev", $site->index_link( $page-1, $search ) );
 	
-//	if( $page+1 < $page_amount )
+	if( $page+1 < $page_amount )
 		$layout->page->html->addSequence( "next", $site->index_link( $page+1, $search ) );
 	
 	//Add links to other sites in the nav bar
