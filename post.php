@@ -96,7 +96,8 @@
 		$tags = explode( " ", $post->get( 'tags' ) );
 		$list = new htmlList();
 		foreach( $tags as $tag )
-			$list->addItem( new htmlLink( $site->index_link( 1, $tag ), str_replace( "_", " ", $tag ) ) );
+			if( $tag )
+				$list->addItem( new htmlLink( $site->index_link( 1, $tag ), str_replace( "_", " ", $tag ) ) );
 		$layout->sidebar->content[] = $list;
 		
 		$layout->page->write();
