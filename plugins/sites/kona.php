@@ -45,13 +45,6 @@
 			'reduced_filesize'	=>	'jpeg_file_size'
 		);
 		
-		private static $tag_mapping = array(
-			'id' => 'name',
-			'name' => 'name',
-			'type' => 'type',
-			'count' => 'count'
-		);
-		
 		public function get_name(){ return "Konachan"; }
 		public function get_code(){ return "kona"; }
 	}
