@@ -3,12 +3,36 @@
 	
 	abstract class DanApi extends Api{
 		protected $url;
+		protected $always_login = false;
+		
+		public function hash_password( $pass ){
+			return sha1( "choujin-steiner--" . $_GET['hash'] . "--" );
+		}
+		
+	//General parsing functions
+		protected function transform_url( &$url, $type ){
+			if( $url && $url[0] == '/' )
+				$url = $this->url . rtrim( $url, '/' );
+		}
+		protected function transform_date( $date ){
+			
+		}
 		
 	//Parsing of post data
 		abstract protected function get_post_mapping(); //This changes so much, must be implemented
 		protected function transform_post( &$data ){
 			//This function may be overloaded to standalize formatting
 			//but remember to call this implementation too!
+			
+			//Transform links
+			if( isset( $data['file_url'] ) )
+				$this->transform_url( $data['file_url'], 'file' );
+			if( isset( $data['thumb_url'] ) )
+				$this->transform_url( $data['thumb_url'], 'thumb' );
+			if( isset( $data['preview_url'] ) )
+				$this->transform_url( $data['preview_url'], 'preview' );
+			if( isset( $data['reduced_url'] ) )
+				$this->transform_url( $data['reduced_url'], 'reduced' );
 			
 			//Remove dublicate images
 			if(	isset( $data['preview_url'] )
@@ -69,8 +93,11 @@
 		
 		
 		protected function get_url( $handler, $action, $format, $parameters=array(), $login=false ){
-			if( $login ){
-				//TODO: add autorisation
+			if( $this->always_login || $login ){
+				if( !$this->username )
+					die( "Missign login which is needed for $handler/$action" );
+				$parameters['login'] = $this->username;
+				$parameters['password_hash'] = $this->password_hash;
 			}
 			
 			//make parameters
@@ -137,4 +164,52 @@
 	}
 	
 	
+	class DanbooruApi extends DanApi{
+		public function __construct(){
+			$this->url = "http://danbooru.donmai.us/";
+			$this->always_login = true;
+		}
+		
+		protected function get_post_mapping(){ return DanbooruApi::$post_mapping; }
+		public static $post_mapping = array(
+			'id'	=>	'id',
+			'hash'	=>	'md5',
+			'author'	=>	'author',
+			'creation_date'	=>	'created_at',
+			
+			'parent_id'	=>	'parent_id',
+			'has_children'	=>	'has_children',
+			'has_notes'	=>	'has_notes',
+			'has_comments'	=>	'has_comments',
+			'source'	=>	'source',
+			
+			'tags'	=>	'tags',
+			'score'	=>	'score',
+			'rating'	=>	'rating',
+			'status'	=>	'status',
+			
+			'url'	=>	'file_url',
+			'width'	=>	'width',
+			'height'	=>	'height',
+			'filesize'	=>	'file_size',
+			
+			'thumb_url'	=>	'preview_url',
+			'thumb_width'	=>	'preview_width',
+			'thumb_height'	=>	'preview_height',
+		//	'thumb_filesize'	=>	NULL,
+			
+			'preview_url'	=>	'sample_url',
+			'preview_width'	=>	'sample_width',
+			'preview_height'	=>	'sample_height',
+		//	'preview_filesize'	=>	NULL,
+			
+		//	'reduced_url'	=>	'jpeg_url',
+		//	'reduced_width'	=>	'jpeg_width',
+		//	'reduced_height'	=>	'jpeg_height',
+		//	'reduced_filesize'	=>	'jpeg_file_size'
+		);
+		
+		public function get_name(){ return "Danbooru"; }
+		public function get_code(){ return "dan"; }
+	}
 ?>

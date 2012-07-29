@@ -7,6 +7,7 @@
 	$layout = new mainLayout( 'Administration' );
 	$layout->page->html->title = 'Administrate sites';
 	
+	$info->add_site( 'dan', 'DanbooruApi' );
 	$info->add_site( 'kona', 'KonachanApi' );
 	$info->add_site( 'imouto', 'YandereApi' );
 	$info->add_site( 'gel', 'GelbooruApi' );

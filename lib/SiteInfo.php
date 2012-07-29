@@ -26,7 +26,17 @@
 			//Include php file and create api
 			$code = $this->get( 'id' ); //Safety: Don't allow direct access to the include
 			$class = $this->get( 'class' );
-			return $this->load_api( $code, $class );
+			$api = $this->load_api( $code, $class );
+			
+			//Set password
+			if( $this->get( 'username' ) ){
+				$api->set_user(
+						$this->get( 'username' ),
+						$this->get( 'password' )
+					);
+			}
+			
+			return $api;
 		}
 		
 		//Warning, this function is unsafe

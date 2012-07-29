@@ -9,7 +9,16 @@
 		abstract public function tag_index( $search );
 	//	abstract public function similar_tags( $tag ); //Correct spelling?
 		
-		
+	//Password functions
+		protected $username = NULL;
+		protected $password_hash;
+		//Set the user by user name and password hash
+		public function set_user( $name, $password ){
+			$this->username = $name;
+			$this->password_hash = $password;
+		}
+		//Hashes the password, override this function if logins are used
+		public function hash_password( $pass ){ return NULL; }
 		
 		protected function get_content( $url ){
 			//Setup HTTP
