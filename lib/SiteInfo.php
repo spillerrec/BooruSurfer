@@ -39,7 +39,18 @@
 			$info->set( 'name', $api->get_name() );
 			$info->set( 'class', $class );
 			$info->db_save();
+		}
+		
+		public static function sites(){
+			$db = Database::get_instance()->db;
+			$stmt = $db->query( 'SELECT * FROM site_info' );
 			
+			//Build array
+			$sites = array();
+			foreach( $stmt as $row )
+				$sites[ $row['id'] ] = $row['name'];
+			
+			return $sites;
 		}
 	}
 ?>

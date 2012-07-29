@@ -16,5 +16,10 @@
 	$info->add_site( 'furry', 'FurryBooruApi' );
 	$info->add_site( 'size', 'SizeBooruApi' );
 	
+	$sites = SiteInfo::sites();
+	foreach( $sites as $code => $site ){
+		$layout->main->content[] = new htmlObject( 'p', "$code = $site" );
+	}
+	
 	$layout->page->write();
 ?>
