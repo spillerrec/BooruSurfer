@@ -98,11 +98,28 @@
 		
 		$layout->sidebar->content[] = new htmlObject( "h3", "Tags:" );
 		
-		$tags = explode( " ", $post->get( 'tags' ) );
+		
+	//Function
+	function make_tag_link( $site, $tag ){
+		$url = $site->index_link( 1, $tag->name() );
+		
+		$title = str_replace( "_", " ", $tag->name() );
+		if( $count = $tag->get_count() )
+			$title .= " ($count)";
+		
+		$link = new htmlLink( $url, $title );
+		
+		$type = $tag->get_type();
+		if( $type )
+			$link->addClass( "tagtype" . $tag->get_type() );
+		
+		return $link;
+	}
+		
+		$tags = $post->get_tags();
 		$list = new htmlList();
 		foreach( $tags as $tag )
-			if( $tag )
-				$list->addItem( new htmlLink( $site->index_link( 1, $tag ), str_replace( "_", " ", $tag ) ) );
+			$list->addItem( make_tag_link( $site, $tag ) );
 		$layout->sidebar->content[] = $list;
 		
 		$layout->page->write();

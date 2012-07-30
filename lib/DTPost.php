@@ -1,5 +1,6 @@
 <?php
 	require_once "lib/DataTable.php";
+	require_once "lib/DTTag.php";
 	
 	
 	class Image{
@@ -59,7 +60,9 @@
 			$this->load_image( $data, false, 'reduced_' );
 			
 			parent::__construct( $prefix . "_post" );
+			$this->prefix = $prefix;
 		}
+		private $prefix;
 		
 		private function load_image( $data, $required, $prefix="" ){
 			$this->add( $data, $prefix . 'url', $required );
@@ -100,6 +103,23 @@
 				case NULL:	return $this->get_to_image();
 				default:	return NULL;
 			}
+		}
+		
+		
+		public function get_tags(){
+			//Tags are space separated
+			$raw = explode( ' ', $this->get( 'tags' ) );
+			$tags = array();
+			
+			//Convert the tags
+			foreach( $raw as $name )
+				if( $name ){	//Avoid empty tags
+					$tag = new DTTag( $this->prefix );
+					$tag->db_read( $name );	//Lookup addional info in database
+					$tags[] = $tag;
+				}
+			
+			return $tags;
 		}
 	}
 ?>
