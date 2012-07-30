@@ -1,6 +1,6 @@
 <?php
 	require_once "lib/Api.php";
-	require_once "lib/Post.php";
+	require_once "lib/DTPost.php";
 	require_once "lib/SiteInfo.php";
 	
 	class Booru{
