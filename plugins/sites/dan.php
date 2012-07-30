@@ -25,8 +25,8 @@
 			//but remember to call this implementation too!
 			
 			//Transform links
-			if( isset( $data['file_url'] ) )
-				$this->transform_url( $data['file_url'], 'file' );
+			if( isset( $data['url'] ) )
+				$this->transform_url( $data['url'], 'file' );
 			if( isset( $data['thumb_url'] ) )
 				$this->transform_url( $data['thumb_url'], 'thumb' );
 			if( isset( $data['preview_url'] ) )

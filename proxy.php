@@ -1,6 +1,8 @@
 <?php
-	include_once "lib/gateway.php";
+	require_once "lib/Booru.php";
+	$site = new Booru( $_GET['site'] );
 	
+	$site_url = "http://behoimi.org/";
 	$url = $site_url . $_GET["url"];
 	
 	//TODO: emulate referer path
@@ -33,5 +35,5 @@
 
 	$context = stream_context_create($opts);
 
-	echo file_get_contents( $url, false, $context );
+	readfile( $url, false, $context );
 ?>

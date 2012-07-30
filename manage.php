@@ -10,6 +10,7 @@
 	$info->add_site( 'dan', 'DanbooruApi' );
 	$info->add_site( 'neko', 'NekobooruApi' );
 	$info->add_site( 'vector', 'VectorbooruApi' );
+	$info->add_site( 'threedee', 'ThreeDeeBooruApi' );
 	$info->add_site( 'kona', 'KonachanApi' );
 	$info->add_site( 'imouto', 'YandereApi' );
 	$info->add_site( 'gel', 'GelbooruApi' );
