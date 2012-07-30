@@ -14,8 +14,8 @@
 			if( $url && $url[0] == '/' )
 				$url = $this->url . rtrim( $url, '/' );
 		}
-		protected function transform_date( $date ){
-			
+		protected function transform_date( &$date ){
+			$date = strtotime( $date );
 		}
 		
 	//Parsing of post data
@@ -23,6 +23,10 @@
 		protected function transform_post( &$data ){
 			//This function may be overloaded to standalize formatting
 			//but remember to call this implementation too!
+			
+			//Transform date
+			if( isset( $data['creation_date'] ) )
+				$this->transform_date( $data['creation_date'] );
 			
 			//Transform links
 			if( isset( $data['url'] ) )

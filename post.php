@@ -61,6 +61,11 @@
 		$layout->sidebar->content[] = new htmlObject( "p", "Dimension: $image->width" . "x$image->height" );
 		$layout->sidebar->content[] = new htmlObject( "p", "Filesize: $image->filesize bytes" );//TODO: show nicely
 		
+		//Date
+		date_default_timezone_set( 'Europe/Copenhagen' );
+		if( $date = $post->get( 'creation_date' ) )
+			$layout->sidebar->content[] = new htmlObject( "p", "Posted: " . date( 'H:i d/m/Y', $date ) );
+		
 //		$layout->sidebar->content[] = new htmlLink( post_siteurl( $id ), "On-site link" );
 		
 		

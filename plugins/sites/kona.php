@@ -6,6 +6,10 @@
 			$this->url = "http://konachan.com/";
 		}
 		
+		protected function transform_date( &$date ){
+			//Already in UNIX time
+		}
+		
 		protected function get_post_mapping(){ return KonachanApi::$post_mapping; }
 		public static $post_mapping = array(
 			'id'	=>	'id',
