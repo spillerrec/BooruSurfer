@@ -53,7 +53,7 @@
 		
 		public static function sites(){
 			$db = Database::get_instance()->db;
-			$stmt = $db->query( 'SELECT * FROM site_info' );
+			$stmt = $db->query( 'SELECT * FROM site_info ORDER BY name ASC' );
 			
 			//Build array
 			$sites = array();
