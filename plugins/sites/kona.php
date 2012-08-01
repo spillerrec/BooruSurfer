@@ -49,6 +49,20 @@
 			'reduced_filesize'	=>	'jpeg_file_size'
 		);
 		
+		
+		protected function transform_tag( &$data ){
+			//Nothing to do here
+			switch( $data['type'] ){
+				case 0:	$data['type'] = DTTag::NONE; break;
+				case 1:	$data['type'] = DTTag::ARTIST; break;
+				case 3:	$data['type'] = DTTag::COPYRIGHT; break;
+				case 4:	$data['type'] = DTTag::CHARACTER; break;
+				case 5:	$data['type'] = DTTag::SPECIAL; break;
+				case 6:	$data['type'] = DTTag::COMPANY; break;
+				default: $data['type'] = DTTag::UNKNOWN; break;
+			}
+		}
+		
 		public function get_name(){ return "Konachan"; }
 		public function get_code(){ return "kona"; }
 	}

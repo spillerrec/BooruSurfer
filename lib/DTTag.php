@@ -19,13 +19,15 @@
 		const COPYRIGHT = 2;
 		const CHARACTER = 3;
 		const SPECIAL = 4;
-		const UNKNOWN = 5;
+		const COMPANY = 5;
+		const UNKNOWN = 255;
 		
 		
 		public function __construct( $prefix, $data = NULL ){
 			$this->add( $data, 'id',	true );
 			$this->add( $data, 'count',	true, 'int' );
 			$this->add( $data, 'type',	true, 'int' );
+			$this->add( $data, 'ambiguous',	true, 'bool' );
 			
 			parent::__construct( $prefix . "_tags" );
 		}

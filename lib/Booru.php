@@ -1,6 +1,7 @@
 <?php
 	require_once "lib/Api.php";
 	require_once "lib/DTPost.php";
+	require_once "lib/DTTag.php";
 	require_once "lib/SiteInfo.php";
 	
 	class Booru{
@@ -99,6 +100,27 @@
 		
 		public function index_link( $page = 1, $search = NULL ){
 			return Booru::site_index_link( $this->code, $page, $search );
+		}
+		
+		public function refresh_tags(){
+			$tags = $this->api->all_tags();
+			
+			$time_start = microtime( true );
+			
+			//Do it as a single transaction to reduce journaling penalty
+			$db = Database::get_instance()->db;
+			$db->beginTransaction();
+			
+			echo "fetched data, saving in db<br>";
+			foreach( $tags as $tag_data ){
+				$tag = new DTTag( $this->code, $tag_data );
+				$tag->db_save();
+			}
+			echo "done :D<br>";
+			
+			echo "Time taken: ", microtime( true ) - $time_start , "<br>";
+			
+			$db->commit();
 		}
 	}
 ?>

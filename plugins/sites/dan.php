@@ -83,6 +83,13 @@
 		}
 		protected function transform_tag( &$data ){
 			//Nothing to do here
+			switch( $data['type'] ){
+				case 0:	$data['type'] = DTTag::NONE; break;
+				case 1:	$data['type'] = DTTag::ARTIST; break;
+				case 3:	$data['type'] = DTTag::COPYRIGHT; break;
+				case 4:	$data['type'] = DTTag::CHARACTER; break;
+				default: $data['type'] = DTTag::UNKNOWN; break;
+			}
 		}
 		protected final function parse_tag( $data ){
 			$arr = $this->element_to_array( $data );
@@ -164,6 +171,35 @@
 			$data = $this->get_xml( $url );
 			if( !$data )	//Kill if failed
 				return NULL;
+		}
+		
+		public function all_tags( $refresh = false ){
+			$type = 'xml';
+			//Get filepath
+			$path = 'cache/tags/' . $this->get_code() . ".$type";
+			
+			set_time_limit( 0 ); //Disable time limit
+			
+			//Get the data
+			$data;
+			if( $refresh || !file_exists( $path ) ){
+				//Not cached, fetch from server
+				$url = $this->get_url( 'tag', 'index', $type, array( 'limit' => 0 ) );
+				$data = $this->get_content( $url );
+				file_put_contents( $path, $data );
+			}
+			else
+				$data = file_get_contents( $path );
+			
+			//Convert
+			$data = simplexml_load_string( $data );
+			
+			//Parse tags
+			$tags = array();
+			foreach( $data->tag as $tag_data )
+				$tags[] = $this->parse_tag( $tag_data );
+				
+			return $tags;
 		}
 	}
 	
