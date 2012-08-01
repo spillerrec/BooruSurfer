@@ -1,0 +1,3 @@
+/test*.php
+/cache/tags/*.xml
+/cache/*.sqlite

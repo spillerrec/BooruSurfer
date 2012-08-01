@@ -1,0 +1,12 @@
+Research
+
+
+Related, but not Booru´s:
+-	http://overbooru.pinochan.net/ - List with a lot of Booru´s, but many are dead
+-	http://ibsearch.i-forge.net/ - Search thingy
+-	http://www.tenshichan.com/ - Another search thingy, but much prettier
+-	http://code.google.com/p/my-imouto-booru/ - Wannabe booru framework, have not seen any using it. Has basic post api, danbooru style.
+-	http://nandaka.wordpress.com/tag/danbooru-downloader/ - Batch downloader for several board
+-	http://kde-apps.org/content/show.php/Danbooru+Client?content=114343 - KDE-based booru browser, haven't tried it yet
+-	http://code.google.com/p/tagbooru/ - some downloader or something
+-	http://forums.bakabt.me/index.php?topic=30154.0 - Stuff about a booru browser

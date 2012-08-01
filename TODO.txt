@@ -1,0 +1,24 @@
+﻿~~~~ Stuff still to be done ~~~~
+
+Sites to be added:
+-	Add site Sankaku chan
+-	Add site Sankaku idol
+
+API to be supported:
+-	Fetch comments
+-	Fetch notes
+-	Fetch related tags
+
+API stuff:
+-	Standalize rating
+-	Research 'status'
+
+Database stuff:
+-	Always use proxy and use custom filenames
+-	Finish /manage/ page
+-	Improve plugin handling
+-	Cache index API calls
+
+Interface:
+-	Add source in /[site]/post/[id]/
+-	Make a standard way of displaying errors

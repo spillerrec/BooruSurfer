@@ -1,0 +1,81 @@
+﻿~~~~ Sites supported: ~~~~
+Danbooru:
+-	Danbooru (requires login)
+-	3dbooru
+-	nekobooru
+-	vectorbooru
+All features supported
+
+moebooru:
+-	Konachan.com
+-	yande.re
+All features supported
+
+Gelbooru 0.2:
+-	Gelbooru
+-	Safebooru
+-	Rule34
+-	FurryBooru
+-	Xbooru
+-	SizeBooru
+All features supported, except related tags
+
+
+
+~~~~ Sites to be added: ~~~~
+Danbooru:
+-	Sankaku chan
+-	Sankaku idol
+
+
+
+~~~~ Sites not supported: ~~~~
+Custom:
+-	http://www.theanimegallery.com/
+-	http://mangadrawing.net/
+-	http://kyon.pl/
+-	http://www.zerochan.net/
+-	http://e-shuushuu.net/
+-	http://www.animegalleries.net/
+
+Shimmie:
+-	http://memefolder.com/post/list
+-	http://aria.tinybooru.com/
+- 	http://amanchu.tinybooru.com/
+-	http://mahoro.tinybooru.com/
+-	http://nis.tinybooru.com/
+-	http://whatistheexcel.com/wooobooru/post/list
+-	http://booru.touhouradio.com/post/list
+-	http://booru.151chan.org/
+-	http://booru.nanochan.org/post/list
+-	http://giantessbooru.com/post/list
+-	http://kou9992.awardspace.com/
+-	http://www.mgbooru.com/
+-	http://megabooru.com/
+-	http://fairygarden.no-ip.org/shimmie2/index.php?q=/post/list/1
+-	http://shimmie.4chanhouse.org/index.php?q=/post/list
+-	http://www.dollbooru.org/
+-	http://rule34.paheal.net/
+-	http://angelhq.net/
+BooruDownloader uses RSS on Shimmie boards which have it enabled. Might be possible to use as a minimal implementation.
+There also appear to be a simple Danbooru API extension, but I can't figure it out and docs are gone.
+NOTE TO SELF: look into OpenSearch
+
+Gelbooru 0.1.x: 
+http://booru.org/top
+http://lolibooru.com/
+Nothing to do here, AFAIK : \
+The booru.org network is pretty big, but unfortunately most are Gelbooru 0.1.11 boards.
+
+Gelbooru 0.2.x:
+-	http://tbib.org/
+Pretty good support, but I don't know how to get related tags to work (if possible). Authorisation and editing is untested/unknown.
+
+Danbooru like:
+-	Sankaku chan
+-	Sankaku idol
+-	http://e621.net/
+-	http://yukkuri.shii.org/
+-	http://wakku.to/ (blocked post)
+-	http://wildcritters.ws/ (blocked post)
+The blocked ones might require login like Danbooru, test it with wakku wakku (because seacats).
