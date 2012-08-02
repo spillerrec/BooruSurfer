@@ -60,10 +60,19 @@
 			return $result;
 		}
 		
-		public function sql_columns(){
+		public function sql_columns( $type = false ){
 			$query = "";
-			foreach( $this->data as $key => $value )
-				$query .= "$key, ";
+			foreach( $this->data as $key => $value ){
+				$query .= "$key";
+				if( $type ){
+					switch( $value->type ){
+						case 'bool':
+						case 'int': $query .= " INT"; break;
+						case 'string': $query .= " TEXT"; break;
+					}
+				}
+				$query .= ", ";
+			}
 			return rtrim( $query, ", " );
 		}
 		public function pdo_values(){
@@ -79,11 +88,8 @@
 			$db = Database::get_instance()->db;
 			$query = "CREATE TABLE IF NOT EXISTS $this->name ( ";
 			
-			$first = true;
-			foreach( $this->data as $prop => $settings ){
-				$query .= $prop . ", ";
-			}
-			$query .= "PRIMARY KEY( id ) )";
+			$query .= $this->sql_columns( true );
+			$query .= ", PRIMARY KEY( id ) )";
 			
 			$db->exec( $query );
 			
