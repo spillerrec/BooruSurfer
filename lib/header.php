@@ -11,6 +11,7 @@
 		
 		function __construct( $site_name, $code = NULL ){
 			$this->page = new htmlPage();
+			$this->page->html->head->content[] = new fakeObject( ("<!--[if lt IE 9]><script src=\"/style/ie8.js\"></script><![endif]-->") );
 			$this->page->html->addStylesheet( "/style/main.css" );
 			
 			$nav = new htmlObject( "nav" );

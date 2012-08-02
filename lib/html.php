@@ -172,4 +172,22 @@
 	function toId( $id ){
 		return array( 'id'=>$id );
 	}
+	
+	
+	class fakeObject{
+		private $data;
+		function __construct( $data ){
+			$this->data = $data;
+			
+			//TODO: actually parse this...
+		}
+		
+		
+		public function writeHtml(){
+			echo $this->data;
+		}
+		public function writeXhtml(){
+			echo $this->data;
+		}
+	}
 ?>
