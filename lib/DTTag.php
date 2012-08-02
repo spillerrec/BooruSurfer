@@ -24,12 +24,14 @@
 		
 		
 		public function __construct( $prefix, $data = NULL ){
-			$this->add( $data, 'id',	true );
-			$this->add( $data, 'count',	true, 'int' );
-			$this->add( $data, 'type',	true, 'int' );
-			$this->add( $data, 'ambiguous',	true, 'bool' );
-			
-			parent::__construct( $prefix . "_tags" );
+			parent::__construct( $prefix . "_tags", $data );
+		}
+		
+		protected function create_data(){
+			$this->add( 'id',	true );
+			$this->add( 'count',	true, 'int' );
+			$this->add( 'type',	true, 'int' );
+			$this->add( 'ambiguous',	true, 'bool' );
 		}
 		
 		

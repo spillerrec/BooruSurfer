@@ -4,46 +4,36 @@
 	/*	Provides a data array which can be stored in a database table
 	**	
 	*/	
-	class DataTable{
+	abstract class DataTable{
 		private $data = array();
 		private $name; //Of the table
 		
 		//Call this after the data array have been filled!
-		public function __construct( $table_name ){
+		public function __construct( $table_name, $data ){
 			$this->name = $table_name;
+			
+			$this->create_data();
+			$this->read_row( $data );
 			
 			$db = Database::get_instance();
 			if( !$db->table_exists( $this->name ) )
 				$this->create_table();
 		}
 		
+		abstract protected function create_data();
+		
 	//Data array functions
-		//Add data to the data-table
+		//Add an entry to the data-table
 		//$required specifies if the lack of this parameter should be treated as an error
 		//$type will cause the variable to be casted to this type
-		protected function add( $arr, $property, $required, $type = "string" ){
-			$content = NULL;
-			//Check if the data is available
-			if( isset( $arr[ $property ] ) ){
-				//Add the contents
-				$content = $arr[ $property ];
-				if( $type == 'bool' )
-					//Casting with bool doesn't convert (string)"true" and similar as intended
-					$content = filter_var( $content, FILTER_VALIDATE_BOOLEAN );
-				else
-					settype( $content, $type );
-			}
-			else
-				if( $required && $arr !== NULL ){ //Shall this be treated as a fatal error?
-					echo "Missing required property: $property !";
-					die;
-				}
-			
+		protected function add( $property, $required, $type = "string" ){
 			//Add the data
 			$this->data[ $property ] = (object) array(
-					'value' => $content,
+					'value' => NULL,
 					'modified' => false,
-					'original' => NULL
+					'original' => NULL,
+					'required' => $required,
+					'type' => $type
 				);
 		}
 		public function get( $property ){
@@ -115,22 +105,44 @@
 			return false;
 		}
 		
+		protected final function read_row( $row ){
+			if( $row ){
+				foreach( $this->data as $prop => $settings ){
+					$obj = $this->data[$prop];
+					
+					$content = NULL;
+					//Check if the data is available
+					if( isset( $row[ $prop ] ) ){
+						//Add the contents
+						$content = $row[ $prop ];
+						if( $obj->type == 'bool' )
+							//Casting with bool doesn't convert (string)"true" and similar as intended
+							$content = filter_var( $content, FILTER_VALIDATE_BOOLEAN );
+						else
+							settype( $content, $obj->type );
+					}
+					else
+						if( $obj->required ){ //Shall this be treated as a fatal error?
+							echo "Missing required property: $prop !";
+							die;
+						}
+					
+					//Fill data
+					$obj->value = $content;
+					$obj->modified = false;
+					$this->data[$prop] = $obj;
+				}
+				return true;
+			}
+			return false;
+		}
+		
 		//Retrive the contents with the id = '$id'
 		public function db_read( $id ){
 			$db = Database::get_instance()->db;
 			$result = $db->query( "SELECT * FROM $this->name WHERE id = " . $db->quote( $id ) );
-			if( $result ){
-				$row = $result->fetch( PDO::FETCH_ASSOC );
-				if( $row ){
-					foreach( $this->data as $prop => $settings ){
-						$settings->value = $row[ $prop ];
-						$settings->modified = false;
-					}
-					return true;
-				}
-			}
-			
-			return false; //Post not loaded
+			//Read row, or return false on failure
+			return $result ? $this->read_row( $result->fetch( PDO::FETCH_ASSOC ) ) : false;
 		}
 		
 		//Save the contents in the database

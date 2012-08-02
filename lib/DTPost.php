@@ -38,37 +38,40 @@
 		
 		
 		public function __construct( $prefix, $data = NULL ){
-			$this->add( $data, 'id',	true, 'int' );
-			$this->add( $data, 'hash',	true );
-			$this->add( $data, 'author',	true );
-			$this->add( $data, 'creation_date',	true, 'int' );
-			
-			$this->add( $data, 'parent_id',	true, 'int' );
-			$this->add( $data, 'has_children',	false, 'bool' );
-			$this->add( $data, 'has_notes',	false, 'bool' );
-			$this->add( $data, 'has_comments',	false, 'bool' );
-			$this->add( $data, 'source',	false );
-			
-			$this->add( $data, 'tags',	true );
-			$this->add( $data, 'score',	false, 'int' );
-			$this->add( $data, 'rating',	false );
-			$this->add( $data, 'status',	false );
-			
-			$this->load_image( $data, true );
-			$this->load_image( $data, true, 'thumb_' );
-			$this->load_image( $data, false, 'preview_' );
-			$this->load_image( $data, false, 'reduced_' );
-			
-			parent::__construct( $prefix . "_post" );
+			parent::__construct( $prefix . "_post", $data );
 			$this->prefix = $prefix;
 		}
 		private $prefix;
 		
-		private function load_image( $data, $required, $prefix="" ){
-			$this->add( $data, $prefix . 'url', $required );
-			$this->add( $data, $prefix . 'width', $required, 'int' );
-			$this->add( $data, $prefix . 'height', $required, 'int' );
-			$this->add( $data, $prefix . 'filesize', false, 'int' );
+		
+		protected function create_data(){
+			$this->add( 'id',	true, 'int' );
+			$this->add( 'hash',	true );
+			$this->add( 'author',	true );
+			$this->add( 'creation_date',	true, 'int' );
+			
+			$this->add( 'parent_id',	true, 'int' );
+			$this->add( 'has_children',	false, 'bool' );
+			$this->add( 'has_notes',	false, 'bool' );
+			$this->add( 'has_comments',	false, 'bool' );
+			$this->add( 'source',	false );
+			
+			$this->add( 'tags',	true );
+			$this->add( 'score',	false, 'int' );
+			$this->add( 'rating',	false );
+			$this->add( 'status',	false );
+			
+			$this->load_image( true );
+			$this->load_image( true, 'thumb_' );
+			$this->load_image( false, 'preview_' );
+			$this->load_image( false, 'reduced_' );
+		}
+		
+		private function load_image( $required, $prefix="" ){
+			$this->add( $prefix . 'url', $required );
+			$this->add( $prefix . 'width', $required, 'int' );
+			$this->add( $prefix . 'height', $required, 'int' );
+			$this->add( $prefix . 'filesize', false, 'int' );
 		}
 		
 		private function get_to_image( $prefix = "" ){

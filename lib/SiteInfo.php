@@ -2,15 +2,17 @@
 	require_once "lib/DataTable.php";
 	
 	class SiteInfo extends DataTable{
-		public function __construct(){
-			$this->add( NULL, 'id',	true ); //ID is the code as a string
-			$this->add( NULL, 'name',	true ); //Human readable name of the site
-			$this->add( NULL, 'class',	true ); //Name of the class
-			$this->add( NULL, 'tags_updated',	false ); //Last time tag db was updated (unix time)
-			$this->add( NULL, 'username',	false ); //login name
-			$this->add( NULL, 'password',	false ); //password hash
-			
-			parent::__construct( "site_info" );
+		public function __construct( $data = NULL){
+			parent::__construct( "site_info", $data );
+		}
+		
+		protected function create_data(){
+			$this->add( 'id',	true ); //ID is the code as a string
+			$this->add( 'name',	true ); //Human readable name of the site
+			$this->add( 'class',	true ); //Name of the class
+			$this->add( 'tags_updated',	false ); //Last time tag db was updated (unix time)
+			$this->add( 'username',	false ); //login name
+			$this->add( 'password',	false ); //password hash
 		}
 		
 		private static function load_api( $code, $class ){
