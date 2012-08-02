@@ -7,11 +7,11 @@ Sites to be added:
 API to be supported:
 -	Fetch comments
 -	Fetch notes
--	Fetch related tags
 
 API stuff:
 -	Standalize rating
 -	Research 'status'
+-	Fix related tags when searching on multiple tags
 
 Database stuff:
 -	Always use proxy and use custom filenames

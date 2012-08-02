@@ -173,6 +173,29 @@
 				return NULL;
 		}
 		
+		public function related_tags( $tags ){
+			//Retrive raw data from the server
+			$para = array( 'tags' => $tags );
+			$url = $this->get_url( 'tag', 'related', 'xml', $para );
+			$data = $this->get_xml( $url );
+			if( !$data )	//Kill if failed
+				return NULL;
+			
+			
+			$list = array();
+			foreach( $data->tag as $tag ){
+				$related = array();
+				
+				foreach( $tag as $t )
+					$related[] = $this->parse_tag( $t );
+				
+				$name = (string)$tag['name'];
+				$list[$name] = $related;
+			}
+			
+			return $list;
+		}
+		
 		public function all_tags( $refresh = false ){
 			$type = 'xml';
 			//Get filepath

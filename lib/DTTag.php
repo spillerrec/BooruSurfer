@@ -31,9 +31,9 @@
 		
 		protected function create_data(){
 			$this->add( 'id',	true );
-			$this->add( 'count',	true, 'int' );
-			$this->add( 'type',	true, 'int' );
-			$this->add( 'ambiguous',	true, 'bool' );
+			$this->add( 'count',	false, 'int' );
+			$this->add( 'type',	false, 'int' );
+			$this->add( 'ambiguous',	false, 'bool' );
 		}
 		
 		

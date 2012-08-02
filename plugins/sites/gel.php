@@ -51,6 +51,10 @@
 			//Return posts
 			return $posts;
 		}
+		
+		public function related_tags( $tags ){
+			return array(); //Not working : \
+		}
 	}
 	
 	class GelbooruApi extends GelApi{

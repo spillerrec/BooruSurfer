@@ -7,6 +7,7 @@
 		abstract public function index( $search = NULL, $page = 1 ); //Retrive several posts based on a search critiria
 	//	abstract public function tag( $id );
 		abstract public function tag_index( $search );
+		abstract public function related_tags( $tags );
 	//	abstract public function similar_tags( $tag ); //Correct spelling?
 		
 	//Password functions
@@ -72,7 +73,7 @@
 		protected function transform_array( $arr, $mapping ){
 			$result = array();
 			foreach( $mapping as $key => $value ){
-				$result[ $key ] = $arr[ $value ];
+				$result[ $key ] = isset( $arr[ $value ] ) ? $arr[ $value ] : NULL;
 			}
 			return $result;
 		}
