@@ -122,5 +122,12 @@
 			
 			$db->commit();
 		}
+		
+		public function related( $search ){
+			if( !$search ){
+				$tag = new DTTag( $this->code );
+				return $tag->most_used();
+			}
+		}
 	}
 ?>

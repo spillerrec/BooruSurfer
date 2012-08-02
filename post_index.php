@@ -76,34 +76,30 @@
 	
 	//Side-panel
 	$layout->sidebar->content[] = new htmlObject( "p", $search );
-/* 	if( $search )
-		$tags = get_related_tags( $search );
-	else
-		$tags = get_tag_list( "count", 30 ); */
-		
-		/* TODO:
+	$tags = $site->related( $search );
+	
 	function make_tag_link2( $tag, $limit = 24 ){
-		$url = $site->index_link( 1, $tag->get_name() );
+		global $site;
+		$url = $site->index_link( 1, $tag->name() );
 		
-		$title = str_replace( "_", " ", $tag->get_name() );
+		$title = str_replace( "_", " ", $tag->name() );
 		if( $tag->get_count() )
 			$title .= " (" . $tag->get_count() . ")";
 		
 		$link = new htmlLink( $url, $title );
 		
 		if( $tag->get_type() )
-			$link->addClass( "tagtype" . $tag->type );
+			$link->addClass( "tagtype" . $tag->get_type() );
 		
 		return $link;
 	}
 	
-	$tagindex = new TagIndexKonachan();
-	$tags = $tagindex->get_related_tags( "vocaloid" );
-	$tag_list = new htmlList();
-	foreach( $tags as $tag )
-		$tag_list->addItem( make_tag_link2( $tag, $limit ) );
-	$layout->sidebar->content[] = $tag_list;
-	*/
+	if( $tags ){
+		$tag_list = new htmlList();
+		foreach( $tags as $tag )
+			$tag_list->addItem( make_tag_link2( $tag ) );
+		$layout->sidebar->content[] = $tag_list;
+	}
 	
 	$layout->page->write();
 ?>

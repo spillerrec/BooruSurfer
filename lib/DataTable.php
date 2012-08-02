@@ -6,7 +6,7 @@
 	*/	
 	abstract class DataTable{
 		private $data = array();
-		private $name; //Of the table
+		protected $name; //Of the table
 		
 		//Call this after the data array have been filled!
 		public function __construct( $table_name, $data ){
@@ -107,8 +107,7 @@
 		
 		protected final function read_row( $row ){
 			if( $row ){
-				foreach( $this->data as $prop => $settings ){
-					$obj = $this->data[$prop];
+				foreach( $this->data as $prop => $obj ){
 					
 					$content = NULL;
 					//Check if the data is available
@@ -130,7 +129,6 @@
 					//Fill data
 					$obj->value = $content;
 					$obj->modified = false;
-					$this->data[$prop] = $obj;
 				}
 				return true;
 			}

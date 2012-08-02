@@ -25,7 +25,9 @@
 		
 		public function __construct( $prefix, $data = NULL ){
 			parent::__construct( $prefix . "_tags", $data );
+			$this->prefix = $prefix;
 		}
+		private $prefix;
 		
 		protected function create_data(){
 			$this->add( 'id',	true );
@@ -43,6 +45,18 @@
 			}
 			else
 				return true;
+		}
+		
+		public function most_used(){
+			$db = Database::get_instance()->db;
+			$result = $db->query( "SELECT * FROM $this->name ORDER BY count DESC LIMIT 30" );
+			
+			//Fetch
+			$tags = array();
+			foreach( $result as $row )
+				$tags[] = new DTTag( $this->prefix, $row );
+			
+			return $tags;
 		}
 	}
 ?>
