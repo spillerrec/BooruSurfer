@@ -5,19 +5,19 @@ body {
 }
 #container {
 	clear:both;
-  padding-left: 200px;   /* LC width */
+	padding-left: 208px;   /* LC width */
 }
 #container .post_list, #container .post {
-  position: relative;
-  float: left;
-  width: 100%;
+	position: relative;
+	float: left;
+	width: 100%;
 }
 #container aside.post_list_info, #container aside.post_info{
-  position: relative;
-  float: left;
-  width: 200px;          /* LC width */
-  right: 200px;          /* LC width */
-  margin-left: -100%;
+	position: relative;
+	float: left;
+	width: 200px;          /* LC width */
+	right: 208px;          /* LC width */
+	margin-left: -100%;
 }
 footer { clear: both; }
 /********** HOLY GRAIL END **********/
@@ -26,14 +26,28 @@ footer { clear: both; }
 
 /********** GLOBAL START **********/
 body{
-	background-color: #222222;
+	background-color: #000000;
 	color: white;
+	font-family: verdana, sans-serif;
+	font-size: 80%;
 }
-a{ color: #ffaaae; }
-a:visited{ color: #ee8887; }
+a{
+	color: #EE8887;
+	text-decoration: none;
+}
+a:visited{ color: #EE8887; }
+a:hover{ color: #FFAAAE; }
+a:active{ color: #006FFA; }
 
 a img{ border:none; } /* annoying IE (and firefox?) behaviour */
 
+h2, h3{ margin-bottom: 0; }
+p{ margin:0; }
+ul{
+	list-style-type: square;
+	margin: 0;
+	padding-left: 15px;
+}
 /********** GLOBAL END **********/
 
 
@@ -231,14 +245,19 @@ nav.page_nav a{
 
 
 /********** TAGS START **********/
-.tagtype1{ color: #cccc00; }
-.tagtype1:hover { color: #33CFFF; }
-.tagtype5{ color: #FF2020; }
-.tagtype5:hover { color: #33CFFF; }
-.tagtype2{ color: #0bb; }	/*guess...*/
-.tagtype2:hover { color: #33CFFF; }
+.tagtype1{ color: #CCCC00; }
+.tagtype1:visited { color: #CCCC00; }
+.tagtype2{ color: #DD00DD; }
+.tagtype2:visited{ color: #DD00DD; }
+.tagtype3{ color: #00AA00; }
+.tagtype3:visited{ color: #00AA00; }
 .tagtype4{ color: #0A0; }
-.tagtype4:hover { color: #33CFFF; }
-.tagtype3{ color: #D0D; }
+.tagtype4:visited{ color: #0A0; }
+.tagtype5{ color: #FF2020; }
+.tagtype5:visited{ color: #FF2020; }
+.tagtype1:hover { color: #33CFFF; }
+.tagtype2:hover { color: #33CFFF; }
 .tagtype3:hover { color: #33CFFF; }
+.tagtype4:hover { color: #33CFFF; }
+.tagtype5:hover { color: #33CFFF; }
 /********** TAGS END **********/
