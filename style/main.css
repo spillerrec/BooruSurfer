@@ -75,6 +75,7 @@ header nav ul li{
 
 
 /********** POST LIST START **********/
+.post_list li{ position:relative; }
 .post_list ul, .post_list ul li{ margin:0; padding:0; list-style:none; }
 .post_list li .details{ display:none; }
 .post_list li a, .post_list li a img{ display:block; }
@@ -84,10 +85,11 @@ header nav ul li{
 	/* TODO: doesn't work in other browsers! */
 	-o-object-fit:contain;
 }
-.post_list li a:hover img{
+.post_list li:hover a img{
 	-o-object-fit:none;
 	position:relative;
 	z-index:100;
+	-o-object-position:left center;
 }
 .post_list li{
 	float:left;
@@ -100,6 +102,21 @@ header nav ul li{
 }
 .post_list li a:visited{
 	background-color:rgba( 255, 0,0, 0.5 );
+}
+/*** Show details on hover ***/
+.post_list a:hover ~ .details{
+	position:absolute;
+	display:block;
+	width:200px;
+	left:-200px;
+	top:0px;
+	
+	background-color: #222222;
+	z-index:1;
+}
+.post_list .details span{
+	display: inline-block;
+	padding: 0 5px 0 0;
 }
 
 

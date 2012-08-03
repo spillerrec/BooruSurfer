@@ -59,7 +59,15 @@
 		$details = new htmlObject( "section", NULL, toClass("details") );
 		$details->content[] = new htmlObject( "p", $image->width . "x" . $image->height, toClass("img_size") );
 		$details->content[] = new htmlObject( "p", $image->filesize, toClass("img_filesize") );
-		$details->content[] = new htmlObject( "p", $i->get( 'tags' ), toClass("img_tag") );
+		//Add tags
+		$tag_details = new htmlObject( "p", NULL, toClass("img_tag") );
+		foreach( $i->get_tags() as $tag ){
+			$t = new htmlObject( 'span', $tag->name() );
+			if( $tag->get_type() )
+				$t->addClass( "tagtype" . $tag->get_type() );
+			$tag_details->content[] = $t;
+		}
+		$details->content[] = $tag_details;
 		
 		$item = $list->addItem( array( new htmlLink( $site->post_link( $i->id() ), $img ), $details ) );
 		if( $i->parent_id() )
