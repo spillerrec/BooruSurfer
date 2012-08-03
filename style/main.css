@@ -104,7 +104,7 @@ header nav ul li{
 	background-color:rgba( 255, 0,0, 0.5 );
 }
 /*** Show details on hover ***/
-.post_list a:hover ~ .details{
+.post_list a:hover + .details{
 	position:absolute;
 	display:block;
 	width:200px;
