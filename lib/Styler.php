@@ -20,7 +20,28 @@
 		
 		//Formats the size of a file
 		public function format_filesize( $bytes ){
-			return $bytes . ' bytes';
+			$endings = array( 'bytes', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB' );
+			
+			//Keep making it smaller, until a unit has been found
+			foreach( $endings as $end ){
+				if( $bytes >= 1024 )
+					$bytes /= 1024;
+				else{
+					//$bytes is below 1024, select amount of decimals
+					if( $bytes >= 100 )
+						$decimals = 0;
+					else if( $bytes >= 10 )
+						$decimals = 1;
+					else
+						$decimals = 2;
+					
+					//Now format and return result
+					return sprintf( "%.$decimals".'f', $bytes ) . " $end";
+				}
+			}
+			
+			//Oh god...
+			return 'will crash your computer';
 		}
 		
 		
@@ -71,12 +92,16 @@
 			//Add tags
 			$tag_details = new htmlObject( "p", NULL, toClass("img_tag") );
 			foreach( $post->get_tags() as $tag ){
-				//TODO: avoid spans when not needed
-				$t = new htmlObject( 'span', $tag->name() );
-				if( $tag->get_type() )
+				if( $tag->get_type() ){
+					//Enclose it in a span
+					$t = new htmlObject( 'span', $tag->name() );
 					$t->addClass( "tagtype" . $tag->get_type() );
-				$tag_details->content[] = $t;
-				$tag_details->content[] = new fakeObject( " " );
+					
+					$tag_details->content[] = $t;
+					$tag_details->content[] = new fakeObject( " " );
+				}
+				else
+					$tag_details->content[] = new fakeObject( $tag->name() . ' ' );
 			}
 			$details->content[] = $tag_details;
 			
