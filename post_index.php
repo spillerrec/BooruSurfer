@@ -3,7 +3,9 @@
 	require_once "lib/links.php";
 	
 	require_once "lib/Booru.php";
+	require_once "lib/Styler.php";
 	$site = new Booru( $_GET['site'] );
+	$styler = new Styler( $site );
 	
 	//Change limit
 	if( isset( $_GET['limit'] ) )
@@ -51,26 +53,7 @@
 	
 	//Write list
 	foreach( $index as $i ){
-		$thumb = $i->get_image( 'thumb' );
-		$image = $i->get_image();
-		
-		//Add link with thumbnail
-		$img = new htmlImage( $thumb->url, null );
-		$details = new htmlObject( "section", NULL, toClass("details") );
-		$details->content[] = new htmlObject( "p", $image->width . "x" . $image->height, toClass("img_size") );
-		$details->content[] = new htmlObject( "p", $image->filesize, toClass("img_filesize") );
-		//Add tags
-		$tag_details = new htmlObject( "p", NULL, toClass("img_tag") );
-		foreach( $i->get_tags() as $tag ){
-			$t = new htmlObject( 'span', $tag->name() );
-			if( $tag->get_type() )
-				$t->addClass( "tagtype" . $tag->get_type() );
-			$tag_details->content[] = $t;
-			$tag_details->content[] = new fakeObject( " " );
-		}
-		$details->content[] = $tag_details;
-		
-		$item = $list->addItem( array( new htmlLink( $site->post_link( $i->id() ), $img ), $details ) );
+		$item = $list->addItem( array( $styler->post_thumb( $i ), $styler->post_details( $i ) ) );
 		if( $i->parent_id() )
 			$item->addClass( "has_parent" );
 		if( $i->has_children() )
@@ -87,27 +70,10 @@
 	$layout->sidebar->content[] = new htmlObject( "p", $search );
 	$tags = $site->related( $search );
 	
-	function make_tag_link2( $tag, $limit = 24 ){
-		global $site;
-		$url = $site->index_link( 1, $tag->name() );
-		
-		$title = str_replace( "_", " ", $tag->name() );
-		$count = $tag->real_count ? $tag->real_count : $tag->get_count();
-		if( $count )
-			$title .= " (" . $count . ")";
-		
-		$link = new htmlLink( $url, $title );
-		
-		if( $tag->get_type() )
-			$link->addClass( "tagtype" . $tag->get_type() );
-		
-		return $link;
-	}
-	
 	if( $tags ){
 		$tag_list = new htmlList();
 		foreach( $tags as $tag )
-			$tag_list->addItem( make_tag_link2( $tag ) );
+			$tag_list->addItem( $styler->tag( $tag ) );
 		$layout->sidebar->content[] = $tag_list;
 	}
 	
