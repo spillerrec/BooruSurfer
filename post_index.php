@@ -1,6 +1,5 @@
 <?php
 	require_once "lib/header.php";
-	require_once "lib/links.php";
 	
 	require_once "lib/Booru.php";
 	require_once "lib/Styler.php";
@@ -61,7 +60,8 @@
 	}
 	$layout->main->content[] =& $list;
 	
-	$page_links = create_page_links( $site, $search, $page );
+	//Add page navigation
+	$page_links = $styler->page_nav( $search, $page );
 	if( $page_links )
 		$layout->main->content[] = $page_links;
 	

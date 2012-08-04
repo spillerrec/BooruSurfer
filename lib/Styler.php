@@ -44,6 +44,11 @@
 			return 'will crash your computer';
 		}
 		
+		//Format a date
+		public function format_date( $unix_time ){
+			date_default_timezone_set( 'Europe/Copenhagen' );
+			return date( 'H:i d/m/Y', $unix_time );
+		}
 		
 	//Formating of DataTables like DTPost and DTTag
 		
@@ -62,6 +67,24 @@
 				$link->addClass( "tagtype" . $tag->get_type() );
 			
 			return $link;
+		}
+		
+		//A large preview of the image, possibly the original image
+		//if no preview exist
+		public function post_preview( $image, $alt=NULL ){
+			if( pathinfo( $image->url, PATHINFO_EXTENSION ) == "swf" ){
+				return array(
+						new htmlObject( 'object', " ", array(
+								'type'=>'application/x-shockwave-flash',
+								'data'=>$image->url,
+								'width'=>$image->width,
+								'height'=>$image->height
+							) ),
+						new htmlLink( $image->url, "Direct link" )
+					);
+			}
+			else
+				return new htmlImage( $image->url, $alt );
 		}
 		
 		//Returns a link to the post with an image thumbnail of the post
@@ -107,5 +130,48 @@
 			
 			return $details;
 		}
+		
+		
+	//Page specific stuff
+		
+		//Pagenation
+		function page_nav( $search, $page ){
+			$amount = $this->site->get_page_amount();
+			if( !$amount )
+				return NULL;
+			
+			$min = $page - 3;
+			$max = $page + 3;
+			if( $min < 1 )
+				$min = 1;
+			if( $max >= $amount )
+				$max = $amount - 1;
+			
+			
+			$list = new htmlList();
+			if( $min > 1 ){
+				$list->addItem( new htmlLink( $this->site->index_link( 1, $search ), "<<" ) );
+				if( $min > 2 )
+					$list->addItem( "..." );
+			}
+			
+			for( $i=$min; $i<=$max; $i++ ){
+				if( $i == $page )
+					$list->addItem( $page );
+				else
+					$list->addItem( new htmlLink( $this->site->index_link( $i, $search ), $i ) );
+			}
+			
+			if( $max < $amount - 1 ){
+				$list->addItem( "..." );
+				$list->addItem( new htmlLink( $this->site->index_link( $amount - 1, $search ), ">>" ) );
+			}
+			
+			$nav = new htmlObject( "nav", NULL, array( 'class'=>'page_nav' ) );
+			$nav->content[] = $list;
+			//$nav->content[] = new htmlObject( "div", NULL, array( 'style'=>'clear:both' ) );
+			return $nav;
+		}
+		
 	}
 ?>

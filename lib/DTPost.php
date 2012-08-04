@@ -15,15 +15,6 @@
 			$this->height = $h;
 			$this->filesize = $size;
 		}
-		
-		public function to_html( $alt = NULL ){
-			if( pathinfo( $this->url, PATHINFO_EXTENSION ) == "swf" ){
-				return new htmlObject( 'object', " ", array( 'type'=>'application/x-shockwave-flash', 'data'=>$this->url, 'width'=>$this->width, 'height'=>$this->height ) );
-			}
-			else{
-				return new htmlImage( $this->url, $alt );
-			}
-		}
 	}
 	
 	

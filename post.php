@@ -2,7 +2,9 @@
 	include "lib/header.php";
 	
 	require_once "lib/Booru.php";
+	require_once "lib/Styler.php";
 	$site = new Booru( $_GET['site'] );
+	$styler = new Styler( $site );
 	
 	//Retrive post
 	$id = $_GET["id"];
@@ -25,13 +27,7 @@
 		$layout->page->html->head->content[] = $speeddial;
 		
 		$image_container = new htmlObject( 'div', NULL, toClass( 'container' ) );
-		$img = $preview->to_html( "preview" );
-		if( pathinfo( $preview->url, PATHINFO_EXTENSION ) == "swf" ){
-			$image_container->content[] = $img;
-			$image_container->content[] = new htmlLink( $image->url, "Direct link" );
-		}
-		else
-			$image_container->content[] = new htmlLink( $image->url, $img );
+		$image_container->content[] = $styler->post_preview( $preview, 'image' );
 		
 		
 		/*Notes
@@ -59,12 +55,12 @@
 		
 		//Fill sidebar
 		$layout->sidebar->content[] = new htmlObject( "p", "Dimension: $image->width" . "x$image->height" );
-		$layout->sidebar->content[] = new htmlObject( "p", "Filesize: $image->filesize bytes" );//TODO: show nicely
+		$layout->sidebar->content[] = new htmlObject( "p", "Filesize: " . $styler->format_filesize( $image->filesize ) );
 		
 		//Date
 		date_default_timezone_set( 'Europe/Copenhagen' );
 		if( $date = $post->get( 'creation_date' ) )
-			$layout->sidebar->content[] = new htmlObject( "p", "Posted: " . date( 'H:i d/m/Y', $date ) );
+			$layout->sidebar->content[] = new htmlObject( "p", "Posted: " .$styler->format_date( $date ) );
 		
 //		$layout->sidebar->content[] = new htmlLink( post_siteurl( $id ), "On-site link" );
 		
@@ -99,27 +95,10 @@
 		$layout->sidebar->content[] = new htmlObject( "h3", "Tags:" );
 		
 		
-	//Function
-	function make_tag_link( $site, $tag ){
-		$url = $site->index_link( 1, $tag->name() );
-		
-		$title = str_replace( "_", " ", $tag->name() );
-		if( $count = $tag->get_count() )
-			$title .= " ($count)";
-		
-		$link = new htmlLink( $url, $title );
-		
-		$type = $tag->get_type();
-		if( $type )
-			$link->addClass( "tagtype" . $tag->get_type() );
-		
-		return $link;
-	}
-		
 		$tags = $post->get_tags();
 		$list = new htmlList();
 		foreach( $tags as $tag )
-			$list->addItem( make_tag_link( $site, $tag ) );
+			$list->addItem( $styler->tag( $tag ) );
 		$layout->sidebar->content[] = $list;
 		
 		$layout->page->write();
