@@ -115,8 +115,8 @@ header nav ul li{
 	z-index:1;
 }
 .post_list .details span{
-	display: inline-block;
-	padding: 0 5px 0 0;
+	display: inline;
+	word-wrap: break-word;
 }
 
 

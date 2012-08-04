@@ -66,6 +66,7 @@
 			if( $tag->get_type() )
 				$t->addClass( "tagtype" . $tag->get_type() );
 			$tag_details->content[] = $t;
+			$tag_details->content[] = new fakeObject( " " );
 		}
 		$details->content[] = $tag_details;
 		
