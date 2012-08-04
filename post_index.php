@@ -92,8 +92,9 @@
 		$url = $site->index_link( 1, $tag->name() );
 		
 		$title = str_replace( "_", " ", $tag->name() );
-		if( $tag->get_count() )
-			$title .= " (" . $tag->get_count() . ")";
+		$count = $tag->real_count ? $tag->real_count : $tag->get_count();
+		if( $count )
+			$title .= " (" . $count . ")";
 		
 		$link = new htmlLink( $url, $title );
 		

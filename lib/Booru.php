@@ -145,6 +145,7 @@
 					$related = array();
 					foreach( $value as $tag_data ){
 						$tag = new DTTag( $this->code, $tag_data );
+						$tag->db_read( $tag->name() );
 						$tag->real_count = $tag_data['count'];
 						$related[] = $tag;
 					}
