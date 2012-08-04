@@ -20,9 +20,12 @@
 			$this->code = $this->api->get_code();
 		}
 		
+		public function get_api(){ return $this->api; }
+		
 		public function get_page_amount(){
 			return $this->post_amount ? ceil( $this->post_amount / $this->fetch_amount ) : NULL;
 		}
+		public function get_fetch_amount(){ return $this->fetch_amount; }
 		
 		public function index( $search = NULL, $page = 1 ){
 			//No caching here yet : \
@@ -43,8 +46,11 @@
 					$posts[] = new DTPost( $this->code, $post );
 			
 			//Save posts in db
+			$db = Database::get_instance()->db;
+			$db->beginTransaction();
 			foreach( $posts as $post )
 				$post->db_save();
+			$db->commit();
 			
 			return $posts;
 		}
