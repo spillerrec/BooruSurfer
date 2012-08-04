@@ -78,27 +78,36 @@ header nav ul li{
 .post_list li{ position:relative; }
 .post_list ul, .post_list ul li{ margin:0; padding:0; list-style:none; }
 .post_list li .details{ display:none; }
-.post_list li a, .post_list li a img{ display:block; }
-.post_list li a img{
+.post_list li a{ display:block; }
+
+.post_list li{
+	float:left;
+}
+.post_list li > a{
+	margin: 0 5px 5px 0;
+	border:2px solid gray;
+	padding:5px;
+	border-radius:5px;
+
+}
+.post_list > ul > li > a{
+	/* Make thumbs centered */
 	width:150px;
 	height:150px;
-	/* TODO: doesn't work in other browsers! */
-	-o-object-fit:contain;
+	line-height:150px;
+	display:block;
+	text-align:center;
+}
+.post_list li > a img{
+	max-width:150px;
+	max-height:150px;
+	vertical-align: middle;
 }
 .post_list li:hover a img{
 	-o-object-fit:none;
 	position:relative;
 	z-index:100;
 	-o-object-position:left center;
-}
-.post_list li{
-	float:left;
-}
-.post_list li a{
-	margin: 0 5px 5px 0;
-	border:2px solid gray;
-	padding:5px;
-	border-radius:5px;
 }
 .post_list li a:visited{
 	background-color:rgba( 255, 0,0, 0.5 );
