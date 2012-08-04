@@ -68,14 +68,11 @@
 	
 	//Side-panel
 	$layout->sidebar->content[] = new htmlObject( "p", $search );
-	$tags = $site->related( $search );
 	
-	if( $tags ){
-		$tag_list = new htmlList();
-		foreach( $tags as $tag )
-			$tag_list->addItem( $styler->tag( $tag ) );
-		$layout->sidebar->content[] = $tag_list;
-	}
+	//Add related tags
+	$tags = $site->related( $search );
+	if( $tags )
+		$layout->sidebar->content[] = $styler->tag_list( $tags );
 	
 	$layout->page->write();
 ?>

@@ -54,11 +54,11 @@
 		$layout->main->content[] = $image_container;
 		
 		//Fill sidebar
+		$layout->sidebar->content[] = new htmlObject( "h3", "Info:" );
 		$layout->sidebar->content[] = new htmlObject( "p", "Dimension: $image->width" . "x$image->height" );
 		$layout->sidebar->content[] = new htmlObject( "p", "Filesize: " . $styler->format_filesize( $image->filesize ) );
 		
 		//Date
-		date_default_timezone_set( 'Europe/Copenhagen' );
 		if( $date = $post->get( 'creation_date' ) )
 			$layout->sidebar->content[] = new htmlObject( "p", "Posted: " .$styler->format_date( $date ) );
 		
@@ -69,7 +69,7 @@
 			$parent = $site->post( $post->parent_id() );
 			
 			$img = new htmlObject( "section", NULL, toClass( "post_parent") );
-			$img->content[] = thumbnail( $parent, $site->post_link( $parent->id() ) );
+			$img->content[] = $styler->post_thumb( $parent );
 			
 			$layout->sidebar->content[] = new htmlObject( "h3", "Parent:" );
 			$layout->sidebar->content[] = $img;
@@ -85,7 +85,7 @@
 			//Add children
 			foreach( $index_child as $child ){
 				if( $child->id() != $post->id() ){
-					$img->content[] = thumbnail( $child, $site->post_link( $child->id() ) );
+					$img->content[] = $styler->post_thumb( $child );
 				}
 			}
 			
@@ -96,10 +96,7 @@
 		
 		
 		$tags = $post->get_tags();
-		$list = new htmlList();
-		foreach( $tags as $tag )
-			$list->addItem( $styler->tag( $tag ) );
-		$layout->sidebar->content[] = $list;
+		$layout->sidebar->content[] = $styler->tag_list( $tags );
 		
 		$layout->page->write();
 	}

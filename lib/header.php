@@ -41,8 +41,4 @@
 			
 		}
 	}
-	
-	function thumbnail( $post, $link, $alt = NULL ){ //Add some settings
-		return new htmlLink( $link, $post->get_image( 'thumb' )->to_html( $alt ) );
-	}
 ?>

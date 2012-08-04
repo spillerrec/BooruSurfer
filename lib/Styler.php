@@ -69,6 +69,15 @@
 			return $link;
 		}
 		
+		//Return an ul list with tags
+		public function tag_list( $tags ){
+			$list = new htmlList();
+			foreach( $tags as $tag )
+				$list->addItem( $this->tag( $tag ) );
+			
+			return $list;
+		}
+		
 		//A large preview of the image, possibly the original image
 		//if no preview exist
 		public function post_preview( $image, $alt=NULL ){

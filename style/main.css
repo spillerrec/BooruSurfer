@@ -73,7 +73,6 @@ header nav ul li{
 /********** Front page END **********/
 
 
-
 /********** POST LIST START **********/
 .post_list li{ position:relative; }
 .post_list ul, .post_list ul li{ margin:0; padding:0; list-style:none; }
@@ -203,9 +202,20 @@ header nav ul li{
 	position:relative;
 	max-width:100%;
 }
+
+/* Make the preview resize with the browser window */
+/* Notice that this requires each div to have 'height:100%'. */
+/* #container have been set to 95% to make the image approax */
+/* fit under the header and avoid extra padding in bottom. */
+html, body, #container > .post, #container > .post > .container{height:100%;}
+.post .container img{max-height:100%}
+#container{height:95%;}
+body{margin:0 5px;}
+header{ padding-top: 5px; }
 .post .container  img{
 	max-width:100%;
 }
+
 .post .container object{
 	display:block;
 }
