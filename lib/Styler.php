@@ -50,6 +50,24 @@
 			return date( 'H:i d/m/Y', $unix_time );
 		}
 		
+		public function tag_search(){
+			//Create tag input
+			$input = new htmlObject( 'input' );
+			$input->attributes['id'] = 'search';
+			$input->attributes['type'] = 'search';
+			$input->attributes['name'] = 'tags';
+			$input->attributes['placeholder'] = 'Tag query';
+			
+			$fields = new htmlObject( 'fieldset', $input );
+			
+			//Create form
+			$form = new htmlObject( 'form', $fields );
+			$form->attributes['action'] = '/' . $this->site->get_api()->get_code() . '/';
+			$form->attributes['method'] = 'GET';
+			
+			return $form;
+		}
+		
 	//Formating of DataTables like DTPost and DTTag
 		
 		//Returns a link to a tag and possibly other info

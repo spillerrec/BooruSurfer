@@ -41,6 +41,7 @@ a:active{ color: #006FFA; }
 
 a img{ border:none; } /* annoying IE (and firefox?) behaviour */
 
+h2:first-child, h3:first-child{ margin-top:0; }
 h2, h3{ margin-bottom: 0; }
 p{ margin:0; }
 ul{
@@ -71,6 +72,21 @@ header nav ul li{
 	margin: 20px auto;
 }
 /********** Front page END **********/
+
+
+/********** Search bar START **********/
+fieldset{
+	margin:0;
+	padding:0;
+	border:none;
+}
+header nav li form{ float:right; }
+#search{
+	border:none;
+	background-color:#222;
+	color:white;
+}
+/********** Search bar START **********/
 
 
 /********** POST LIST START **********/

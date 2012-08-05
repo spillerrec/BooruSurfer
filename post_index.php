@@ -48,6 +48,9 @@
 			);
 	}
 	
+	//Add search
+	$layout->navigation->addItem( $styler->tag_search() );
+	
 	$list = new htmlList();
 	
 	//Write list
