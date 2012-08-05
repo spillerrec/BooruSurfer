@@ -20,7 +20,8 @@
 		//TODO:
 	}
 	
-	$layout = new mainLayout( "Konachan", "kona" );
+	$layout = new mainLayout();
+	$layout->navigation = $styler->main_navigation( $search );
 	
 	//Set title
 	$title = "Index";
@@ -40,16 +41,6 @@
 	if( $page+1 < $page_amount )
 		$layout->page->html->addSequence( "next", $site->index_link( $page+1, $search ) );
 	
-	//Add links to other sites in the nav bar
-	$sites = SiteInfo::sites();
-	foreach( $sites as $key=>$sub_site ){
-		$layout->navigation->addItem(
-				new htmlLink( $site->site_index_link( $key, 1, $search ), $sub_site )
-			);
-	}
-	
-	//Add search
-	$layout->navigation->addItem( $styler->tag_search() );
 	
 	$list = new htmlList();
 	

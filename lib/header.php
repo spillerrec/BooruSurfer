@@ -9,25 +9,18 @@
 		public $main;
 		
 		
-		function __construct( $site_name, $code = NULL ){
+		function __construct(){
 			$this->page = new htmlPage();
 			$this->page->html->head->content[] = new fakeObject( ("<!--[if lt IE 9]><script src=\"/style/ie8.js\"></script><![endif]-->") );
 			$this->page->html->addStylesheet( "/style/main.css" );
 			
+			//Create header
 			$nav = new htmlObject( "nav" );
-			
-			$nav->content[] = new htmlList();
-			$this->navigation =& $nav->content[0];
-			$this->navigation->addItem( $site_name );
-			if( $code )
-				$this->navigation->addItem( new htmlLink( "/$code/index/", "Posts" ) );
-			
-			//TODO: add search bar
-			
-			
 			$header = new htmlObject( "header" );
 			$header->content[] = $nav;
 			$this->page->html->body->content[] = $header;
+			
+			$this->navigation =& $nav->content;
 			
 			
 			//Add content areas

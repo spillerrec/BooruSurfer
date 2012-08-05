@@ -1,7 +1,7 @@
 
 /********** HOLY GRAIL START **********/
 body {
-  min-width: 400px;      /* 2x LC width + RC width */
+  min-width: 408px;      /* 2x LC width + RC width */
 }
 #container {
 	clear:both;
@@ -55,7 +55,7 @@ ul{
 /********** HEADER START **********/
 header nav ul, header nav ul li{ margin:0; padding:0; list-style:none; }
 
-header nav ul li{ float: left; }
+header nav > ul > li{ float: left; }
 header nav ul li{
 	padding: 0 5px 5px 0;
 	border-radius:5px;
@@ -74,7 +74,26 @@ header nav ul li{
 /********** Front page END **********/
 
 
-/********** Search bar START **********/
+/********** Header START **********/
+header > nav > ul{
+	
+}
+header > nav li > ul{
+	position:absolute;
+	z-index:1;
+	background-color: black;
+	display:none;
+	border: 2px solid #222;
+	padding-top: 5px;
+}
+header > nav li:hover > ul{
+	display:block;
+}
+header > nav li > ul > li{
+	padding-left: 5px;
+}
+
+/**** search bar ****/
 fieldset{
 	margin:0;
 	padding:0;
@@ -86,7 +105,7 @@ header nav li form{ float:right; }
 	background-color:#222;
 	color:white;
 }
-/********** Search bar START **********/
+/********** Header END **********/
 
 
 /********** POST LIST START **********/

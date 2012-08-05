@@ -1,6 +1,7 @@
 <?php
 	require_once "lib/html.php";
 	require_once "lib/Booru.php";
+	require_once "lib/SiteInfo.php";
 	
 	/* Styler creates the HTML markup for all basic objects.
 	 * In time you should be able to override this class
@@ -11,8 +12,10 @@
 	//Stuff needed for the class to function properly
 		
 		private $site;
+		private $code;
 		public function __construct( $site ){
 			$this->site = $site;
+			$code = $this->site->get_api()->get_code();
 		}
 		
 		
@@ -50,6 +53,10 @@
 			return date( 'H:i d/m/Y', $unix_time );
 		}
 		
+		
+	//Page elements like headers
+		
+		//Creates a form to input a search
 		public function tag_search(){
 			//Create tag input
 			$input = new htmlObject( 'input' );
@@ -62,11 +69,39 @@
 			
 			//Create form
 			$form = new htmlObject( 'form', $fields );
-			$form->attributes['action'] = '/' . $this->site->get_api()->get_code() . '/';
+			$form->attributes['action'] = '/' . $this->code . '/';
 			$form->attributes['method'] = 'GET';
 			
 			return $form;
 		}
+		
+		//The navigation bar
+		public function main_navigation( $search=NULL ){
+			//Init
+			$sites = SiteInfo::sites();
+			$links = new htmlList();
+			//Create a dropdown menu with all sites
+			$sub = new htmlList();
+			foreach( $sites as $key=>$sub_site ){
+				$sub->addItem(
+						new htmlLink( $this->site->site_index_link( $key, 1, $search ), $sub_site )
+					);
+			}
+			
+			//Add this under the current site name
+			$links->addItem( array( new fakeObject( $this->site->get_api()->get_name() ), $sub ) );
+			
+			
+			//Add other pages
+			$links->addItem( new htmlLink( $this->site->index_link(), 'Index' ) );
+			$links->addItem( new htmlLink( '/manage/', 'Settings' ) );
+			
+			//Add search
+			$links->addItem( $this->tag_search() );
+			
+			return $links;
+		}
+		
 		
 	//Formating of DataTables like DTPost and DTTag
 		
@@ -98,7 +133,9 @@
 		
 		//A large preview of the image, possibly the original image
 		//if no preview exist
-		public function post_preview( $image, $alt=NULL ){
+		public function post_preview( $post ){
+			$preview = $post->get_image( 'preview' );
+			$image = $post->get_image();
 			if( pathinfo( $image->url, PATHINFO_EXTENSION ) == "swf" ){
 				return array(
 						new htmlObject( 'object', " ", array(
@@ -110,8 +147,10 @@
 						new htmlLink( $image->url, "Direct link" )
 					);
 			}
-			else
-				return new htmlImage( $image->url, $alt );
+			else{
+				$img = new htmlImage( $preview->url, 'preview' );
+				return new htmlLink( $image->url, $img );
+			}
 		}
 		
 		//Returns a link to the post with an image thumbnail of the post

@@ -11,7 +11,8 @@
 	$post = $site->post( $id );
 	
 	if( $post ){
-		$layout = new mainLayout( "Konachan", "kona" );
+		$layout = new mainLayout();
+		$layout->navigation = $styler->main_navigation();
 		$layout->page->html->title = "Post: " . $post->get( 'tags' );
 		$layout->main->attributes['class'] = "post";
 		$layout->sidebar->attributes['class'] = "post_info";
@@ -27,7 +28,7 @@
 		$layout->page->html->head->content[] = $speeddial;
 		
 		$image_container = new htmlObject( 'div', NULL, toClass( 'container' ) );
-		$image_container->content[] = $styler->post_preview( $preview, 'image' );
+		$image_container->content[] = $styler->post_preview( $post, 'image' );
 		
 		
 		/*Notes
