@@ -110,15 +110,16 @@ header nav li form{ float:right; }
 
 /********** POST LIST START **********/
 .post_list li{ position:relative; }
-.post_list ul, .post_list ul li{ margin:0; padding:0; list-style:none; }
+.post_list ul{ margin:0; padding:0; list-style:none; }
 .post_list li .details{ display:none; }
 .post_list li a{ display:block; }
 
 .post_list li{
 	float:left;
+	margin: 0 5px 5px 0;
+	padding:0;
 }
 .post_list li > a{
-	margin: 0 5px 5px 0;
 	border:2px solid gray;
 	padding:5px;
 	border-radius:5px;
