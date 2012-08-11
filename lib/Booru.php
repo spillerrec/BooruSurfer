@@ -125,13 +125,23 @@
 		}
 		
 		public function refresh_tags(){
+			$time = time();
 			$tags = $this->api->all_tags();
 			
 			$time_start = microtime( true );
 			
+			//Create this before the transaction
+			//in case the database doesn't exist
+			$t = new DTTag( $this->code );
+			
 			//Do it as a single transaction to reduce journaling penalty
 			$db = Database::get_instance()->db;
 			$db->beginTransaction();
+			
+			//set update time in info
+			$db->exec( "UPDATE site_info SET tags_updated = $time WHERE id = '$this->code'" );
+			//Delete previous contents
+			$t->delete_contents();
 			
 			echo "fetched data, saving in db<br>";
 			foreach( $tags as $tag_data ){

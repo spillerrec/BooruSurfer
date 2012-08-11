@@ -3,8 +3,9 @@ RewriteEngine on
 RewriteCond   %{QUERY_STRING}    ^tags=(.*)$
 RewriteRule ^([a-zA-Z0-9]+)/$    /$1/index/%1? [R]
 
-RewriteRule ^manage/                    manage.php [L]
-RewriteRule ^([a-zA-Z0-9]+)/manage/     manage.php?site=$1 [L]
+RewriteRule ^manage/                        manage.php [L]
+RewriteRule ^([a-zA-Z0-9]+)/manage/set/     manage.php?site=$1&set=1 [L]
+RewriteRule ^([a-zA-Z0-9]+)/manage/         manage.php?site=$1 [L]
 
 RewriteRule ^([a-zA-Z0-9]+)/proxy/(.*)     proxy.php?site=$1&url=$2 [L]
 

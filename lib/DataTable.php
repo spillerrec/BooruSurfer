@@ -24,7 +24,7 @@
 		private $data = array();
 		protected $name; //Of the table
 		
-		//Call this after the data array have been filled!
+		//This constructor MUST be called in subclasses
 		public function __construct( $table_name, $data ){
 			$this->name = $table_name;
 			
@@ -39,6 +39,20 @@
 		abstract protected function create_data();
 		
 	//Data array functions
+		
+		//Returns whether a row is loaded or not
+		public function is_loaded(){
+			return $this->get !== NULL;
+		}
+		
+		//Die and emit an error message if not loaded
+		public function must_be_loaded(){
+			if( !$this->is_loaded() ){
+				echo "$this->name has not a row loaded and cannot be processed.";
+				die();
+			}
+		}
+		
 		//Add an entry to the data-table
 		//$required specifies if the lack of this parameter should be treated as an error
 		//$type will cause the variable to be casted to this type
@@ -113,6 +127,11 @@
 		public function delete_table(){
 			$db = Database::get_instance()->db;
 			$db->exec( "DROP TABLE $this->name" );
+		}
+		
+		public function delete_contents(){
+			$db = Database::get_instance()->db;
+			$db->exec( "DELETE FROM $this->name" );
 		}
 		
 		//Check if the data with the id '$id' is already stored
