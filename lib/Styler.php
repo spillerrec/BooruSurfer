@@ -31,7 +31,8 @@
 		private $code;
 		public function __construct( $site ){
 			$this->site = $site;
-			$code = $this->site->get_api()->get_code();
+			if( $this->site )
+				$this->code = $this->site->get_api()->get_code();
 		}
 		
 		
