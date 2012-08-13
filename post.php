@@ -73,7 +73,8 @@
 		//Fill sidebar
 		$layout->sidebar->content[] = new htmlObject( "h3", "Info:" );
 		$layout->sidebar->content[] = new htmlObject( "p", "Dimension: $image->width" . "x$image->height" );
-		$layout->sidebar->content[] = new htmlObject( "p", "Filesize: " . $styler->format_filesize( $image->filesize ) );
+		if( $image->filesize )
+			$layout->sidebar->content[] = new htmlObject( "p", "Filesize: " . $styler->format_filesize( $image->filesize ) );
 		
 		//Date
 		if( $date = $post->get( 'creation_date' ) )

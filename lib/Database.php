@@ -23,6 +23,7 @@
 		
 		private function __construct(){
 			$this->db = new PDO('sqlite:cache/db.sqlite' );
+			$this->db->exec( "PRAGMA foreign_keys = ON" );
 		}
 		public static function get_instance(){
 			if( !Database::$instance )
