@@ -131,7 +131,7 @@
 			//make parameters
 			$para = "?";
 			foreach( $parameters as $key => $value )
-				$para .= "$key=" . urlencode( $value ) . '&';
+				$para .= "$key=" . rawurlencode( $value ) . '&';
 			$para = rtrim( $para, "&" );
 			
 			//Create URL
