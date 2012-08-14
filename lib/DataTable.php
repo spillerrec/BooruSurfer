@@ -83,6 +83,13 @@
 			$this->data[ $property ] = $data;
 		}
 		
+		public function export(){
+			$raw = array();
+			foreach( $this->data as $key => $value )
+				$raw[$key] = $value->value;
+			return $raw;
+		}
+		
 		public function prepare_array(){
 			$result = array();
 			foreach( $this->data as $key => $value )

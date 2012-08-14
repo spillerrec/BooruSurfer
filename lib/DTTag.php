@@ -74,5 +74,17 @@
 			
 			return $tags;
 		}
+		
+		public function similar_tags( $search ){
+			$db = Database::get_instance()->db;
+			$result = $db->query( "SELECT * FROM $this->name WHERE id LIKE " . $db->quote('%'.$search.'%') . " ORDER BY count DESC LIMIT 10" );
+			
+			//Fetch
+			$tags = array();
+			foreach( $result as $row )
+				$tags[] = new DTTag( $this->prefix, $row );
+			
+			return $tags;
+		}
 	}
 ?>
