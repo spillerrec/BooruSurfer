@@ -22,6 +22,6 @@
 			$this->url = "http://yande.re/";
 		}
 		public function get_name(){ return "Yande.re"; }
-		public function get_code(){ return "imouto"; }
+		public function get_code(){ return "yandere"; }
 	}
 ?>

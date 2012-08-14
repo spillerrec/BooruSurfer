@@ -14,7 +14,6 @@ API stuff:
 -	Fix related tags when searching on multiple tags
 
 Database stuff:
--	Always use proxy and use custom filenames
 -	Finish /manage/ page
 -	Improve plugin handling
 -	Cache index API calls
@@ -22,3 +21,4 @@ Database stuff:
 Interface:
 -	Add source in /[site]/post/[id]/
 -	Make a standard way of displaying errors
+-	Add search suggestions
