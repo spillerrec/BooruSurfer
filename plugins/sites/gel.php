@@ -33,7 +33,7 @@
 			//make parameters
 			$para = "?";
 			foreach( $parameters as $key => $value )
-				$para .= "$key=$value&";
+				$para .= "$key=" . urlencode( $value ) . '&';
 			$para = rtrim( $para, "&" );
 			
 			//Create URL
