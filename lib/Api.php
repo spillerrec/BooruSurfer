@@ -18,6 +18,7 @@
 	abstract class Api{
 		abstract public function get_name();
 		abstract public function get_code();
+		public function get_refferer(){ return ''; }
 		
 		abstract public function post( $id ); //Retrive a single post based on id
 		abstract public function index( $search = NULL, $page = 1 ); //Retrive several posts based on a search critiria

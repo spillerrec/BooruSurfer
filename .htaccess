@@ -7,7 +7,7 @@ RewriteRule ^manage/                        manage.php [L]
 RewriteRule ^([a-zA-Z0-9]+)/manage/set/     manage.php?site=$1&set=1 [L]
 RewriteRule ^([a-zA-Z0-9]+)/manage/         manage.php?site=$1 [L]
 
-RewriteRule ^([a-zA-Z0-9]+)/proxy/(.*)     proxy.php?site=$1&url=$2 [L]
+RewriteRule ^([a-zA-Z0-9]+)/proxy/([a-z]+)/([a-zA-Z0-9]+)\ ([0-9]+)\ (.*)     proxy.php?site=$1&type=$2&id=$4 [L]
 
 RewriteRule ^([a-zA-Z0-9]+)/post/([0-9]+)/                   post.php?site=$1&id=$2 [L]
 RewriteRule ^([a-zA-Z0-9]+)/index/([0-9]+)-([0-9]+)/(.*)     post_index.php?site=$1&page=$2&limit=$3&search=$4 [L]

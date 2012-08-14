@@ -18,8 +18,28 @@
 	require_once "lib/Booru.php";
 	$site = new Booru( $_GET['site'] );
 	
-	$site_url = "http://behoimi.org/";
-	$url = $site_url . $_GET["url"];
+	$post = $site->post( $_GET['id'] );
+	
+	$site_url = $site->get_api()->get_refferer();
+	//TODO: emulate it better ;P
+	
+	//Get image
+	$type = $_GET['type']; //TODO: validate
+	switch( $type ){
+		case 'thumb':
+		case 'preview':
+		case 'reduced':
+			break;
+		
+		case 'original':
+				$type = '';
+			break;
+		
+		default:
+			die( "Unknown image type!" );
+	}
+	$img = $post->get_image( $type );
+	$url = $img->real_url;
 	
 	//TODO: emulate referer path
 	//TODO: set caching

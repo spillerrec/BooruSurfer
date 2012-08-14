@@ -24,6 +24,7 @@
 		public function hash_password( $pass ){
 			return sha1( "choujin-steiner--" . $_GET['hash'] . "--" );
 		}
+		public function get_refferer(){ return $this->url; }
 		
 	//General parsing functions
 		protected function transform_url( &$url, $type ){

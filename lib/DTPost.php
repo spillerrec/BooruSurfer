@@ -19,21 +19,6 @@
 	require_once "lib/DTTag.php";
 	
 	
-	class Image{
-		public $url;
-		public $width;
-		public $height;
-		public $filesize;
-		
-		function __construct( $path, $w, $h, $size ){
-			$this->url = $path;
-			$this->width = $w;
-			$this->height = $h;
-			$this->filesize = $size;
-		}
-	}
-	
-	
 	class DTPost extends DataTable{
 		public function id(){ return $this->get( 'id' ); }
 		public function parent_id(){ return $this->get( 'parent_id' ); }
@@ -81,16 +66,152 @@
 			$this->add( $prefix . 'filesize', false, 'int' );
 		}
 		
+		
+		//Construct a name based on the tags
+		private $name_cache = NULL;
+		public function name(){
+			//Get from cache if already contructed
+			if( $this->name_cache !== NULL )
+				return $this->name_cache;
+			
+			//Types of tags
+			$tags = $this->get_tags();
+			$authors = array();
+			$copy = array();
+			$charac = array();
+			$others = array();
+			
+			//Sepearate tags
+			foreach( $tags as $tag ){
+				switch( $tag->get_type() ){
+					case DTTag::ARTIST:	$authors[$tag->name()]	= $tag->get_count(); break;
+					case DTTag::COPYRIGHT:	$copy[$tag->name()]	= $tag->get_count(); break;
+					case DTTag::CHARACTER:	$charac[$tag->name()]	= $tag->get_count(); break;
+					default:	$others[$tag->name()]	= $tag->get_count(); break;
+				}
+			}
+			
+			//Build name
+			$text;
+			$this->add_to_name( $text, $authors );
+			$text .= ' - ';
+			$this->add_to_name( $text, $copy );
+			$text .= ' - ';
+			$this->add_to_name( $text, $charac );
+			$text .= ' - ';
+			$this->add_to_name( $text, $others );
+			
+			//Set cache and return
+			$this->name_cache = $text;
+			return $this->name_cache;
+		}
+		
+		//Converts an array of tags to names
+		private function tags_to_name( $tags ){
+			$name = "";
+			foreach( $tags as $text => $count ){
+				$name .= ($name) ? ' ' : '';
+				$name .= $text;
+			}
+			return $name;
+		}
+		
+		//Adding a tag group to $name, while keeping the character count
+		//below $limit. Returns false if nothing added, otherwise true
+		private function add_to_name( &$name, $tag_group, $limit=128 ){
+			//Just skip if it is already too late
+			if( mb_strlen( $name ) >= $limit )
+				return false;
+			
+			//Add the whole thing if enough space
+			$temp = $this->tags_to_name( $tag_group );
+			if( mb_strlen( $name . $temp ) < $limit ){
+				$name .= $temp;
+				return true;
+			}
+			
+			//Sort the thing
+			arsort( $tag_group );
+			
+			//Remove until there is room
+			while( count( $tag_group ) ){
+				//Remove
+				array_pop( $tag_group );
+				$temp = $this->tags_to_name( $tag_group );
+				
+				//stop if short enough
+				if( mb_strlen( $name . $temp ) < $limit ){
+					$name .= $temp;
+					return true;
+				}
+			}
+			
+			//Nothing added
+			return false;
+		}
+		
+		private function proxy_url( $url, $type ){
+			//Don't do anything for thumbnails
+			if( $type == 'thumb_' )
+				return $url;
+			
+			//create postfix for filename
+			$post = '.';
+			if( $type ){
+				$type = rtrim( $type, '_' ); //Avoid the '_'
+				$post .= $type . '.';
+			}
+			
+			//Fix the extension
+			$ext = pathinfo($url, PATHINFO_EXTENSION);
+			$ext = ($ext == 'jpeg') ? 'jpg' : $ext;
+			
+			$post .= $ext;
+			
+			//Create prefix
+			$pre = $this->prefix . ' ' . $this->id() . ' - ';
+			
+			//avoid empty type
+			$type = ($type == '') ? 'original' : $type;
+			
+			//Get name and remove throublesome characters
+			$name = $this->name();
+			//Windows illegal characters, from
+			//http://msdn.microsoft.com/en-us/library/windows/desktop/aa365247(v=vs.85).aspx#naming_conventions
+			$name = str_replace( '<', '', $name );
+			$name = str_replace( '>', '', $name );
+			$name = str_replace( ':', '', $name );
+			$name = str_replace( '"', '', $name );
+			$name = str_replace( '/', '', $name );
+			$name = str_replace( '\\', '', $name );
+			$name = str_replace( '|', '', $name );
+			$name = str_replace( '?', '', $name );
+			$name = str_replace( '*', '', $name );
+			//Characters messing up filenames in Opera
+			$name = str_replace( ';', '', $name );
+			
+			//Create full url
+			return "/$this->prefix/proxy/$type/$pre" . $name . $post;
+		}
+		
+		//Get all infomation about an image, with a specific prefix
 		private function get_to_image( $prefix = "" ){
 			//Make sure it is available
 			if( $this->get( $prefix . "url" ) === NULL )
 				return NULL;
 			
-			return new Image(
-					$this->get( $prefix . 'url' ),
-					$this->get( $prefix . 'width' ),
-					$this->get( $prefix . 'height' ),
-					$this->get( $prefix . 'filesize' )
+			//make a proxy url
+			$real_url = $this->get( $prefix . 'url' );
+			$url = $this->proxy_url( $real_url, $prefix );
+			
+			//Create the full object
+			return (object)array(
+					'url'	=>	$url,
+					'width'	=>	$this->get( $prefix . 'width' ),
+					'height'	=>	$this->get( $prefix . 'height' ),
+					'filesize'	=>	$this->get( $prefix . 'filesize' ),
+					'prefix'	=> $prefix,
+					'real_url'	=> $real_url
 				);
 		}
 		//TODO: Check for a certain type
@@ -116,20 +237,26 @@
 		}
 		
 		
+		//Get the tags as DTTag
+		//Process is only calculated once per post
+		private $tags_cache = NULL;
 		public function get_tags(){
-			//Tags are space separated
-			$raw = explode( ' ', $this->get( 'tags' ) );
-			$tags = array();
-			
-			//Convert the tags
-			foreach( $raw as $name )
-				if( $name ){	//Avoid empty tags
-					$tag = new DTTag( $this->prefix );
-					$tag->db_read( $name );	//Lookup addional info in database
-					$tags[] = $tag;
-				}
-			
-			return $tags;
+			if( $this->tags_cache === NULL ){
+				//Tags are space separated
+				$raw = explode( ' ', $this->get( 'tags' ) );
+				$tags = array();
+				
+				//Convert the tags
+				foreach( $raw as $name )
+					if( $name ){	//Avoid empty tags
+						$tag = new DTTag( $this->prefix );
+						$tag->db_read( $name );	//Lookup addional info in database
+						$tags[] = $tag;
+					}
+				
+				$this->tags_cache = $tags;
+			}
+			return $this->tags_cache;
 		}
 	}
 ?>

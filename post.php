@@ -29,7 +29,7 @@
 	if( $post ){
 		$layout = new mainLayout();
 		$layout->navigation = $styler->main_navigation();
-		$layout->page->html->title = "Post: " . $post->get( 'tags' );
+		$layout->page->html->title = "Post: " . $post->name();
 		$layout->main->attributes['class'] = "post";
 		$layout->sidebar->attributes['class'] = "post_info";
 		$thumbnail = new htmlObject( "link" );

@@ -17,10 +17,12 @@
 	
 	require_once 'lib/header.php';
 	require_once 'lib/SiteInfo.php';
+	require_once 'lib/Styler.php';
 	
 	//Get site, if available
 	require_once "lib/Booru.php";
 	$site = isset( $_GET['site'] ) ? new Booru( $_GET['site'] ) : NULL;
+	$styler = new Styler( $site );
 	
 	$info = new SiteInfo();
 	
@@ -118,11 +120,8 @@
 		
 		//Add time on last update
 		$time = $info->get_tags_updated();
-		date_default_timezone_set( 'Europe/Copenhagen' );
-		if( $time > 0 ){
-			$time = date( 'd/m/Y', $time );
-			$time = 'Last updated: '.$time;
-		}
+		if( $time > 0 )
+			$time = 'Last updated: '.$styler->format_date( $time );
 		else
 			$time = 'No tags in DB!';
 		$update_field->content[] = new htmlObject( 'p', $time );

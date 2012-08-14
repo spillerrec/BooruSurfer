@@ -96,9 +96,10 @@
 		
 		public static function sites( $active = true){
 			$db = Database::get_instance()->db;
-			$query = 'SELECT * FROM site_info ORDER BY name ASC';
+			$query = 'SELECT * FROM site_info';
 			if( $active )
 				$query .= ' WHERE active = 1';
+			$query .= ' ORDER BY name ASC';
 			$stmt = $db->query( $query );
 			
 			//Build array
