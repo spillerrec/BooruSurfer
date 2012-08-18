@@ -223,21 +223,24 @@
 			if( !$amount )
 				return NULL;
 			
+			//Calculate min and max page to show
 			$min = $page - 3;
 			$max = $page + 3;
 			if( $min < 1 )
 				$min = 1;
-			if( $max >= $amount )
-				$max = $amount - 1;
+			if( $max > $amount )
+				$max = $amount;
 			
 			
 			$list = new htmlList();
+			//If first page is not included, add it
 			if( $min > 1 ){
-				$list->addItem( new htmlLink( $this->site->index_link( 1, $search ), "<<" ) );
+				$list->addItem( new htmlLink( $this->site->index_link( 1, $search ), '1' ) );
 				if( $min > 2 )
 					$list->addItem( "..." );
 			}
 			
+			//Add pages from min to max
 			for( $i=$min; $i<=$max; $i++ ){
 				if( $i == $page )
 					$list->addItem( $page );
@@ -245,14 +248,15 @@
 					$list->addItem( new htmlLink( $this->site->index_link( $i, $search ), $i ) );
 			}
 			
-			if( $max < $amount - 1 ){
+			//If last page is not included, add it
+			if( $max < $amount ){
 				$list->addItem( "..." );
-				$list->addItem( new htmlLink( $this->site->index_link( $amount - 1, $search ), ">>" ) );
+				$list->addItem( new htmlLink( $this->site->index_link( $amount, $search ), $amount ) );
 			}
 			
+			//Encase the list in a nav
 			$nav = new htmlObject( "nav", NULL, array( 'class'=>'page_nav' ) );
 			$nav->content[] = $list;
-			//$nav->content[] = new htmlObject( "div", NULL, array( 'style'=>'clear:both' ) );
 			return $nav;
 		}
 		

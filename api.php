@@ -21,18 +21,10 @@
 	$handler = $_GET['handler'];
 	
 	
-	function dt_to_json( $arr ){
-		$container = array();
-		foreach( $arr as $row )
-			$container[] = $row->export();
-		
-		echo json_encode( $container );
-	}
-	
 	if( $handler == 'similar_tags' ){
 		$query = $_GET['query'];
 		$dttag = new DTTag( $site->get_api()->get_code() );
 		$tags = $dttag->similar_tags( $query );
-		dt_to_json( $tags );
+		echo json_encode( $tags );
 	}
 ?>

@@ -20,7 +20,7 @@
 	/*	Provides a data array which can be stored in a database table
 	**	
 	*/	
-	abstract class DataTable{
+	abstract class DataTable implements JsonSerializable{
 		private $data = array();
 		protected $name; //Of the table
 		
@@ -83,7 +83,8 @@
 			$this->data[ $property ] = $data;
 		}
 		
-		public function export(){
+		//Export as JSON, but don't show internal variables
+		public function jsonSerialize(){
 			$raw = array();
 			foreach( $this->data as $key => $value )
 				$raw[$key] = $value->value;
