@@ -126,16 +126,22 @@
 			if( $limit == NULL )
 				$limit = $this->site->get_fetch_amount();
 			
+			//Calculate min/max
+			$min = ($page-1) * $limit;
+			$max = $page * $limit;
+			if( $max > $this->get_count() )
+				$max = $this->get_count();
+			
 			//Finish the query and execute
 			$stmt->execute( array(
-					'range_min'	=>	($page-1) * $limit
-				,	'range_max'	=>	$page * $limit
+					'range_min'	=>	$min
+				,	'range_max'	=>	$max
 				,	'id'	=>	$this->id
 				) );
 			$data = $stmt->fetchAll();
 			
 		//Try to retrive the data
-			if( count( $data ) == $limit ){
+			if( count( $data ) == $max-$min ){
 				//All post are known, convert and return them
 				$posts = array();
 				foreach( $data as $post )
