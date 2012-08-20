@@ -54,7 +54,7 @@
 	if( $page > 1 )
 		$layout->page->html->addSequence( "prev", $site->index_link( $page-1, $search ) );
 	
-	if( $page+1 < $page_amount )
+	if( $page+1 <= $page_amount )
 		$layout->page->html->addSequence( "next", $site->index_link( $page+1, $search ) );
 	
 	
