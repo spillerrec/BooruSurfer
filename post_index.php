@@ -29,9 +29,10 @@
 	//Get parameters
 	$search = $_GET["search"];
 	$page = $_GET["page"];
-	$index = $site->index( $search, $page );
+	$post_index = $site->index( $search );
+	$index = $post_index->get_page( $page );
 	
-	$page_amount = $site->get_page_amount();
+	$page_amount = $post_index->get_page_amount();
 	if( $page_amount < 2 ){
 		//TODO:
 	}
@@ -71,7 +72,7 @@
 	$layout->main->content[] =& $list;
 	
 	//Add page navigation
-	$page_links = $styler->page_nav( $search, $page );
+	$page_links = $styler->page_index_nav( $post_index, $page );
 	if( $page_links )
 		$layout->main->content[] = $page_links;
 	

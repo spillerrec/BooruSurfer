@@ -18,6 +18,7 @@
 	require_once "lib/html.php";
 	require_once "lib/Booru.php";
 	require_once "lib/SiteInfo.php";
+	require_once "lib/Index.php";
 	
 	/* Styler creates the HTML markup for all basic objects.
 	 * In time you should be able to override this class
@@ -218,8 +219,8 @@
 	//Page specific stuff
 		
 		//Pagenation
-		function page_nav( $search, $page ){
-			$amount = $this->site->get_page_amount();
+		function page_index_nav( $index, $page ){
+			$amount = $index->get_page_amount();
 			if( !$amount )
 				return NULL;
 			
@@ -235,7 +236,7 @@
 			$list = new htmlList();
 			//If first page is not included, add it
 			if( $min > 1 ){
-				$list->addItem( new htmlLink( $this->site->index_link( 1, $search ), '1' ) );
+				$list->addItem( new htmlLink( $this->site->index_link( 1, $index->get_search() ), '1' ) );
 				if( $min > 2 )
 					$list->addItem( "..." );
 			}
@@ -245,13 +246,13 @@
 				if( $i == $page )
 					$list->addItem( $page );
 				else
-					$list->addItem( new htmlLink( $this->site->index_link( $i, $search ), $i ) );
+					$list->addItem( new htmlLink( $this->site->index_link( $i, $index->get_search() ), $i ) );
 			}
 			
 			//If last page is not included, add it
 			if( $max < $amount ){
 				$list->addItem( "..." );
-				$list->addItem( new htmlLink( $this->site->index_link( $amount, $search ), $amount ) );
+				$list->addItem( new htmlLink( $this->site->index_link( $amount, $index->get_search() ), $amount ) );
 			}
 			
 			//Encase the list in a nav

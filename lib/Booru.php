@@ -19,6 +19,7 @@
 	require_once "lib/DTPost.php";
 	require_once "lib/DTTag.php";
 	require_once "lib/SiteInfo.php";
+	require_once "lib/Index.php";
 	
 	class Booru{
 		private $info;
@@ -38,37 +39,10 @@
 		
 		public function get_api(){ return $this->api; }
 		
-		public function get_page_amount(){
-			return $this->post_amount ? ceil( $this->post_amount / $this->fetch_amount ) : NULL;
-		}
 		public function get_fetch_amount(){ return $this->fetch_amount; }
 		
-		public function index( $search = NULL, $page = 1 ){
-			//No caching here yet : \
-			$data = $this->api->index( $search, $page, $this->fetch_amount );
-			
-			//Set post_amount if available
-			if( isset( $data[ 'count' ] ) )
-				$this->post_amount = $data[ 'count' ];
-			else{
-				//fetch it explicitly
-				//TODO: 
-			}
-			
-			//Convert posts
-			$posts = array();
-			foreach( $data as $post )
-				if( gettype( $post ) == "array" ) //Do not convert extra properties like 'count'
-					$posts[] = new DTPost( $this->code, $post );
-			
-			//Save posts in db
-			$db = Database::get_instance()->db;
-			$db->beginTransaction();
-			foreach( $posts as $post )
-				$post->db_save();
-			$db->commit();
-			
-			return $posts;
+		public function index( $search = NULL ){
+			return new Index( $this, $search );
 		}
 		
 		public function post( $id ){
