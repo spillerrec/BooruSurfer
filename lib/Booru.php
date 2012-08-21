@@ -100,6 +100,7 @@
 		
 		public function refresh_tags(){
 			$time = time();
+			ini_set("memory_limit","256M"); //Oh my fucking God...
 			$tags = $this->api->all_tags();
 			
 			$time_start = microtime( true );
