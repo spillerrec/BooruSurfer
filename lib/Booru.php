@@ -128,34 +128,5 @@
 			
 			$db->commit();
 		}
-		
-		public function related( $search ){
-			if( !$search ){
-				$tag = new DTTag( $this->code );
-				return $tag->most_used();
-			}
-			else{
-				//Fetch related tags
-				//No caching yet : \
-				$data = $this->api->related_tags( $search );
-				
-				$tags_list = array();
-				foreach( $data as $key => $value ){
-					
-					$related = array();
-					foreach( $value as $tag_data ){
-						$tag = new DTTag( $this->code, $tag_data );
-						$tag->db_read( $tag->name() );
-						$tag->real_count = $tag_data['count'];
-						$related[] = $tag;
-					}
-					
-					$tags_list[$key] = $related;
-				}
-				
-				foreach( $tags_list as $result )
-					return $result; //Hackish way of returning first one..
-			}
-		}
 	}
 ?>

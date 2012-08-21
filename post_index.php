@@ -81,7 +81,7 @@
 	$layout->sidebar->content[] = new htmlObject( "p", $search );
 	
 	//Add related tags
-	$tags = $site->related( $search );
+	$tags = $post_index->related_tags();
 	if( $tags )
 		$layout->sidebar->content[] = $styler->tag_list( $tags );
 	

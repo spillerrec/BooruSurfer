@@ -17,6 +17,7 @@
 	
 	require_once "lib/Database.php";
 	require_once "lib/DTPost.php";
+	require_once "lib/DTTag.php";
 	
 	/*	Manages searches and related tags.
 	 *	
@@ -118,14 +119,66 @@
 			return $this->fetch_from_db( $page );
 		}
 		
+		//Retrive a set of related tags.
+		//Will use (cached) API or database depending on
+		//the situation.
+		public function related_tags(){
+			if( !$this->search ){
+				//If no search just show most common tags
+				$tag = new DTTag( $this->prefix );
+				return $tag->most_used();
+			}
+			else{
+				//TODO: decide whether it should calculate
+				//or fetch from API. API is used for now.
+				
+			//Use the API to get the tags
+				//Check cache first
+				$tags = $this->get_tags();
+				if( $tags != NULL )
+					return $tags;
+				
+				//Fetch from API
+				$data = $this->site->get_api()->related_tags( $this->search );
+				if( !$data )
+					return NULL;
+				
+				//Build array of tags to relate too
+				$tags_list = array();
+				foreach( $data as $key => $value ){
+					//Create related tags
+					$related = array();
+					foreach( $value as $tag_data ){
+						$tag = new DTTag( $this->prefix, $tag_data );
+						$tag->db_read( $tag->name() );
+						$tag->real_count = $tag_data['count'];
+						$related[] = $tag;
+					}
+					
+					$tags_list[$key] = $related;
+				}
+				
+				//Use the first one
+				$tags = array_shift( $tags_list );
+				
+				//Cache it and return
+				$this->save_tags( $tags );
+				return $tags;
+			}
+		}
 		
 	//Update functions
 		//Set a index_list field to a new value
 		private function change_field( $field, $value ){
+			//Update object cache
 			$this->index[$field] = $value;
 			
-			//Update db
+			//Avoid unescaped strings
 			$db = Database::get_instance()->db;
+			if( is_string( $value ) )
+				$value = $db->quote( $value );
+			
+			//Update db
 			$db->query(
 					"UPDATE $this->list SET $field = "
 				.	$value . " WHERE id = "
@@ -257,7 +310,7 @@
 		}
 		
 		
-	//Database handling of searches
+	//Database handling of searches and related tags
 		//Initialize this object with search-data form the database
 		private function lookup_search(){
 			//Get data
@@ -291,6 +344,43 @@
 			$this->lookup_search();
 		}
 		
+		//Store a set of related tags
+		private function save_tags( $tags ){
+			//Calculate fields
+			$names = $counts = "";
+			foreach( $tags as $tag ){
+				$names .= $tag->name() . " ";
+				$counts .= $tag->real_count . " ";
+			}
+			
+			//Update fields
+			$this->change_field( 'related_tags', $names );
+			$this->change_field( 'related_counts', $counts );
+		}
+		
+		//Retrive a set of cached tags
+		private function get_tags(){
+			//fail if not cached
+			if( !$this->index['related_tags'] )
+				return NULL;
+			
+			//Fetch tags and combine them in a single array
+			$tags = array();
+			$raw_names = explode( ' ', $this->index['related_tags'] );
+			$raw_counts = explode( ' ', $this->index['related_counts'] );
+			$raw = array_combine( $raw_names, $raw_counts );
+			
+			//Create all tags
+			foreach( $raw as $name => $count )
+				if( $name ){
+					$t = new DTTag( $this->prefix );
+					$t->db_read( $name );
+					$t->real_count = $count;
+					$tags[] = $t;
+				}
+			
+			return $tags;
+		}
 	}
 	
 ?>
