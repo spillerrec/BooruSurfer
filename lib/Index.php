@@ -18,6 +18,15 @@
 	require_once "lib/Database.php";
 	require_once "lib/DTPost.php";
 	
+	/*	Manages searches and related tags.
+	 *	
+	 *	Ordered indexes and post counts are cached to
+	 *	reduce the amount of API calls.
+	 *	
+	 *	Related tags are cached if the API provides it
+	 *	otherwise they are calculated from the posts.
+	 *	This is still WIP/to be done.
+	 */
 	class Index{
 		//Table names
 		private $post;
@@ -74,6 +83,29 @@
 				$this->create_search();
 		}
 		
+		
+	//Access functions
+		//Current search as a string
+		public function get_search(){ return $this->search; }
+		
+		//The time when it needs updating in unix time
+		public function next_update(){
+			return $this->index['next_update'];
+		}
+		
+		//The amount of posts for the current search
+		public function get_count(){
+			return $this->index['count'];
+		}
+		
+		//The amount of pages required to hold the posts
+		//for this search using the default fetch amount
+		public function get_page_amount(){
+			return $this->get_count() ? ceil( $this->get_count() / $this->site->get_fetch_amount() ) : NULL;
+		}
+		
+		//Retrive the contents of a page in the index
+		//Returns the posts as an array (subject to change)
 		public function get_page( $page ){
 			//Update if too old
 			if( $this->next_update() <= time() ){
@@ -86,6 +118,37 @@
 			return $this->fetch_from_db( $page );
 		}
 		
+		
+	//Update functions
+		//Sets a new unix time for the next update
+		private function set_next_update( $time ){
+			$this->index['next_update'] = $time;
+			
+			//Update db
+			$db = Database::get_instance()->db;
+			$db->query(
+					"UPDATE $this->list SET next_update = "
+				.	$time . " WHERE id = "
+				.	(int)$this->id
+				);
+		}
+		
+		//Sets the count
+		private function set_count( $count ){
+			$this->index['count'] = $count;
+			
+			//Update db
+			$db = Database::get_instance()->db;
+			$db->query(
+					"UPDATE $this->list SET count = "
+				.	(int)$count . " WHERE id = "
+				.	(int)$this->id
+				);
+		}
+		
+		
+	//Database handling of posts
+		//Update the posts offsets for this search
 		private function update_offsets( $diff ){
 			if( $diff != 0 ){
 				$db = Database::get_instance()->db;
@@ -97,6 +160,8 @@
 			}
 		}
 		
+		//Retrive a page from the site and save it in the database
+		//Corrects offsets if 'count' is provided by the site
 		private function fetch_and_save( $page, $limit ){
 			$data = $this->site->get_api()->index( $this->search, $page, $limit );
 			
@@ -109,8 +174,40 @@
 				$this->set_next_update( time() + 5 * 60 ); //TODO:
 			}
 			
-			$this->save_posts( $data, ($page-1) * $limit );
+		//Save the posts in the database
+			//Calculate initial offset
+			$offset = ($page-1) * $limit;
+			
+			//Avoid journaling overhead
+			$db = Database::get_instance()->db;
+			$db->beginTransaction();
+			
+			//Save all posts
+			foreach( $data as $post )
+				//Do not process extra properties like 'count'
+				if( gettype( $post ) == "array" ){
+					//Save post data
+					$p = new DTPost( $this->prefix, $post );
+					$p->db_save();
+					
+					//Save offset data
+					$db->query( "REPLACE INTO $this->post VALUES ( "
+						.	(int)$this->id . ", "
+						.	(int)$offset . ", "
+						.	(int)$p->id() . " )"
+						);
+					
+					//Increment offset
+					$offset++;
+				}
+			
+			$db->commit();
 		}
+		
+		//Retrive a page from the database.
+		//If it is not there, it tries to fetch it from the site
+		//and calls itself recursively.
+		//If $limit is NULL the default limit is used.
 		private function fetch_from_db( $page, $limit=NULL ){
 		//Grap everything from the database
 			//Prepare the query
@@ -158,7 +255,9 @@
 			}
 		}
 		
-		//Get basic information
+		
+	//Database handling of searches
+		//Initialize this object with search-data form the database
 		private function lookup_search(){
 			//Get data
 			$db = Database::get_instance()->db;
@@ -169,6 +268,7 @@
 			$this->id = $this->index ? $this->index['id'] : NULL;
 		}
 		
+		//Store a new search in the database
 		private function create_search(){
 			//Prepare values to insert
 			$search = $this->search;
@@ -190,57 +290,6 @@
 			$this->lookup_search();
 		}
 		
-		private function save_posts( $data, $offset ){
-			$db = Database::get_instance()->db;
-			$db->beginTransaction();
-			foreach( $data as $post )
-				if( gettype( $post ) == "array" ){ //Do not convert extra properties like 'count'
-					$p = new DTPost( $this->prefix, $post );
-					$p->db_save();
-					
-					$db->query( "REPLACE INTO $this->post VALUES ( "
-						.	(int)$this->id . ", "
-						.	(int)$offset . ", "
-						.	(int)$p->id() . " )"
-						);
-					
-					$offset++;
-				}
-			$db->commit();
-		}
-		
-		public function get_search(){ return $this->search; }
-		public function next_update(){
-			return $this->index['next_update'];
-		}
-		private function set_next_update( $time ){
-			$this->index['next_update'] = $time;
-			
-			//Update db
-			$db = Database::get_instance()->db;
-			$db->query(
-					"UPDATE $this->list SET next_update = "
-				.	$time . " WHERE id = "
-				.	(int)$this->id
-				);
-		}
-		public function get_count(){
-			return $this->index['count'];
-		}
-		public function get_page_amount(){
-			return $this->get_count() ? ceil( $this->get_count() / $this->site->get_fetch_amount() ) : NULL;
-		}
-		private function set_count( $count ){
-			$this->index['count'] = $count;
-			
-			//Update db
-			$db = Database::get_instance()->db;
-			$db->query(
-					"UPDATE $this->list SET count = "
-				.	(int)$count . " WHERE id = "
-				.	(int)$this->id
-				);
-		}
 	}
 	
 ?>
