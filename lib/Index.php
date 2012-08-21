@@ -120,30 +120,33 @@
 		
 		
 	//Update functions
-		//Sets a new unix time for the next update
-		private function set_next_update( $time ){
-			$this->index['next_update'] = $time;
+		//Set a index_list field to a new value
+		private function change_field( $field, $value ){
+			$this->index[$field] = $value;
 			
 			//Update db
 			$db = Database::get_instance()->db;
 			$db->query(
-					"UPDATE $this->list SET next_update = "
-				.	$time . " WHERE id = "
+					"UPDATE $this->list SET $field = "
+				.	$value . " WHERE id = "
 				.	(int)$this->id
 				);
 		}
 		
+		//Calculates a new time for the next update
+		private function refresh_next_update(){
+			$new_time = time() + 5 * 60; //TODO:
+			$this->change_field( 'next_update', $new_time );
+		}
+		
 		//Sets the count
 		private function set_count( $count ){
-			$this->index['count'] = $count;
+			//Fix the offsets in index_post
+			$offset = $count - $this->get_count();
+			$this->update_offsets( $offset );
 			
-			//Update db
-			$db = Database::get_instance()->db;
-			$db->query(
-					"UPDATE $this->list SET count = "
-				.	(int)$count . " WHERE id = "
-				.	(int)$this->id
-				);
+			//Update the field in index_list
+			$this->change_field( 'count', (int)$count );
 		}
 		
 		
@@ -165,22 +168,16 @@
 		private function fetch_and_save( $page, $limit ){
 			$data = $this->site->get_api()->index( $this->search, $page, $limit );
 			
-			//Fix offsets
-			if( isset( $data['count'] ) ){
-				$offset = $data['count'] - $this->get_count();
-				$this->update_offsets( $offset );
-				$this->set_count( $data['count'] );
-				
-				$this->set_next_update( time() + 5 * 60 ); //TODO:
-			}
-			
-		//Save the posts in the database
-			//Calculate initial offset
-			$offset = ($page-1) * $limit;
-			
 			//Avoid journaling overhead
 			$db = Database::get_instance()->db;
 			$db->beginTransaction();
+			
+			//Fix offsets
+			if( isset( $data['count'] ) )
+				$this->set_count( $data['count'] );
+			
+			//Calculate initial offset
+			$offset = ($page-1) * $limit;
 			
 			//Save all posts
 			foreach( $data as $post )
@@ -200,6 +197,10 @@
 					//Increment offset
 					$offset++;
 				}
+			
+			//Set new update time, if count was refreshed
+			if( isset( $data['count'] ) )
+				$this->refresh_next_update();
 			
 			$db->commit();
 		}
