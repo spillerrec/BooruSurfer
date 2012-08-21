@@ -1,8 +1,6 @@
 ﻿~~~~ Stuff still to be done ~~~~
 
 Sites to be added:
--	Add site Sankaku chan
--	Add site Sankaku idol
 
 API to be supported:
 -	Fetch comments

@@ -4,6 +4,8 @@ Danbooru:
 -	3dbooru
 -	nekobooru
 -	vectorbooru
+-	Sankaku Channel
+-	Idol Complex
 All features supported
 
 moebooru:
@@ -24,8 +26,6 @@ All features supported, except related tags
 
 ~~~~ Sites to be added: ~~~~
 Danbooru:
--	Sankaku chan
--	Sankaku idol
 
 
 
@@ -72,8 +72,6 @@ Gelbooru 0.2.x:
 Pretty good support, but I don't know how to get related tags to work (if possible). Authorisation and editing is untested/unknown.
 
 Danbooru like:
--	Sankaku chan
--	Sankaku idol
 -	http://e621.net/
 -	http://yukkuri.shii.org/
 -	http://wakku.to/ (blocked post)

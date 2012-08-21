@@ -20,12 +20,23 @@
 		abstract public function get_code();
 		public function get_refferer(){ return ''; }
 		
-		abstract public function post( $id ); //Retrive a single post based on id
-		abstract public function index( $search = NULL, $page = 1 ); //Retrive several posts based on a search critiria
+	//Post related stuff
+		//Retrive a single post based on id
+		//TODO: delete and replace functionallity in Index()?
+		abstract public function post( $id );
+		
+		//Retrive several posts based on a search critiria
+		abstract public function index( $search = NULL, $page = 1 );
+		
+		//Get the count of a index search. If this data is provided
+		//by the index function this should return NULL
+		public function index_count( $search = NULL ){ return NULL; }
+		
+		
+	//Tag related stuff
 	//	abstract public function tag( $id );
 		abstract public function tag_index( $search );
 		abstract public function related_tags( $tags );
-	//	abstract public function similar_tags( $tag ); //Correct spelling?
 		
 	//Password functions
 		protected $username = NULL;
@@ -78,11 +89,8 @@
 				foreach( $data->attributes() as $key => $value )
 					$arr[ $key ] = (string)$value;
 			}
-			else{
-				//TODO: do JSON here
-				//return $data->{ $name };
-				//We need some way of transforming fields into keys
-			}
+			else
+				return get_object_vars( $data );
 			
 			return $arr;
 		}

@@ -161,8 +161,10 @@
 		$info->add_site( 'neko', 'NekobooruApi' );
 		$info->add_site( 'vector', 'VectorbooruApi' );
 		$info->add_site( 'threedee', 'ThreeDeeBooruApi' );
+		$info->add_site( 'san', 'SankakuChannelApi' );
+		$info->add_site( 'idol', 'IdolComplexApi' );
 		$info->add_site( 'kona', 'KonachanApi' );
-		$info->add_site( 'imouto', 'YandereApi' );
+		$info->add_site( 'yandere', 'YandereApi' );
 		$info->add_site( 'gel', 'GelbooruApi' );
 		$info->add_site( 'rule34', 'rule34Api' );
 		$info->add_site( 'xbooru', 'XbooruApi' );

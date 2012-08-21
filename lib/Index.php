@@ -75,7 +75,7 @@
 					.	"PRIMARY KEY( list, offset ), "
 					.	"FOREIGN KEY(list) REFERENCES $this->list (id) ON DELETE CASCADE )" 
 					);
-			
+			new DTPost( $this->prefix ); //make sure it exists too
 			//TODO: standalize search
 			
 			//Get search, or create it
@@ -111,8 +111,16 @@
 			//Update if too old
 			if( $this->next_update() <= time() ){
 				//TODO: with sankaku, check count before fetching
-				
-				$this->fetch_and_save( 1, Index::limit );
+				//index_count( $search )
+				$count = $this->site->get_api()->index_count( $this->search );
+				if( $count !== NULL ){
+					//We have fetched it explicitly
+					$this->set_count( $count );
+					$this->refresh_next_update();
+					//TODO: move refreshing of next update!
+				}
+				else
+					$this->fetch_and_save( 1, Index::limit );
 			}
 			
 			//Get it from the DB
@@ -262,7 +270,12 @@
 		//If it is not there, it tries to fetch it from the site
 		//and calls itself recursively.
 		//If $limit is NULL the default limit is used.
-		private function fetch_from_db( $page, $limit=NULL ){
+		private function fetch_from_db( $page, $limit=NULL, $recursion=0 ){
+			//Prevent it from recursing endlessy
+			$recursion++;
+			if( $recursion > 2 )
+				die( "Not possible to fetch page : (" );
+			
 		//Grap everything from the database
 			//Prepare the query
 			$db = Database::get_instance()->db;
@@ -305,7 +318,7 @@
 						(int)(($page-1)/3) + 1
 					,	$limit * 3
 					);
-				return $this->fetch_from_db( $page, $limit );
+				return $this->fetch_from_db( $page, $limit, $recursion );
 			}
 		}
 		
