@@ -4,9 +4,12 @@ Danbooru:
 -	3dbooru
 -	nekobooru
 -	vectorbooru
+All features supported
+
+sankaku:
 -	Sankaku Channel
 -	Idol Complex
-All features supported
+All features supported, however index API requires post count and post data to be fetched seperately
 
 moebooru:
 -	Konachan.com
@@ -37,29 +40,44 @@ Custom:
 -	http://www.zerochan.net/
 -	http://e-shuushuu.net/
 -	http://www.animegalleries.net/
+-	http://mjv-art.org/
 
 Shimmie:
--	http://memefolder.com/post/list
 -	http://aria.tinybooru.com/
 - 	http://amanchu.tinybooru.com/
 -	http://mahoro.tinybooru.com/
 -	http://nis.tinybooru.com/
--	http://whatistheexcel.com/wooobooru/post/list
--	http://booru.touhouradio.com/post/list
--	http://booru.151chan.org/
--	http://booru.nanochan.org/post/list
--	http://giantessbooru.com/post/list
+-	http://whatistheexcel.com/wooobooru/
+-	http://giantessbooru.com/
 -	http://kou9992.awardspace.com/
 -	http://www.mgbooru.com/
--	http://megabooru.com/
--	http://fairygarden.no-ip.org/shimmie2/index.php?q=/post/list/1
--	http://shimmie.4chanhouse.org/index.php?q=/post/list
--	http://www.dollbooru.org/
--	http://rule34.paheal.net/
--	http://angelhq.net/
-BooruDownloader uses RSS on Shimmie boards which have it enabled. Might be possible to use as a minimal implementation.
-There also appear to be a simple Danbooru API extension, but I can't figure it out and docs are gone.
+Don't know what to do here. There appear to be a simple Danbooru API extension, but I can't figure it out and docs are gone. Chances are that it is not enabled either.
 NOTE TO SELF: look into OpenSearch
+
+
+Shimmie with RSS:
+-	http://booru.touhouradio.com/ (Supplies extra info)
+-	http://memefolder.com/
+-	http://booru.151chan.org/ (Has comments feed)
+-	http://booru.nanochan.org/ (Has comments feed)
+-	http://megabooru.com/
+-	http://fairygarden.no-ip.org/shimmie2/ (But XML parsing failed because of unescaped '<3' tag >:| )
+-	http://shimmie.4chanhouse.org/index.php?q=/post/list (RSS appears to be sligthly broken, but I think I could make it work nevertheless. Has comments feed)
+-	http://www.dollbooru.org/ (More broken RSS, but has extra info.)
+-	http://rule34.paheal.net/ (Has comments feed)
+-	http://angelhq.net/ (More invaild XML, this time incorrect placement of XML declaration. Should be easy to fix. No direct link, but it is easy to calculate)
+
+RSS image feed surplies following information for each post:
+-	ID
+-	upload date
+-	tags
+-	thumbnail link
+-	direct image link
+-	image dimentions and size (sometimes)
+-	author
+The RSS feed works on searches too and most importantly, it can be iterated. There is no post count however, so pagenavigation and caching will need to take this in account. A more advanced algorithm for updating the cache will be required.
+Tag type and count will not be available, but once calculating of related tags based on cache is done, tags should be decent nevertheless.
+
 
 Gelbooru 0.1.x: 
 http://booru.org/top
