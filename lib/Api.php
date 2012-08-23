@@ -26,10 +26,10 @@
 		abstract public function post( $id );
 		
 		//Retrive several posts based on a search critiria
-		abstract public function index( $search = NULL, $page = 1 );
+		abstract public function index( $search = NULL, $page = 1, $limit=NULL );
 		
 		//Get the count of a index search. If this data is provided
-		//by the index function this should return NULL
+		//by the index() function this should return NULL
 		public function index_count( $search = NULL ){ return NULL; }
 		
 		
@@ -38,7 +38,7 @@
 		abstract public function tag_index( $search );
 		abstract public function related_tags( $tags );
 		
-	//Password functions
+	//Login functionallity
 		protected $username = NULL;
 		protected $password_hash;
 		//Set the user by user name and password hash
@@ -48,6 +48,30 @@
 		}
 		//Hashes the password, override this function if logins are used
 		public function hash_password( $pass ){ return NULL; }
+		
+		
+	//Support for features
+		
+		//Returns true if you can change the amount of posts
+		//to be fetched by index().
+		abstract public function supports_post_limit();
+		
+		//Returns 0 if post count is unknown.
+		//Returns 1 if post count can be found with index_count()
+		//Returns 2 if post count is surplied alongside index()
+		abstract public function supports_post_count();
+		
+		//Returns true if it can fetch all tags at once or not.
+		abstract public function supports_all_tags();
+		
+		//Returns true if it can calculate related tags
+		abstract public function supports_related_tags();
+		
+		//Returns true if it is possible to log in
+		abstract public function supports_login();
+		
+		
+	//Other stuff
 		
 		protected function get_content( $url ){
 			//Setup HTTP

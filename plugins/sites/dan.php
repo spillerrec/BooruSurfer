@@ -18,6 +18,15 @@
 	require_once 'lib/Api.php';
 	
 	abstract class DanApi extends Api{
+	//Support
+		public function supports_post_limit(){ return true; }
+		public function supports_post_count(){ return true; }
+		public function supports_all_tags(){ return true; }
+		public function supports_related_tags(){ return true; }
+		public function supports_login(){ return true; }
+		
+		
+	//Password and misc.
 		protected $url;
 		protected $always_login = false;
 		

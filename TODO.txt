@@ -1,6 +1,7 @@
 ﻿~~~~ Stuff still to be done ~~~~
 
 Sites to be added:
+-	Shimmie RSS boards
 
 API to be supported:
 -	Fetch comments
@@ -14,7 +15,6 @@ API stuff:
 Database stuff:
 -	Finish /manage/ page
 -	Improve plugin handling
--	Cache index API calls
 
 Interface:
 -	Add source in /[site]/post/[id]/

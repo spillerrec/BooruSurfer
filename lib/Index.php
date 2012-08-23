@@ -36,6 +36,7 @@
 		
 		//Search parameters
 		private $site;
+		private $api;
 		private $search;
 		
 		//Current seach info
@@ -49,6 +50,7 @@
 		public function __construct( $site, $search ){
 			$this->site = $site;
 			$this->search = $search;
+			$this->api = $site->get_api();
 			
 			$this->prefix = $site->get_api()->get_code();
 			$this->list = $this->prefix . "_index_list";
@@ -131,16 +133,19 @@
 		//Will use (cached) API or database depending on
 		//the situation.
 		public function related_tags(){
-			if( !$this->search ){
-				//If no search just show most common tags
+			//If no search and tag database exists, use it
+			if( !$this->search && $this->api->supports_all_tags() ){
 				$tag = new DTTag( $this->prefix );
-				return $tag->most_used();
-			}
-			else{
-				//TODO: decide whether it should calculate
-				//or fetch from API. API is used for now.
+				$tags = $tag->most_used();
 				
-			//Use the API to get the tags
+				//Only do so if the database actually contain something
+				if( count( $tags ) > 0 )
+					return $tags;
+			}
+			
+			//Use API support if available
+			//TODO: only do this for simple searches
+			if( $this->api->supports_related_tags() ){
 				//Check cache first
 				$tags = $this->get_tags();
 				if( $tags != NULL )
@@ -173,6 +178,9 @@
 				$this->save_tags( $tags );
 				return $tags;
 			}
+			
+			//Nothing was successful, calculate it based on the cache
+			return $this->calculate_tags();
 		}
 		
 	//Update functions
@@ -391,6 +399,45 @@
 					$t->real_count = $count;
 					$tags[] = $t;
 				}
+			
+			return $tags;
+		}
+		
+		//Calculate a set of related tags based on cache
+		private function calculate_tags(){
+			//Get all tags for current search
+			$db = Database::get_instance()->db;
+			$stmt = $db->query( "SELECT tags FROM $this->post "
+				.	"LEFT JOIN " . $this->prefix . '_post '
+				.	"ON post = id "
+				.	"WHERE list = " . (int)$this->id
+				);
+			
+			//Count the amount of each tag
+			$counts = array();
+			foreach( $stmt as $row ){
+				$tags = explode( ' ', $row['tags'] );
+				foreach( $tags as $tag )
+					if( $tag ){
+						if( isset( $counts[$tag] ) )
+							$counts[$tag]++;
+						else
+							$counts[$tag] = 1;
+					}
+			}
+			
+			//Sort the array, then cut to 25 elements
+			arsort( $counts );
+			$counts = array_slice( $counts, 0, 25 );
+			
+			//Convert it
+			$tags = array();
+			foreach( $counts as $name => $count ){
+				$t = new DTTag( $this->prefix );
+				$t->db_read( $name );
+				$t->real_count = $count;
+				$tags[] = $t;
+			}
 			
 			return $tags;
 		}

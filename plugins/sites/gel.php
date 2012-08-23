@@ -18,6 +18,8 @@
 	require_once "plugins/sites/dan.php";
 	
 	abstract class GelApi extends DanApi{
+		//No related tags support : \
+		public function supports_related_tags(){ return false; }
 		
 		protected function get_url( $handler, $action, $format, $parameters=array(), $login=false ){
 			//Format is ignored, only XML available
