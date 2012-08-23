@@ -122,8 +122,7 @@
 						$this->content = array( $this->content );
 					
 					if( is_array( $this->content ) )
-						foreach( $this->content as $child )
-							$child->writeXhtml();
+						array_walk_recursive( $this->content, function( $item, $key ){ $item->writeXhtml(); } );
 					else
 						echo $this->escape( $this->content );
 					
