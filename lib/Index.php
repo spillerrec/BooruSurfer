@@ -242,8 +242,17 @@
 			$db->beginTransaction();
 			
 			//Fix offsets
-			if( isset( $data['count'] ) )
+			$updated = false;
+			if( isset( $data['count'] ) ){
+				$updated = true;
 				$this->set_count( $data['count'] );
+			}
+			if( isset( $data['more'] ) ){
+				$updated = true;
+				$count = ($page + 1) * abs( $this->api->supports_post_limit() );
+				if( $this->index['count'] < $count )
+					$this->change_field( 'count', (int)$count );
+			}
 			
 			//Calculate initial offset
 			$offset = ($page-1) * $limit;
@@ -291,7 +300,8 @@
 				.	"LEFT JOIN " . $this->prefix . '_post '
 				.	"ON post = id "
 				.	"WHERE offset >= :range_min AND offset < :range_max "
-				.	"AND list = :id"
+				.	"AND list = :id "
+				.	"ORDER BY offset ASC "
 				);
 			
 			//Get default fetch amount if unset
@@ -321,12 +331,53 @@
 				return $posts;
 			}
 			else{
-				//Not all are fetched, fetch and try again
-				$this->fetch_and_save(
-						(int)(($page-1)/3) + 1
-					,	$limit * 3
-					);
-				return $this->fetch_from_db( $page, $limit, $recursion );
+				//Not all are fetched, we have to do this first
+				$post_limit = $this->api->supports_post_limit();
+				if( $post_limit >= 0 ){
+					//Limit works, try to fetch 3 times the size
+					//TODO: respect upper limit!
+					$this->fetch_and_save(
+							(int)(($page-1)/3) + 1
+						,	$limit * 3
+						);
+					return $this->fetch_from_db( $page, $limit, $recursion );
+				}
+				else{
+					//Limit is fixed, find pages missing
+					$first = $min - 1;
+					$last = $max;
+					
+					//We might already have some post already
+					if( count( $data ) > 0 ){
+						//Find first missing post
+						foreach( $data as $row )
+							if( $row['offset'] == $first + 1 )
+								$first++;
+							else
+								break;
+						$min++;
+						
+						//Find last missing post
+						$reverse = array_reverse( $data );
+						foreach( $reverse as $row )
+							if( $row['offset'] == $last - 1 )
+								$last--;
+							else
+								break;
+						$last--;
+					}
+					
+					//Calculate post range
+					$count = abs( $post_limit );
+					$page_start = floor( $first / $count ) + 1;
+					$page_end = floor( $last / $count ) + 1;
+					
+					//Fetch pages
+					for( $i=$page_start; $i<=$page_end; $i++ )
+						$this->fetch_and_save( $i, $count );
+					
+					return $this->fetch_from_db( $page, $limit, $recursion );
+				}
 			}
 		}
 		

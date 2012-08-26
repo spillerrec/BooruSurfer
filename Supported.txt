@@ -25,20 +25,25 @@ Gelbooru 0.2:
 -	SizeBooru
 All features supported, except related tags
 
+Shimmie with RSS:
+-	http://memefolder.com/
+Searching/browsing with tags supported, without post count
 
 
 ~~~~ Sites to be added: ~~~~
 Danbooru:
 
-
+Shimmie with RSS:
+-	http://shimmie.katawa-shoujo.com/
+-	http://booru.touhouradio.com/
 
 ~~~~ Sites not supported: ~~~~
 Custom:
 -	http://www.theanimegallery.com/
 -	http://mangadrawing.net/
 -	http://kyon.pl/
--	http://www.zerochan.net/
--	http://e-shuushuu.net/
+-	http://www.zerochan.net/ - Has good RSS : )
+-	http://e-shuushuu.net/ - non-searchable and browsable rss : \
 -	http://www.animegalleries.net/
 -	http://mjv-art.org/
 
@@ -57,7 +62,6 @@ NOTE TO SELF: look into OpenSearch
 
 Shimmie with RSS:
 -	http://booru.touhouradio.com/ (Supplies extra info)
--	http://memefolder.com/
 -	http://booru.151chan.org/ (Has comments feed)
 -	http://booru.nanochan.org/ (Has comments feed)
 -	http://megabooru.com/
@@ -66,6 +70,7 @@ Shimmie with RSS:
 -	http://www.dollbooru.org/ (More broken RSS, but has extra info.)
 -	http://rule34.paheal.net/ (Has comments feed)
 -	http://angelhq.net/ (More invaild XML, this time incorrect placement of XML declaration. Should be easy to fix. No direct link, but it is easy to calculate)
+-	http://shimmie.katawa-shoujo.com/
 
 RSS image feed surplies following information for each post:
 -	ID

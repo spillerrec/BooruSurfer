@@ -38,11 +38,11 @@
 		
 		protected function create_data(){
 			$this->add( 'id',	true, 'int' );
-			$this->add( 'hash',	true );
-			$this->add( 'author',	true );
-			$this->add( 'creation_date',	true, 'int' );
+			$this->add( 'hash',	false );
+			$this->add( 'author',	false );
+			$this->add( 'creation_date',	false, 'int' );
 			
-			$this->add( 'parent_id',	true, 'int' );
+			$this->add( 'parent_id',	false, 'int' );
 			$this->add( 'has_children',	false, 'bool' );
 			$this->add( 'has_notes',	false, 'bool' );
 			$this->add( 'has_comments',	false, 'bool' );
@@ -61,8 +61,8 @@
 		
 		private function load_image( $required, $prefix="" ){
 			$this->add( $prefix . 'url', $required );
-			$this->add( $prefix . 'width', $required, 'int' );
-			$this->add( $prefix . 'height', $required, 'int' );
+			$this->add( $prefix . 'width', false, 'int' );
+			$this->add( $prefix . 'height', false, 'int' );
 			$this->add( $prefix . 'filesize', false, 'int' );
 		}
 		

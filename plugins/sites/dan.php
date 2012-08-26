@@ -19,7 +19,7 @@
 	
 	abstract class DanApi extends Api{
 	//Support
-		public function supports_post_limit(){ return true; }
+		public function supports_post_limit(){ return 0; } //There should have been a upper limit on 100, but none seems to adhere to this...
 		public function supports_post_count(){ return true; }
 		public function supports_all_tags(){ return true; }
 		public function supports_related_tags(){ return true; }

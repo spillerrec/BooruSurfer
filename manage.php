@@ -172,6 +172,9 @@
 		$info->add_site( 'furry', 'FurryBooruApi' );
 		$info->add_site( 'size', 'SizeBooruApi' );
 		
+		//ShimmieRSS
+		$info->add_site( 'meme', 'MemeFolderApi' );
+		
 		//Show a list over all sites
 		$sites = SiteInfo::sites( false );
 		foreach( $sites as $code => $site ){

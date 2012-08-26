@@ -52,8 +52,12 @@
 		
 	//Support for features
 		
-		//Returns true if you can change the amount of posts
-		//to be fetched by index().
+		//Specifies how 'limit' works.
+		//If result is negative, limit cannot be changed
+		//and is equal to abs(result).
+		//If result is 0, no limit exists.
+		//If result is >0 then there is a upper limit
+		//equal to result.
 		abstract public function supports_post_limit();
 		
 		//Returns 0 if post count is unknown.
