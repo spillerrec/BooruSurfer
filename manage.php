@@ -160,6 +160,8 @@
 		$info->add_site( 'dan', 'DanbooruApi' );
 		$info->add_site( 'neko', 'NekobooruApi' );
 		$info->add_site( 'vector', 'VectorbooruApi' );
+		$info->add_site( 'yukkuri', 'YukkuriApi' );
+		$info->add_site( 'e621', 'E621Api' );
 		$info->add_site( 'threedee', 'ThreeDeeBooruApi' );
 		$info->add_site( 'san', 'SankakuChannelApi' );
 		$info->add_site( 'idol', 'IdolComplexApi' );

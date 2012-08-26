@@ -1,14 +1,16 @@
 ﻿~~~~ Sites supported: ~~~~
 Danbooru:
--	Danbooru (requires login)
 -	3dbooru
+-	Danbooru (requires login)
 -	nekobooru
 -	vectorbooru
+-	http://yukkuri.shii.org/
+-	http://e621.net/
 All features supported
 
 sankaku:
--	Sankaku Channel
 -	Idol Complex
+-	Sankaku Channel
 All features supported, however index API requires post count and post data to be fetched seperately
 
 moebooru:
@@ -17,12 +19,12 @@ moebooru:
 All features supported
 
 Gelbooru 0.2:
--	Gelbooru
--	Safebooru
--	Rule34
 -	FurryBooru
--	Xbooru
+-	Gelbooru
+-	Rule34
+-	Safebooru
 -	SizeBooru
+-	Xbooru
 All features supported, except related tags
 
 Shimmie with RSS:
@@ -36,6 +38,12 @@ Searching/browsing with tags supported, but without post count. Minimal post inf
 Danbooru:
 
 Shimmie with RSS:
+-	http://booru.151chan.org/ (Has comments feed)
+-	http://booru.nanochan.org/ (Has comments feed)
+-	http://megabooru.com/
+
+Custom:
+-	http://www.zerochan.net/ - (RSS)
 
 ~~~~ Sites not supported: ~~~~
 Custom:
@@ -61,7 +69,6 @@ NOTE TO SELF: look into OpenSearch
 
 
 Shimmie with RSS:
--	http://booru.touhouradio.com/ (Supplies extra info)
 -	http://booru.151chan.org/ (Has comments feed)
 -	http://booru.nanochan.org/ (Has comments feed)
 -	http://megabooru.com/
@@ -94,8 +101,6 @@ Gelbooru 0.2.x:
 Pretty good support, but I don't know how to get related tags to work (if possible). Authorisation and editing is untested/unknown.
 
 Danbooru like:
--	http://e621.net/
--	http://yukkuri.shii.org/
 -	http://wakku.to/ (blocked post)
 -	http://wildcritters.ws/ (blocked post)
 The blocked ones might require login like Danbooru, test it with wakku wakku (because seacats).
