@@ -46,7 +46,19 @@
 		
 		//Calculate URL
 		protected function get_url( $search, $page=1 ){
-			return $this->url . "rss/images/$search/$page";
+			if( $search )
+				return $this->url . "rss/images/$search/$page";
+			else
+				return $this->url . "rss/images/$page";
+		}
+		
+		//Fix url if missing base url
+		protected function transform_url( &$url ){
+			if( $url ){
+				if( $url[0] == '/' )
+					$url = rtrim( $this->url, '/' ) . $url;
+				$url = str_replace( ' ', '%20', $url );
+			}
 		}
 		
 		//Finds the first substr which starts with
@@ -87,6 +99,10 @@
 			$post['thumb_url'] = (string)$media->thumbnail->attributes()->url;
 			$post['url'] = (string)$media->content->attributes()->url;
 			//TODO: calculate 'img' from thumb if not existent
+			
+			//Fix urls
+			$this->transform_url( $post['url'] );
+			$this->transform_url( $post['thumb_url'] );
 		}
 		
 		//Parse title
@@ -105,6 +121,30 @@
 			$author = $this->find( $desc, 'Uploaded by ', '</p>' );
 			if( $author )
 				$post['author'] = $author;
+			
+			//Find extended information
+			$info = $this->find( $desc, ' // ', "'" );
+			if( $info ){
+				//Parse the string
+				$size; $type;
+				sscanf(
+						$info
+					,	"%dx%d // %f%s"
+					,	$post['width']
+					,	$post['height']
+					,	$size
+					,	$type
+					);
+				
+				//Fix size
+				switch( $type ){
+					case 'B': break;
+					case 'KB': $size = (float)$size * 1024; break;
+					case 'MB': $size = (float)$size * 1024*1024; break;
+					default: die( 'Unknown size postfix: ' . $type );
+				}
+				$post['filesize'] = $size;
+			}
 		}
 		
 		//Parse date

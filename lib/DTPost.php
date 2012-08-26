@@ -184,11 +184,14 @@
 			$name = str_replace( '"', '', $name );
 			$name = str_replace( '/', '', $name );
 			$name = str_replace( '\\', '', $name );
-			$name = str_replace( '|', '', $name );
+			$name = str_replace( '|', '-', $name ); //Fancy ;)
 			$name = str_replace( '?', '', $name );
 			$name = str_replace( '*', '', $name );
 			//Characters messing up filenames in Opera
 			$name = str_replace( ';', '', $name );
+			$name = str_replace( '{', '', $name );
+			$name = str_replace( '}', '', $name );
+			$name = str_replace( '#', '', $name );
 			
 			//Create full url
 			return "/$this->prefix/proxy/$type/$pre" . $name . $post;

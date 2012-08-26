@@ -174,6 +174,8 @@
 		
 		//ShimmieRSS
 		$info->add_site( 'meme', 'MemeFolderApi' );
+		$info->add_site( 'katawa', 'KatawaShoujoApi' );
+		$info->add_site( 'tradio', 'TouhouRadioApi' );
 		
 		//Show a list over all sites
 		$sites = SiteInfo::sites( false );

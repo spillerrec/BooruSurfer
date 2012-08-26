@@ -27,15 +27,15 @@ All features supported, except related tags
 
 Shimmie with RSS:
 -	http://memefolder.com/
-Searching/browsing with tags supported, without post count
+-	http://shimmie.katawa-shoujo.com/
+-	http://booru.touhouradio.com/
+Searching/browsing with tags supported, but without post count. Minimal post info, some sites provide dimentions and filesize though.
 
 
 ~~~~ Sites to be added: ~~~~
 Danbooru:
 
 Shimmie with RSS:
--	http://shimmie.katawa-shoujo.com/
--	http://booru.touhouradio.com/
 
 ~~~~ Sites not supported: ~~~~
 Custom:
@@ -70,7 +70,6 @@ Shimmie with RSS:
 -	http://www.dollbooru.org/ (More broken RSS, but has extra info.)
 -	http://rule34.paheal.net/ (Has comments feed)
 -	http://angelhq.net/ (More invaild XML, this time incorrect placement of XML declaration. Should be easy to fix. No direct link, but it is easy to calculate)
--	http://shimmie.katawa-shoujo.com/
 
 RSS image feed surplies following information for each post:
 -	ID
