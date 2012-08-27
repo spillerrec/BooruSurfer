@@ -61,6 +61,10 @@
 			$this->add( 'active',	false, 'bool' ); //If the site has been activated
 		}
 		
+		
+	//API functions
+		
+		//Load an API from the file '$code' with the name '$class'
 		private static function load_api( $code, $class ){
 			require_once "plugins/sites/$code.php";
 			return new $class();
@@ -70,6 +74,15 @@
 			//Site not initated
 			if( !$this->db_read( $code ) )
 				return NULL;
+			
+			return $this->api();
+		}
+		
+		private $cached_api = NULL;
+		public function api(){
+			//Check cache
+			if( $this->cached_api )
+				return $this->cached_api;
 			
 			//Include php file and create api
 			$code = $this->get( 'id' ); //Safety: Don't allow direct access to the include
@@ -84,7 +97,8 @@
 					);
 			}
 			
-			return $api;
+			//Fill and return cache
+			return $this->cached_api = $api;
 		}
 		
 		//Warning, this function is unsafe
@@ -149,13 +163,13 @@
 		}
 		
 		//Set the user and password
-		//It is the callers responsibility to do any hashing
+		//The password will be hashed according to the api
 		public function set_user( $user, $password ){
 			$db = Database::get_instance()->db;
 			$stmt = $db->prepare( "UPDATE $this->name SET username = :user, password = :pass WHERE id = :table" );
 			$para = array(
 					'user' => $user,
-					'pass' => $password,
+					'pass' => $this->api()->hash_password( $password ),
 					'table' => $this->get_id()
 				);
 			$stmt->execute( $para );

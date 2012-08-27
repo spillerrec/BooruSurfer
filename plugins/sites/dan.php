@@ -31,7 +31,7 @@
 		protected $always_login = false;
 		
 		public function hash_password( $pass ){
-			return sha1( "choujin-steiner--" . $_GET['hash'] . "--" );
+			return sha1( "choujin-steiner--" . $pass . "--" );
 		}
 		public function get_refferer(){ return $this->url; }
 		
