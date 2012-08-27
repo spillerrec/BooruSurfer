@@ -179,13 +179,47 @@
 		$info->add_site( 'katawa', 'KatawaShoujoApi' );
 		$info->add_site( 'tradio', 'TouhouRadioApi' );
 		
+		//Show a header
+		$header = new htmlObject( 'tr' );
+		$header->content[] = new htmlObject( 'th', 'Site' );
+		$header->content[] = new htmlObject( 'th', 'Code' );
+		$header->content[] = new htmlObject( 'th', 'Active' );
+		$header->content[] = new htmlObject( 'th', 'User' );
+		$header->content[] = new htmlObject( 'th', 'Tags Loaded' );
+		
 		//Show a list over all sites
-		$sites = SiteInfo::sites( false );
-		foreach( $sites as $code => $site ){
-			$layout->main->content[] = new htmlObject( 'p', "$code = $site" );
+		$rows = array();
+		$sites = SiteInfo::all();
+		foreach( $sites as $site ){
+			//Prepare info
+			$id = $site->get_id();
+			$name = new htmlLink( "/$id/manage/", $site->get_name() );
+			$active = $site->is_active() ? 'true' : 'false';
+			
+			//Prepare date
+			$time = $site->get_tags_updated();
+			if( $time )
+				$time = $styler->format_date( $time );
+			else if( $site->get_api( $id )->supports_all_tags() )
+				//Site supports tags, but hasn't loaded it yet
+				$time = 'Not loaded!';
+			else
+				$time = NULL;
+			
+			//Add content in HTML
+			$row = new htmlObject( 'tr' );
+			$row->content[] = new htmlObject( 'td', $name );
+			$row->content[] = new htmlObject( 'td', $id );
+			$row->content[] = new htmlObject( 'td', $active );
+			$row->content[] = new htmlObject( 'td', $site->has_user() );
+			$row->content[] = new htmlObject( 'td', $time );
+			$rows[] = $row;
 		}
+		
+		$layout->main->content[] = new htmlObject( 'table', array( $header, $rows ) );
 		
 		$layout->page->write();
 	}
 	
 ?>
+

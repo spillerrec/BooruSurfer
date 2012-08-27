@@ -30,6 +30,11 @@
 			return $this->get( 'id' );
 		}
 		
+		//Get the human readable name
+		public function get_name(){
+			return $this->get( 'name' );
+		}
+		
 		//A username has been set (password unchecked)
 		//A username is supplied on success, else NULL
 		public function has_user(){
@@ -106,6 +111,22 @@
 			$sites = array();
 			foreach( $stmt as $row )
 				$sites[ $row['id'] ] = $row['name'];
+			
+			return $sites;
+		}
+		
+		//Returns all sites as an array of SiteInfo
+		public static function all(){
+			//Execute query
+			$db = Database::get_instance()->db;
+			$query = 'SELECT * FROM site_info';
+			$query .= ' ORDER BY name ASC';
+			$stmt = $db->query( $query );
+			
+			//Build array
+			$sites = array();
+			foreach( $stmt as $row )
+				$sites[] = new SiteInfo( $row );
 			
 			return $sites;
 		}
