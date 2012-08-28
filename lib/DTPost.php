@@ -27,6 +27,7 @@
 		public function has_children(){ return $this->get( 'has_children' ); }
 		public function has_notes(){ return $this->get( 'has_notes' ); }
 		public function has_comments(){ return $this->get( 'has_comments' ); }
+		public function rating(){ return $this->get( 'rating' ); }
 		
 		
 		public function __construct( $prefix, $data = NULL ){

@@ -210,10 +210,20 @@ header nav li form{ float:right; }
 	float:left;
 }
 
-.post_list .details :before{ font-weight:bold; }
-.post_list .details .img_tags:before{ content:"Tags: "; }
-.post_list .details .img_size:before{ content:"Dimensions: "; }
-.post_list .details .img_filesize:before{ content:"Filesize: "; }
+.post_list .details em{
+	font-weight:bold;
+	margin-right: 4px;
+}
+.post_list .details p:first-line{
+	text-indent:0;
+}
+.post_list .details p{
+	padding-left:10px;
+	text-indent:-10px;
+}
+.post_list .details p+p{
+	margin-top:1px;
+}
 
 /********** POST LIST DETAILS END **********/
 
@@ -237,6 +247,20 @@ header nav li form{ float:right; }
 	display:inline-block;
 	position:relative;
 	max-width:100%;
+}
+.post_info em{
+	font-weight:bold;
+	margin-right: 4px;
+}
+.post_info p:first-line{
+	text-indent:0;
+}
+.post_info p{
+	padding-left:10px;
+	text-indent:-10px;
+}
+.post_info p+p{
+	margin-top:1px;
 }
 
 /* Make the preview resize with the browser window */

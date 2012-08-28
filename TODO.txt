@@ -15,10 +15,8 @@ API stuff:
 Database stuff:
 -	Finish /manage/ page
 -	Improve plugin handling
+-	Standalize search queries
 
 Interface:
--	Add source in /[site]/post/[id]/
--	Don't show image dimentions when not available
 -	Make a standard way of displaying errors
 -	Add search suggestions
--	Add 'rating'

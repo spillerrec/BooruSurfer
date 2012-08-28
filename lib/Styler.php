@@ -149,6 +149,16 @@
 			return $list;
 		}
 		
+		//Returns a human readable rating, or NULL if none
+		public function post_rating( $post ){
+			switch( $post->rating() ){
+				case DTPost::SAFE: return 'safe';
+				case DTPost::QUESTIONABLE: return 'questionable';
+				case DTPost::ADULT: return 'explict';
+				default: return NULL;
+			}
+		}
+		
 		//A large preview of the image, possibly the original image
 		//if no preview exist
 		public function post_preview( $post ){
@@ -182,22 +192,62 @@
 			return new htmlLink( $url, $img );
 		}
 		
-		//Returns a section element containing details about the post
-		public function post_details( $post ){
+		//Returns a series of <p> which contains post info
+		public function post_info( $post, $extended=false ){
+			$info = array();
 			$image = $post->get_image();
-			$details = new htmlObject( "section", NULL, toClass("details") );
 			
-			//Ad the dimentions
-			$details->content[] = new htmlObject( "p", $image->width . "x" . $image->height, toClass("img_size") );
+			//create a p with em
+			$add = function( $title, $content ){
+				return new htmlObject( "p", array(
+						new htmlObject( 'em', "$title:" )
+					,	$content
+					) );
+			};
+			
+			//Add creation time
+			if( $date = $post->get( 'creation_date' ) )
+				$info[] = $add( 'Posted'
+					,	$this->format_date( $date )
+					);
+			
+			//Add user
+			if( $extended && $user = $post->get( 'author' ) )
+				$info[] = $add( 'By', $user );
+			
+			//Add the dimentions
+			if( $image->width && $image->height )
+				$info[] = $add( 'Dimensions'
+					,	$image->width . "x" . $image->height
+					);
 			
 			//Add the filesize
-			if( $image->filesize ){
-				$size = $this->format_filesize( $image->filesize );
-				$details->content[] = new htmlObject( "p", $size, toClass("img_filesize") );
-			}
+			if( $image->filesize )
+				$info[] = $add( 'Size'
+					,	$this->format_filesize( $image->filesize )
+					);
+			
+			//Add rating
+			$rating = $this->post_rating( $post );
+			if( $rating )
+				$info[] = $add( 'Rating', $rating );
+			
+			//Add source
+			if( $extended && $source = $post->get( 'source' ) )
+				$info[] = $add( 'Source', $source );
+			
+			return $info;
+		}
+		
+		//Returns a section element containing details about the post
+		public function post_details( $post ){
+			$details = new htmlObject( "section", NULL, toClass("details") );
+			
+			$details->content[] = $this->post_info( $post );
 			
 			//Add tags
-			$tag_details = new htmlObject( "p", NULL, toClass("img_tag") );
+			$tag_details = new htmlObject( "p" );
+			$tag_details->content[] = new htmlObject( 'em', 'Tags:' );
 			foreach( $post->get_tags() as $tag ){
 				if( $tag->get_type() ){
 					//Enclose it in a span

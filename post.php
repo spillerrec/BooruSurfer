@@ -72,13 +72,7 @@
 		
 		//Fill sidebar
 		$layout->sidebar->content[] = new htmlObject( "h3", "Info:" );
-		$layout->sidebar->content[] = new htmlObject( "p", "Dimension: $image->width" . "x$image->height" );
-		if( $image->filesize )
-			$layout->sidebar->content[] = new htmlObject( "p", "Filesize: " . $styler->format_filesize( $image->filesize ) );
-		
-		//Date
-		if( $date = $post->get( 'creation_date' ) )
-			$layout->sidebar->content[] = new htmlObject( "p", "Posted: " .$styler->format_date( $date ) );
+		$layout->sidebar->content[] = $styler->post_info( $post, true );
 		
 //		$layout->sidebar->content[] = new htmlLink( post_siteurl( $id ), "On-site link" );
 		
@@ -120,8 +114,6 @@
 	}
 	else{
 		//No post to display : \
-		//write_header( "Could not find post" );
-		
 		echo "The post was not found";
 		
 		//TODO: error page

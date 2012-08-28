@@ -118,13 +118,18 @@
 				if( $this->content ){
 					echo ">";
 					
+					//Make sure it is an array
+					if( !is_array( $this->content ) )
+						$this->content = array( $this->content );
 					if( is_object( $this->content ) )
 						$this->content = array( $this->content );
 					
-					if( is_array( $this->content ) )
-						array_walk_recursive( $this->content, function( $item, $key ){ $item->writeXhtml(); } );
-					else
-						echo $this->escape( $this->content );
+					array_walk_recursive( $this->content, function( $item, $key ){
+							if( is_object( $item ) )
+								$item->writeXhtml();
+							else
+								echo $this->escape( $item );
+						} );
 					
 					echo "</$this->type>";
 				}
