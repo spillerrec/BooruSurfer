@@ -35,6 +35,9 @@
 		}
 		private $prefix;
 		
+		const SAFE = 's';
+		const QUESTIONABLE = 'q';
+		const ADULT = 'e';
 		
 		protected function create_data(){
 			$this->add( 'id',	true, 'int' );

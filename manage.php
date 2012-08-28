@@ -179,6 +179,9 @@
 		$info->add_site( 'katawa', 'KatawaShoujoApi' );
 		$info->add_site( 'tradio', 'TouhouRadioApi' );
 		
+		//Custom sites
+		$info->add_site( 'zero', 'ZeroApi' );
+		
 		//Show a header
 		$header = new htmlObject( 'tr' );
 		$header->content[] = new htmlObject( 'th', 'Site' );

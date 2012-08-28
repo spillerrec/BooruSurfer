@@ -8,9 +8,9 @@ API to be supported:
 -	Fetch notes
 
 API stuff:
--	Standalize rating
 -	Research 'status'
 -	Fix related tags when searching on multiple tags
+-	Add links to the original pages, i.e. index and post pages.
 
 Database stuff:
 -	Finish /manage/ page
@@ -18,5 +18,7 @@ Database stuff:
 
 Interface:
 -	Add source in /[site]/post/[id]/
+-	Don't show image dimentions when not available
 -	Make a standard way of displaying errors
 -	Add search suggestions
+-	Add 'rating'

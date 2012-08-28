@@ -33,6 +33,9 @@ Shimmie with RSS:
 -	http://booru.touhouradio.com/
 Searching/browsing with tags supported, but without post count. Minimal post info, some sites provide dimentions and filesize though.
 
+Custom:
+-	http://www.zerochan.net/ - (RSS)
+
 
 ~~~~ Sites to be added: ~~~~
 Danbooru:
@@ -42,8 +45,6 @@ Shimmie with RSS:
 -	http://booru.nanochan.org/ (Has comments feed)
 -	http://megabooru.com/
 
-Custom:
--	http://www.zerochan.net/ - (RSS)
 
 ~~~~ Sites not supported: ~~~~
 Custom:
