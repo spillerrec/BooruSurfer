@@ -178,6 +178,9 @@
 		$info->add_site( 'meme', 'MemeFolderApi' );
 		$info->add_site( 'katawa', 'KatawaShoujoApi' );
 		$info->add_site( 'tradio', 'TouhouRadioApi' );
+		$info->add_site( 'nano', 'NanobooruApi' );
+		$info->add_site( 'mega', 'MegabooruApi' );
+		$info->add_site( 'poke', 'PokeApi' );
 		
 		//Custom sites
 		$info->add_site( 'zero', 'ZeroApi' );

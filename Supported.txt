@@ -31,6 +31,9 @@ Shimmie with RSS:
 -	http://memefolder.com/
 -	http://shimmie.katawa-shoujo.com/
 -	http://booru.touhouradio.com/
+-	http://booru.nanochan.org/
+-	http://megabooru.com/
+-	http://booru.151chan.org/ (Has comments feed)
 Searching/browsing with tags supported, but without post count. Minimal post info, some sites provide dimentions and filesize though.
 
 Custom:
@@ -41,9 +44,6 @@ Custom:
 Danbooru:
 
 Shimmie with RSS:
--	http://booru.151chan.org/ (Has comments feed)
--	http://booru.nanochan.org/ (Has comments feed)
--	http://megabooru.com/
 
 
 ~~~~ Sites not supported: ~~~~
@@ -70,9 +70,6 @@ NOTE TO SELF: look into OpenSearch
 
 
 Shimmie with RSS:
--	http://booru.151chan.org/ (Has comments feed)
--	http://booru.nanochan.org/ (Has comments feed)
--	http://megabooru.com/
 -	http://fairygarden.no-ip.org/shimmie2/ (But XML parsing failed because of unescaped '<3' tag >:| )
 -	http://shimmie.4chanhouse.org/index.php?q=/post/list (RSS appears to be sligthly broken, but I think I could make it work nevertheless. Has comments feed)
 -	http://www.dollbooru.org/ (More broken RSS, but has extra info.)
@@ -89,6 +86,7 @@ RSS image feed surplies following information for each post:
 -	author
 The RSS feed works on searches too and most importantly, it can be iterated. There is no post count however, so pagenavigation and caching will need to take this in account. A more advanced algorithm for updating the cache will be required.
 Tag type and count will not be available, but once calculating of related tags based on cache is done, tags should be decent nevertheless.
+NEW: Tag count might be parsable from: "/tags/popularity"
 
 
 Gelbooru 0.1.x: 
