@@ -8,7 +8,6 @@ API to be supported:
 -	Fetch notes
 
 API stuff:
--	Research 'status'
 -	Fix related tags when searching on multiple tags
 -	Add links to the original pages, i.e. index and post pages.
 
@@ -16,6 +15,12 @@ Database stuff:
 -	Finish /manage/ page
 -	Improve plugin handling
 -	Standalize search queries
+-	Remove the need for DataTable::get() outside DT* classes
+-	Improve index cache
+-	Improve tag handling
+	-	Insert new tags in DB and try to look it up in other sites to guess type
+	-	Update tag counts when searching for a single tag, and post count available
+	-	Update tag type when fetching related tags
 
 Interface:
 -	Make a standard way of displaying errors

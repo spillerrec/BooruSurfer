@@ -189,7 +189,19 @@
 			
 			//Create link
 			$url = $this->site->post_link( $post->id() );
-			return new htmlLink( $url, $img );
+			$link = new htmlLink( $url, $img );
+			
+			//Add classes
+			if( $post->is_pending() )
+				$link->addClass( 'is_pending' );
+			if( $post->is_flagged() )
+				$link->addClass( 'is_flagged' );
+			if( $post->has_children() )
+				$link->addClass( 'has_children' );
+			if( $post->parent_id() )
+				$link->addClass( 'has_parent' );
+			
+			return $link;
 		}
 		
 		//Returns a series of <p> which contains post info
@@ -206,13 +218,13 @@
 			};
 			
 			//Add creation time
-			if( $date = $post->get( 'creation_date' ) )
+			if( $date = $post->added() )
 				$info[] = $add( 'Posted'
 					,	$this->format_date( $date )
 					);
 			
 			//Add user
-			if( $extended && $user = $post->get( 'author' ) )
+			if( $extended && $user = $post->author() )
 				$info[] = $add( 'By', $user );
 			
 			//Add the dimentions
@@ -233,7 +245,7 @@
 				$info[] = $add( 'Rating', $rating );
 			
 			//Add source
-			if( $extended && $source = $post->get( 'source' ) )
+			if( $extended && $source = $post->source() )
 				$info[] = $add( 'Source', $source );
 			
 			return $info;

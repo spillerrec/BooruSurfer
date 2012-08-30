@@ -185,6 +185,7 @@
 			$posts = array();
 			
 			//Check for more posts
+			//TODO: check for rel="next"
 			$ns = $data->getNameSpaces( true );
 			$atom = $data->channel->children( $ns['atom'] );
 			$posts['more'] = isset( $atom->link );

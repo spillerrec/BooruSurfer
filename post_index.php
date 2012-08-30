@@ -59,17 +59,15 @@
 		$layout->page->html->addSequence( "next", $site->index_link( $page+1, $search ) );
 	
 	
-	$list = new htmlList();
-	
 	//Write list
-	foreach( $index as $i ){
-		$item = $list->addItem( array( $styler->post_thumb( $i ), $styler->post_details( $i ) ) );
-		if( $i->parent_id() )
-			$item->addClass( "has_parent" );
-		if( $i->has_children() )
-			$item->addClass( "has_children" );
-	}
-	$layout->main->content[] =& $list;
+	$list = new htmlList();
+	foreach( $index as $i )
+		$list->addItem( array(
+				$styler->post_thumb( $i )
+			,	$styler->post_details( $i )
+			) );
+	
+	$layout->main->content[] = $list;
 	
 	//Add page navigation
 	$page_links = $styler->page_index_nav( $post_index, $page );

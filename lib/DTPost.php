@@ -21,12 +21,19 @@
 	
 	class DTPost extends DataTable{
 		public function id(){ return $this->get( 'id' ); }
-		public function parent_id(){ return $this->get( 'parent_id' ); }
+		public function hash(){ return $this->get( 'hash' ); }
+		public function author(){ return $this->get( 'author' ); }
+		public function added(){ return $this->get( 'creation_date' ); }
 		
+		public function parent_id(){ return $this->get( 'parent_id' ); }
 		//Return if this type is available, NULL if unknown
 		public function has_children(){ return $this->get( 'has_children' ); }
 		public function has_notes(){ return $this->get( 'has_notes' ); }
 		public function has_comments(){ return $this->get( 'has_comments' ); }
+		public function source(){ return $this->get( 'source' ); }
+		
+		
+		public function score(){ return $this->get( 'score' ); }
 		public function rating(){ return $this->get( 'rating' ); }
 		
 		
@@ -39,6 +46,18 @@
 		const SAFE = 's';
 		const QUESTIONABLE = 'q';
 		const ADULT = 'e';
+		
+		const NORMAL = 'active';
+		const PENDING = 'pending';
+		const FLAGGED = 'flagged';
+		
+		public function is_pending(){
+			return $this->get( 'status' ) == DTPost::PENDING;
+		}
+		
+		public function is_flagged(){
+			return $this->get( 'status' ) == DTPost::FLAGGED;
+		}
 		
 		protected function create_data(){
 			$this->add( 'id',	true, 'int' );

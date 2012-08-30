@@ -165,17 +165,17 @@ header nav li form{ float:right; }
 
 
 /*** post relations ***/
-.post_list ul li.has_parent a{ border-color:yellow; }
-.post_list ul li.has_children a{ border-color:green; }
-.post_list ul li.is_pending a{ border-color:blue; }
-.post_list ul li.is_flagged a{ border-color:red; }
+.post_list ul li > a.has_parent{ border-color:yellow; }
+.post_list ul li > a.has_children{ border-color:green; }
+.post_list ul li > a.is_pending{ border-color:blue; }
+.post_list ul li > a.is_flagged{ border-color:red; }
 
-.post_list ul li.has_parent a{ border-left-color:yellow; border-top-color:yellow; }
-.post_list ul li.has_children a{ border-left-color:green; border-bottom-color:green; }
-.post_list ul li.is_pending a{ border-right-color:blue; border-bottom-color:blue; }
-.post_list ul li.is_flagged a{ border-right-color:red; border-top-color:red; }
+.post_list ul li > a.has_parent{ border-left-color:yellow; border-top-color:yellow; }
+.post_list ul li > a.has_children{ border-left-color:green; border-bottom-color:green; }
+.post_list ul li > a.is_pending{ border-right-color:blue; border-bottom-color:blue; }
+.post_list ul li > a.is_flagged{ border-right-color:red; border-top-color:red; }
 
-.post_list ul li.has_parent a{ border-top-color:yellow; }
+.post_list ul li > a.has_parent{ border-top-color:yellow; }
 /********** POST LIST END **********/
 
 
