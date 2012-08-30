@@ -24,7 +24,7 @@
 	//TODO: emulate it better ;P
 	
 	//Get image
-	$type = $_GET['type']; //TODO: validate
+	$type = $_GET['type'];
 	switch( $type ){
 		case 'thumb':
 		case 'preview':
@@ -41,35 +41,29 @@
 	$img = $post->get_image( $type );
 	$url = $img->real_url;
 	
-	//TODO: emulate referer path
-	//TODO: set caching
-	
-	//Set mimetype
-	$mime;
-	$ext = pathinfo($url, PATHINFO_EXTENSION);
-	switch( $ext ){
-		case "jpeg":
-		case "jpg": $mime = "image/jpeg"; break;
-		case "png": $mime = "image/png"; break;
-		case "gif": $mime = "image/gif"; break;
-		case "bmp": $mime = "image/bmp"; break; //Not standard!
-		case "svg": $mime = "image/svg+xml"; break;
-		case "swf": $mime = "application/x-shockwave-flash"; break;
-		case "tif": $mime = "image/tiff"; break;
-		default: echo "Unknown filetype: $ext!"; die;
-	}
-	header( "Content-Type: $mime" );
+	//Fix caching
 	header( "Cache-Control: max-age=" . 60*60*24*365 );
 	
-	//Setup HTTP
-	$opts = array(
-		'http'=>array(
-			'method'=>"GET",
-			'header'=>"User-Agent: Opera/9.80 (Windows NT 6.1; Win64; x64; U; en) Presto/2.10.289 Version/12.00\r\nReferer: $site_url\r\n"
-		)
-	);
-
-	$context = stream_context_create($opts);
-
-	readfile( $url, false, $context );
+	$ch = curl_init( $url );
+	
+	curl_setopt( $ch, CURLOPT_REFERER, $site_url );
+	curl_setopt( $ch, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT'] );
+	curl_setopt( $ch, CURLOPT_RETURNTRANSFER, false );
+	
+	//Enable HTTPS
+	curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, FALSE );
+	curl_setopt( $ch, CURLOPT_SSL_VERIFYHOST, 2 );
+	
+	//Forward content lenght
+	curl_setopt( $ch, CURLOPT_HEADERFUNCTION, function( $ch, $header ){
+		if( strpos( $header, 'Content-Length:' ) !== false )
+			header( $header );
+		if( strpos( $header, 'Content-Type:' ) !== false )
+			header( $header );
+		return strlen( $header );
+	}	);
+	
+	curl_exec( $ch );
+	
+	curl_close( $ch );
 ?>
