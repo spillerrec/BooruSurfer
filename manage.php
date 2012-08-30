@@ -181,6 +181,7 @@
 		$info->add_site( 'nano', 'NanobooruApi' );
 		$info->add_site( 'mega', 'MegabooruApi' );
 		$info->add_site( 'poke', 'PokeApi' );
+		$info->add_site( 'r34', 'Rule34PahealApi' );
 		
 		//Custom sites
 		$info->add_site( 'zero', 'ZeroApi' );

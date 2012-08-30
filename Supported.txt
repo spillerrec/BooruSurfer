@@ -33,7 +33,8 @@ Shimmie with RSS:
 -	http://booru.touhouradio.com/
 -	http://booru.nanochan.org/
 -	http://megabooru.com/
--	http://booru.151chan.org/ (Has comments feed)
+-	http://booru.151chan.org/
+-	http://rule34.paheal.net/
 Searching/browsing with tags supported, but without post count. Minimal post info, some sites provide dimentions and filesize though.
 
 Custom:
@@ -73,8 +74,7 @@ Shimmie with RSS:
 -	http://fairygarden.no-ip.org/shimmie2/ (But XML parsing failed because of unescaped '<3' tag >:| )
 -	http://shimmie.4chanhouse.org/index.php?q=/post/list (RSS appears to be sligthly broken, but I think I could make it work nevertheless. Has comments feed)
 -	http://www.dollbooru.org/ (More broken RSS, but has extra info.)
--	http://rule34.paheal.net/ (Has comments feed)
--	http://angelhq.net/ (More invaild XML, this time incorrect placement of XML declaration. Should be easy to fix. No direct link, but it is easy to calculate)
+-	http://angelhq.net/ (non-searchable and browsable, this is useless...)
 
 RSS image feed surplies following information for each post:
 -	ID
