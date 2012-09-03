@@ -85,54 +85,55 @@
 		}
 		
 	//The password form
-		
-		//Text
-		$user = $info->has_user();
-		$pass_text = ( $user ? 'Change' : 'Set' ) . ' password';
-		$fieldset = action_field( 'set_user', $pass_text );
-		
-		//User input
-		$input_user = new htmlObject( 'input' );
-		$input_user->attributes['name'] = 'user';
-		$input_user->attributes['type'] = 'text';
-		$input_user->attributes['value'] = $user;
-		$input_user->attributes['placeholder'] = 'Username';
-		$fieldset->content[] = $input_user;
-		
-		//password input
-		$input_pass = new htmlObject( 'input' );
-		$input_pass->attributes['name'] = 'pass';
-		$input_pass->attributes['type'] = 'password';
-		$input_pass->attributes['placeholder'] = 'Password';
-		$fieldset->content[] = $input_pass;
-		
-		//button
-		$input_submit = new htmlObject( 'input' );
-		$input_submit->attributes['type'] = 'submit';
-		$fieldset->content[] = $input_submit;
-		
-		//Add password form
-		add_form( $fieldset );
-		
+		if( $site->get_api()->supports_login() ){
+			//Text
+			$user = $info->has_user();
+			$pass_text = ( $user ? 'Change' : 'Set' ) . ' password';
+			$fieldset = action_field( 'set_user', $pass_text );
+			
+			//User input
+			$input_user = new htmlObject( 'input' );
+			$input_user->attributes['name'] = 'user';
+			$input_user->attributes['type'] = 'text';
+			$input_user->attributes['value'] = $user;
+			$input_user->attributes['placeholder'] = 'Username';
+			$fieldset->content[] = $input_user;
+			
+			//password input
+			$input_pass = new htmlObject( 'input' );
+			$input_pass->attributes['name'] = 'pass';
+			$input_pass->attributes['type'] = 'password';
+			$input_pass->attributes['placeholder'] = 'Password';
+			$fieldset->content[] = $input_pass;
+			
+			//button
+			$input_submit = new htmlObject( 'input' );
+			$input_submit->attributes['type'] = 'submit';
+			$fieldset->content[] = $input_submit;
+			
+			//Add password form
+			add_form( $fieldset );
+		}
 		
 	//Add update tags
-		$update_field = action_field( 'update_tags', 'Update tags' );
-		
-		//Add time on last update
-		$time = $info->get_tags_updated();
-		if( $time > 0 )
-			$time = 'Last updated: '.$styler->format_date( $time );
-		else
-			$time = 'No tags in DB!';
-		$update_field->content[] = new htmlObject( 'p', $time );
-		
-		
-		//Add submit and form
-		$update_submit = new htmlObject( 'input' );
-		$update_submit->attributes['type'] = 'submit';
-		$update_field->content[] = $update_submit;
-		add_form( $update_field );
-		
+		if( $site->get_api()->supports_all_tags() ){
+			$update_field = action_field( 'update_tags', 'Update tags' );
+			
+			//Add time on last update
+			$time = $info->get_tags_updated();
+			if( $time > 0 )
+				$time = 'Last updated: '.$styler->format_date( $time );
+			else
+				$time = 'No tags in DB!';
+			$update_field->content[] = new htmlObject( 'p', $time );
+			
+			
+			//Add submit and form
+			$update_submit = new htmlObject( 'input' );
+			$update_submit->attributes['type'] = 'submit';
+			$update_field->content[] = $update_submit;
+			add_form( $update_field );
+		}
 		
 	//Add active/deactivate
 		if( !$info->is_active() )
