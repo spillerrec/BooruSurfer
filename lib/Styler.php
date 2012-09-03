@@ -141,12 +141,20 @@
 		}
 		
 		//Return an ul list with tags
-		public function tag_list( $tags ){
+		public function tag_list( $tags, $title=NULL ){
+			//Do nothing if no tags
+			if( !$tags )
+				return NULL;
+			
+			//Add title if set
+			$h3 = ( $title ) ? new htmlObject( 'h3', $title ) : NULL;
+			
+			//Add tags in <ul>
 			$list = new htmlList();
 			foreach( $tags as $tag )
 				$list->addItem( $this->tag( $tag ) );
 			
-			return $list;
+			return array( $h3, $list );
 		}
 		
 		//Returns a human readable rating, or NULL if none

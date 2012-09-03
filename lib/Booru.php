@@ -38,6 +38,7 @@
 		}
 		
 		public function get_api(){ return $this->api; }
+		public function get_code(){ return $this->code; }
 		
 		public function get_fetch_amount(){ return $this->fetch_amount; }
 		

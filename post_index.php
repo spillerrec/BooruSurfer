@@ -33,9 +33,6 @@
 	$index = $post_index->get_page( $page );
 	
 	$page_amount = $post_index->get_page_amount();
-	if( $page_amount < 2 ){
-		//TODO:
-	}
 	
 	$layout = new mainLayout();
 	$layout->navigation = $styler->main_navigation( $search );
@@ -58,16 +55,19 @@
 	if( $page+1 <= $page_amount )
 		$layout->page->html->addSequence( "next", $site->index_link( $page+1, $search ) );
 	
-	
-	//Write list
-	$list = new htmlList();
-	foreach( $index as $i )
-		$list->addItem( array(
-				$styler->post_thumb( $i )
-			,	$styler->post_details( $i )
-			) );
-	
-	$layout->main->content[] = $list;
+	if( $index ){
+		//Write list
+		$list = new htmlList();
+		foreach( $index as $i )
+			$list->addItem( array(
+					$styler->post_thumb( $i )
+				,	$styler->post_details( $i )
+				) );
+		
+		$layout->main->content[] = $list;
+	}
+	else	//Nothing to display
+		$layout->main->content[] = new htmlObject( 'p', 'No posts found' );
 	
 	//Add page navigation
 	$page_links = $styler->page_index_nav( $post_index, $page );
@@ -76,12 +76,17 @@
 	
 	
 	//Side-panel
-	$layout->sidebar->content[] = new htmlObject( "p", $search );
+	
+	//Add similar tags if low amount of pages
+	if( $page_amount < 2 ){
+		$tag = new DTTag( $site->get_code() );
+		$tags = $tag->similar_tags( $search );
+		$layout->sidebar->content[] = $styler->tag_list( $tags, 'Similar tags' );
+	}
 	
 	//Add related tags
 	$tags = $post_index->related_tags();
-	if( $tags )
-		$layout->sidebar->content[] = $styler->tag_list( $tags );
+	$layout->sidebar->content[] = $styler->tag_list( $tags, 'Related tags' );
 	
 	$layout->page->write();
 ?>
