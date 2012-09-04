@@ -38,6 +38,9 @@
 		abstract public function tag_index( $search );
 		abstract public function related_tags( $tags );
 		
+	//Notes stuff
+		abstract public function notes( $post_id=NULL );
+		
 	//Login functionallity
 		protected $username = NULL;
 		protected $password_hash;

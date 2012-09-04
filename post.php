@@ -47,27 +47,12 @@
 		$image_container->content[] = $styler->post_preview( $post, 'image' );
 		
 		
-		/*Notes
-		$notes = get_notes( $id );
+		//Notes
+		$notes = $site->notes( $post );
 		if( $notes )
-			foreach( $notes as $note ){
-				$note_info = get_note_info( $note );
-				
-				//Write note
-				$block = new htmlObject( 'div' );
-				$x = $note->x / $image->width * 100;
-				$y = $note->y / $image->height * 100;
-				$width = $note->width / $image->width * 100;
-				$height = $note->height / $image->height * 100;
-				$style = "left:$x%;top:$y%;width:$width%;height:$height%";
-				
-				$block->attributes['style'] = $style;
-				$block->content = new htmlObject( 'div', $note_info->body );
-				//TODO: add body
-				
-				$image_container->content[] = $block;
-			}
-		//*/
+			foreach( $notes as $note )
+				$image_container->content[] = $styler->note( $note, $post );
+		
 		$layout->main->content[] = $image_container;
 		
 		//Fill sidebar

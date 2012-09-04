@@ -280,9 +280,11 @@ header nav li form{ float:right; }
 /* Notice that this requires each div to have 'height:100%'. */
 /* #container have been set to 95% to make the image approax */
 /* fit under the header and avoid extra padding in bottom. */
+/*
 html, body, #container > .post, #container > .post > .container, #container > .post > .container > a{height:100%;}
 .post .container img{max-height:100%}
 #container{height:95%;}
+*/
 body{margin:0 5px;}
 header{ padding-top: 5px; }
 .post .container  img{

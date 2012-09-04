@@ -126,7 +126,34 @@
 		}
 		
 	//Parsing of note data
-		//protected function parse_note( $data );
+		protected function get_note_mapping(){
+			return array(
+					'id' => 'id',
+					'post_id' => 'post_id',
+					'created_at' => 'created_at',
+					'updated_at' => 'updated_at',
+					'x' => 'x',
+					'y' => 'y',
+					'width' => 'width',
+					'height' => 'height',
+					'active' => 'is_active',
+					'body' => 'body',
+					'version' => 'version'
+				);
+		}
+		protected function transform_note( &$data ){
+			//Parse dates
+			$data['created_at'] = strtotime( $data['created_at'] );
+			$data['updated_at'] = strtotime( $data['updated_at'] );
+			if( $data['updated_at'] == $data['created_at'] )
+				$data['updated_at'] = NULL;
+		}
+		protected function parse_note( $data ){
+			$arr = $this->element_to_array( $data );
+			$note = $this->transform_array( $arr, $this->get_note_mapping() );
+			$this->transform_note( $note );
+			return $note;
+		}
 		
 		
 		
@@ -250,6 +277,23 @@
 				$tags[] = $this->parse_tag( $tag_data );
 				
 			return $tags;
+		}
+		
+		public function notes( $post_id=NULL ){
+			//Retrive raw data from the server
+			$para = array( 'post_id' => $post_id );
+			$url = $this->get_url( 'note', 'index', 'xml', $para );
+			$data = $this->get_xml( $url );
+			if( !$data )	//Kill if failed
+				return NULL;
+			
+			
+			$notes = array();
+			foreach( $data->note as $note ){
+					$notes[] = $this->parse_note( $note );
+			}
+			
+			return $notes;
 		}
 	}
 	

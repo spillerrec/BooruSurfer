@@ -18,6 +18,7 @@
 	require_once "lib/Api.php";
 	require_once "lib/DTPost.php";
 	require_once "lib/DTTag.php";
+	require_once "lib/DTNote.php";
 	require_once "lib/SiteInfo.php";
 	require_once "lib/Index.php";
 	
@@ -64,6 +65,31 @@
 				$post = new DTPost( $this->code, $data );
 				$post->db_save();
 				return $post;
+			}
+		}
+		
+		public function notes( $post ){
+			if( !$post->has_notes() )
+				return array();
+			
+			//Check database
+			$db = new DTNote( $this->code );
+			$notes = $db->post( $post->id() );
+			if( $notes )
+				return $notes;
+			else{
+				//Not in database, fetch it from site
+				$data = $this->api->notes( $post->id() );
+				
+				//Fill notes
+				$notes = array();
+				foreach( $data as $note_data ){
+					$note = new DTNote( $this->code, $note_data );
+					$note->db_save();
+					$notes[] = $note;
+				}
+				
+				return $notes;
 			}
 		}
 		

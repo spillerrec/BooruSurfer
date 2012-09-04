@@ -1,11 +1,9 @@
 ﻿~~~~ Stuff still to be done ~~~~
 
 Sites to be added:
--	Shimmie RSS boards
 
 API to be supported:
 -	Fetch comments
--	Fetch notes
 
 API stuff:
 -	Fix related tags when searching on multiple tags

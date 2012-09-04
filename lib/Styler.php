@@ -157,6 +157,24 @@
 			return array( $h3, $list );
 		}
 		
+		//Returns a link to a tag and possibly other info
+		public function note( $note, $post ){
+			$image = $post->get_image();
+			$block = new htmlObject( 'div' );
+			
+			$x = $note->x() / $image->width * 100;
+			$y = $note->y() / $image->height * 100;
+			$width = $note->width() / $image->width * 100;
+			$height = $note->height() / $image->height * 100;
+			$style = "left:$x%;top:$y%;width:$width%;height:$height%";
+			
+			$block->attributes['style'] = $style;
+			$block->content = new htmlObject( 'div', $note->body() );
+			//TODO: add body
+			
+			return $block;
+		}
+		
 		//Returns a human readable rating, or NULL if none
 		public function post_rating( $post ){
 			switch( $post->rating() ){
