@@ -74,6 +74,9 @@
 		//Returns true if it is possible to log in
 		abstract public function supports_login();
 		
+		//Returns the default size of thumbnails
+		abstract public function thumbnail_size();
+		
 		
 	//Other stuff
 		

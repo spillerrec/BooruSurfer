@@ -21,6 +21,7 @@
 		public function __construct(){
 			$this->url = "http://konachan.com/";
 		}
+		public function thumbnail_size(){ return 300; }
 		
 		protected function transform_date( &$date ){
 			//Already in UNIX time

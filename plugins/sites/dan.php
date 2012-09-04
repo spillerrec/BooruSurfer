@@ -24,6 +24,7 @@
 		public function supports_all_tags(){ return true; }
 		public function supports_related_tags(){ return true; }
 		public function supports_login(){ return true; }
+		public function thumbnail_size(){ return 150; }
 		
 		
 	//Password and misc.

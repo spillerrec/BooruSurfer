@@ -24,6 +24,7 @@
 		public function supports_all_tags(){ return false; }
 		public function supports_related_tags(){ return false; }
 		public function supports_login(){ return false; }
+		public function thumbnail_size(){ return 192; }
 		
 	//Site
 		private $name;

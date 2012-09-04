@@ -45,8 +45,12 @@
 		$title .= " - Page " . $page;
 	$layout->page->html->title = $title;
 	
-	$layout->main->attributes['class'] = "post_list";
-	$layout->sidebar->attributes['class'] = "post_list_info";
+	$layout->main->addClass( 'post_list' );
+	$layout->sidebar->addClass( 'post_list_info' );
+	
+	//Set sizing options
+	if( $site->get_api()->thumbnail_size() >= 192 )
+		$layout->main->addClass( 'size_medium' );
 	
 	//Set page relationships
 	if( $page > 1 )

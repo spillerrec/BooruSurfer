@@ -26,5 +26,6 @@
 				,	40
 				);
 		}
+		public function thumbnail_size(){ return 150; }
 	}
 ?>

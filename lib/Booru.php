@@ -57,7 +57,11 @@
 			}
 			else{
 				//Not in database, fetch it from site
-				$post = new DTPost( $this->code, $this->api->post( $id ) );
+				$data = $this->api->post( $id );
+				if( !isset( $data['url'] ) )
+					return NULL; //Post has been deleted : \
+				
+				$post = new DTPost( $this->code, $data );
 				$post->db_save();
 				return $post;
 			}

@@ -164,6 +164,18 @@ header nav li form{ float:right; }
 	word-wrap: break-word;
 }
 
+@media screen and (min-width:1290px), screen and (min-height:1200px) {
+	.size_medium > ul > li > a{
+		width:192px;
+		height:192px;
+		line-height:192px;
+	}
+	.size_medium li > a img{
+		max-width:192px;
+		max-height:192px;
+	}
+}
+
 
 /*** post relations ***/
 .post_list ul li > a.has_parent{ border-color:yellow; }
