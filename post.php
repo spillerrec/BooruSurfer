@@ -75,12 +75,13 @@
 		
 		if( $post->has_children() ){
 			$index_child = $site->index( "parent:" . $post->id() );
+			$children = $index_child->get_page( 1 );
 			
 			$layout->sidebar->content[] = new htmlObject( "h3", "Children:" );
 			$img = new htmlObject( "section", NULL, toClass( "post_children") );
 			
 			//Add children
-			foreach( $index_child as $child ){
+			foreach( $children as $child ){
 				if( $child->id() != $post->id() ){
 					$img->content[] = $styler->post_thumb( $child );
 				}
