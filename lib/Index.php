@@ -256,6 +256,7 @@
 			
 			//Calculate initial offset
 			$offset = ($page-1) * $limit;
+			$pos = 0;
 			
 			//Save all posts
 			foreach( $data as $post )
@@ -268,13 +269,18 @@
 					//Save offset data
 					$db->query( "REPLACE INTO $this->post VALUES ( "
 						.	(int)$this->id . ", "
-						.	(int)$offset . ", "
+						.	(int)($offset + $pos) . ", "
 						.	(int)$p->id() . " )"
 						);
 					
 					//Increment offset
-					$offset++;
+					$pos++;
 				}
+			
+			//The count data might be unreliable
+			//If we reached the end, update count
+			if( $pos < $limit )
+				$this->change_field( 'count', (int)($offset+$pos) );
 			
 			//Set new update time, if count was refreshed
 			if( isset( $data['count'] ) )
@@ -290,7 +296,7 @@
 		private function fetch_from_db( $page, $limit=NULL, $recursion=0 ){
 			//Prevent it from recursing endlessy
 			$recursion++;
-			if( $recursion > 2 )
+			if( $recursion > 3 )
 				die( "Not possible to fetch page : (" );
 			
 		//Grap everything from the database
@@ -313,6 +319,10 @@
 			$max = $page * $limit;
 			if( $max > $this->get_count() )
 				$max = $this->get_count();
+			
+			//Stop if this page does not contain any posts
+			if( $max <= $min )
+				return NULL;
 			
 			//Finish the query and execute
 			$stmt->execute( array(
