@@ -41,6 +41,9 @@
 	//Notes stuff
 		abstract public function notes( $post_id=NULL );
 		
+	//Comments stuff
+		abstract public function comments( $post_id=NULL );
+		
 	//Login functionallity
 		protected $username = NULL;
 		protected $password_hash;

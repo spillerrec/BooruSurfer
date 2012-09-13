@@ -207,6 +207,7 @@
 		public function tag_index( $search ){ return NULL; }
 		public function related_tags( $tags ){ return NULL; }
 		public function notes( $post_id=NULL ){ return NULL; }
+		public function comments( $post_id=NULL ){ return NULL; }
 	}
 	
 	class MemeFolderApi extends ShimmieRssApi{

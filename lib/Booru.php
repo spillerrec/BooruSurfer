@@ -19,6 +19,7 @@
 	require_once "lib/DTPost.php";
 	require_once "lib/DTTag.php";
 	require_once "lib/DTNote.php";
+	require_once "lib/DTComment.php";
 	require_once "lib/SiteInfo.php";
 	require_once "lib/Index.php";
 	
@@ -90,6 +91,33 @@
 				}
 				
 				return $notes;
+			}
+		}
+		
+		//TODO: don't create a DTNote/DTComment if no API support
+		//in order to avoid creating an empty DB
+		public function comments( $post ){
+			if( !$post->has_comments() )
+				return array();
+			
+			//Check database
+			$db = new DTComment( $this->code );
+			$comments = $db->post( $post->id() );
+			if( $comments )
+				return $comments;
+			else{
+				//Not in database, fetch it from site
+				$data = $this->api->comments( $post->id() );
+				
+				//Fill comments
+				$comments = array();
+				foreach( $data as $comment_data ){
+					$comment = new DTComment( $this->code, $comment_data );
+					$comment->db_save();
+					$comments[] = $comment;
+				}
+				
+				return $comments;
 			}
 		}
 		

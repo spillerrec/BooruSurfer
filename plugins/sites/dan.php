@@ -155,6 +155,28 @@
 			return $note;
 		}
 		
+	//Parsing of comment data
+		protected function get_comment_mapping(){
+			return array(
+					'id' => 'id',
+					'post_id' => 'post_id',
+					'creator' => 'creator',
+					'created_at' => 'created_at',
+					'score' => 'score',
+					'body' => 'body'
+				);
+		}
+		protected function transform_comment( &$data ){
+			//Parse dates
+			$data['created_at'] = strtotime( $data['created_at'] );
+		}
+		protected function parse_comment( $data ){
+			$arr = $this->element_to_array( $data );
+			$comment = $this->transform_array( $arr, $this->get_comment_mapping() );
+			$this->transform_comment( $comment );
+			return $comment;
+		}
+		
 		
 		
 		protected function get_url( $handler, $action, $format, $parameters=array(), $login=false ){
@@ -294,6 +316,23 @@
 			}
 			
 			return $notes;
+		}
+		
+		public function comments( $post_id=NULL ){
+			//Retrive raw data from the server
+			$para = array( 'post_id' => $post_id );
+			$url = $this->get_url( 'comment', 'index', 'xml', $para );
+			$data = $this->get_xml( $url );
+			if( !$data )	//Kill if failed
+				return NULL;
+			
+			
+			$comments = array();
+			foreach( $data->comment as $comment ){
+					$comments[] = $this->parse_comment( $comment );
+			}
+			
+			return $comments;
 		}
 	}
 	

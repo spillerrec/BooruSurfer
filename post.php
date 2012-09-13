@@ -55,6 +55,19 @@
 		
 		$layout->main->content[] = $image_container;
 		
+		
+		//Comments
+		$comments = $site->comments( $post );
+		if( $comments ){
+			$container = new htmlObject( 'div' );
+			$container->addClass( 'comments' );
+			
+			foreach( $comments as $comment )
+				$container->content[] = $styler->comment( $comment, $post );
+			
+			$layout->main->content[] = $container;
+		}
+		
 		//Fill sidebar
 		$layout->sidebar->content[] = new htmlObject( "h3", "Info:" );
 		$layout->sidebar->content[] = $styler->post_info( $post, true );

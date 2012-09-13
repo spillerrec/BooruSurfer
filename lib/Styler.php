@@ -175,6 +175,15 @@
 			return $block;
 		}
 		
+		//Returns a comment
+		public function comment( $comment ){
+			$block = new htmlObject( 'article' );
+			
+			$block->content[] = new htmlObject( 'p', $comment->body() );
+			
+			return $block;
+		}
+		
 		//Returns a human readable rating, or NULL if none
 		public function post_rating( $post ){
 			switch( $post->rating() ){
