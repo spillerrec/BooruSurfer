@@ -133,23 +133,26 @@
 		//Will use (cached) API or database depending on
 		//the situation.
 		public function related_tags(){
+			//Check cache first
+			$tags = $this->get_tags();
+			if( $tags != NULL )
+				return $tags;
+			
 			//If no search and tag database exists, use it
 			if( !$this->search && $this->api->supports_all_tags() ){
 				$tag = new DTTag( $this->prefix );
 				$tags = $tag->most_used();
 				
 				//Only do so if the database actually contain something
-				if( count( $tags ) > 0 )
+				if( count( $tags ) > 0 ){
+					$this->save_tags( $tags );
 					return $tags;
+				}
 			}
 			
 			//Use API support if available
 			//TODO: only do this for simple searches
 			if( $this->api->supports_related_tags() ){
-				//Check cache first
-				$tags = $this->get_tags();
-				if( $tags != NULL )
-					return $tags;
 				
 				//Fetch from API
 				$data = $this->site->get_api()->related_tags( $this->search );
