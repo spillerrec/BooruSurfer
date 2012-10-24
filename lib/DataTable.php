@@ -123,14 +123,14 @@
 		
 	//Database functions
 		public function create_table(){
-			$db = Database::get_instance()->db;
+			$db = Database::get_instance();
 			$query = "CREATE TABLE IF NOT EXISTS $this->name ( ";
 			
 			$query .= $this->sql_columns( true );
 			$query .= ", PRIMARY KEY( id ) )";
 			
-			$db->exec( $query );
-			
+			$db->db->exec( $query );
+			$db->table_created( $this->name );
 		}
 		public function delete_table(){
 			$db = Database::get_instance()->db;
@@ -184,12 +184,21 @@
 			return false;
 		}
 		
+		private static $read_prepares = array();
 		//Retrive the contents with the id = '$id'
 		public function db_read( $id ){
-			$db = Database::get_instance()->db;
-			$result = $db->query( "SELECT * FROM $this->name WHERE id = " . $db->quote( $id ) );
+			$stmt = NULL;
+			if( isset( DataTable::$read_prepares[ $this->name ] ) )
+				$stmt = DataTable::$read_prepares[ $this->name ];
+			else{
+				//Create query and add to cache
+				$db = Database::get_instance()->db;
+				$stmt = $db->prepare( "SELECT * FROM $this->name WHERE id = :id LIMIT 1" );
+				DataTable::$read_prepares[ $this->name ] = $stmt;
+			}
+			
 			//Read row, or return false on failure
-			return $result ? $this->read_row( $result->fetch( PDO::FETCH_ASSOC ) ) : false;
+			return $stmt->execute( array( 'id' => $id ) ) ? $this->read_row( $stmt->fetch( PDO::FETCH_ASSOC ) ) : false;
 		}
 		
 		//Save the contents in the database

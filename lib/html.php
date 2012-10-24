@@ -89,14 +89,9 @@
 		}
 		
 		private function escape( $text, $attribute=false ){
-			$text = str_replace( "&", "&amp;", $text );
-			$text = str_replace( "<", "&lt;", $text );
-			$text = str_replace( ">", "&gt;", $text );
-			if( $attribute ){
-				$text = str_replace( '"', "&quot;", $text );
-				$text = str_replace( "'", "&apos;", $text );
-			}
-			return $text;
+			if( $attribute )
+				$text = str_replace( array('"', "'"), array( '&quot;', '&apos;' ), $text );
+			return str_replace( array('&', '<', '>'), array('&amp;', '&lt;', '&gt;'), $text );
 		}
 		
 		public function writeHtml(){
@@ -105,36 +100,33 @@
 		public function writeXhtml(){
 			if( $this->type ){
 				//Write type and attributes
-				echo "<$this->type";
+				echo '<', $this->type;
 				if( $this->attributes ){
 					foreach( $this->attributes as $attribute=>$value )
-						if( $value ){
-							$value = $this->escape( $value, true );
-							echo " $attribute=\"$value\"";
-						}
+						if( $value )
+							echo ' ', $attribute, '="', $this->escape( $value, true ), '"';
 				}
 				
 				//Write body of element
 				if( $this->content ){
-					echo ">";
+					echo '>';
 					
-					//Make sure it is an array
-					if( !is_array( $this->content ) )
-						$this->content = array( $this->content );
 					if( is_object( $this->content ) )
-						$this->content = array( $this->content );
-					
-					array_walk_recursive( $this->content, function( $item, $key ){
+						$this->content->writeXhtml();
+					else if( is_array( $this->content ) )
+						array_walk_recursive( $this->content, function( $item, $key ){
 							if( is_object( $item ) )
 								$item->writeXhtml();
 							else
 								echo $this->escape( $item );
 						} );
+							else
+								echo $this->escape( $this->content );
 					
-					echo "</$this->type>";
+					echo '</', $this->type, '>';
 				}
 				else
-					echo "/>";
+					echo '/>';
 			}
 		}
 		

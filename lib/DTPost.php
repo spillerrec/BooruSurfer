@@ -275,9 +275,9 @@
 				//Convert the tags
 				foreach( $raw as $name )
 					if( $name ){	//Avoid empty tags
-						$tag = new DTTag( $this->prefix );
-						$tag->db_read( $name );	//Lookup addional info in database
-						$tags[] = $tag;
+						$tag = DTTag::get_tag( $this->prefix, $name );
+						if( $tag )
+							$tags[] = $tag;
 					}
 				
 				$this->tags_cache = $tags;

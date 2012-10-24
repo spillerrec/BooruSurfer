@@ -21,9 +21,16 @@
 		private static $instance = NULL;
 		public $db;
 		
+		private $tables;
+		
 		private function __construct(){
 			$this->db = new PDO('sqlite:cache/db.sqlite' );
 			$this->db->exec( "PRAGMA foreign_keys = ON" );
+			
+			//Cache existing tables
+			$stmt = $this->db->query( "SELECT * FROM sqlite_master" );
+			foreach( $stmt as $row )
+				$tables[ $row['name'] ] = true;
 		}
 		public static function get_instance(){
 			if( !Database::$instance )
@@ -32,8 +39,10 @@
 		}
 		
 		public function table_exists( $name ){
-			$stmt = $this->db->query( "SELECT * FROM sqlite_master WHERE name = " . $this->db->quote( $name ) );
-			return $this->has_rows( $stmt );
+			return isset( $this->tables[ $name ] );
+		}
+		public function table_created( $name ){
+			$this->tables[ $name ] = true;
 		}
 		
 		//Checks if a query returned any rows

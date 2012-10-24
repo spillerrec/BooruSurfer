@@ -38,6 +38,29 @@
 		const COMPANY = 5;
 		const UNKNOWN = 255;
 		
+	//Tag cache
+		private static $cached_table = NULL;
+		private static $cached_tags;
+		public static function get_tag( $prefix, $id ){
+			//Empty cache if new table is queried
+			if( $prefix != DTTag::$cached_table ){
+				DTTag::$cached_table = $prefix;
+				DTTag::$cached_tags = array();
+			}
+			
+			if( isset( DTTag::$cached_tags[ $id ] ) )
+				return DTTag::$cached_tags[ $id ];
+			else{
+				//Create new one and add it
+				$temp = new DTTag( $prefix );
+				if( $temp->db_read( $id ) ){
+					DTTag::$cached_tags[ $id ] = $temp;
+					return $temp;
+				}
+				else
+					return NULL;
+			}
+		}
 		
 		public function __construct( $prefix, $data = NULL ){
 			parent::__construct( $prefix . "_tags", $data );
