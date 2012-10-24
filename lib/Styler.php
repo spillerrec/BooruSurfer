@@ -71,6 +71,13 @@
 			return date( 'H:i d/m/Y', $unix_time );
 		}
 		
+		//Create a <time> element
+		public function time( $unix_time ){
+			$time = new htmlObject( 'time', $this->format_date( $unix_time ) );
+			$time->attributes['datetime'] = date( DATE_ISO8601 );
+			return $time;
+		}
+		
 		
 	//Page elements like headers
 		
@@ -179,6 +186,8 @@
 		public function comment( $comment ){
 			$block = new htmlObject( 'article' );
 			
+			$block->content[] = new htmlObject( 'h3', $comment->creator() );
+			$block->content[] = $this->time( $comment->created_at() );
 			$block->content[] = new htmlObject( 'p', $comment->body() );
 			
 			return $block;

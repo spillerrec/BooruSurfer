@@ -23,16 +23,17 @@
 		public $navigation;
 		public $sidebar;
 		public $main;
+		public $all;
 		
 		
 		function __construct(){
 			$this->page = new htmlPage();
-			$this->page->html->head->content[] = new fakeObject( ("<!--[if lt IE 9]><script src=\"/style/ie8.js\"></script><![endif]-->") );
-			$this->page->html->addStylesheet( "/style/main.css" );
+			$this->page->html->head->content[] = new fakeObject( ('<!--[if lt IE 9]><script src="/style/ie8.js"></script><![endif]-->') );
+			$this->page->html->addStylesheet( '/style/main.css' );
 			
 			//Create header
-			$nav = new htmlObject( "nav" );
-			$header = new htmlObject( "header" );
+			$nav = new htmlObject( 'nav' );
+			$header = new htmlObject( 'header' );
 			$header->content[] = $nav;
 			$this->page->html->body->content[] = $header;
 			
@@ -40,13 +41,13 @@
 			
 			
 			//Add content areas
-			$content = new htmlObject( "div" );
-			$content->attributes['id'] = "container";
-			$this->sidebar = new htmlObject( "aside" );
-			$this->main = new htmlObject( "section" );
-			$content->content[] =& $this->main;
-			$content->content[] =& $this->sidebar;
-			$this->page->html->body->content[] = $content;
+			$this->all = new htmlObject( 'div' );
+			$this->all->attributes['id'] = 'container';
+			$this->sidebar = new htmlObject( 'aside' );
+			$this->main = new htmlObject( 'section' );
+			$this->all->content[] =& $this->main;
+			$this->all->content[] =& $this->sidebar;
+			$this->page->html->body->content[] =& $this->all;
 			
 		}
 	}

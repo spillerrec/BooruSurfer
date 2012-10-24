@@ -20,6 +20,20 @@ body {
 	margin-left: -100%;
 }
 footer { clear: both; }
+
+
+@media screen and (min-width:1290px){
+	/* TODO: find good width value */
+	.has_comments{
+		padding-right: 308px;   /* RC width */
+	}
+	#container div.comments{
+		position: relative;
+		float: left;
+		width: 300px;          /* LC width */
+		margin-right: -300px;
+	}
+}
 /********** HOLY GRAIL END **********/
 
 
@@ -312,6 +326,14 @@ header{ padding-top: 5px; }
 	width:auto;
 	max-width:200px;
 }
+/*** COMMENTS START ***/
+.comments article{
+	margin-bottom: 10px;
+}
+.comments time{
+	color:gray;
+}
+/*** COMMENTS END ***/
 /********** POST END **********/
 
 

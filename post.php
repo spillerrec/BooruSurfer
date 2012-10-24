@@ -29,17 +29,17 @@
 	if( $post ){
 		$layout = new mainLayout();
 		$layout->navigation = $styler->main_navigation();
-		$layout->page->html->title = "Post: " . $post->name();
-		$layout->main->attributes['class'] = "post";
-		$layout->sidebar->attributes['class'] = "post_info";
-		$thumbnail = new htmlObject( "link" );
+		$layout->page->html->title = 'Post: ' . $post->name();
+		$layout->main->addClass( 'post' );
+		$layout->sidebar->addClass( 'post_info' );
+		$thumbnail = new htmlObject( 'link' );
 		
 		$preview = $post->get_image( 'preview' );
 		$image = $post->get_image();
 		
 		//Add opera speeddial thumbnail
 		$speeddial = new htmlObject( 'link' );
-		$speeddial->attributes[ 'rel' ] = "image_src";
+		$speeddial->attributes[ 'rel' ] = 'image_src';
 		$speeddial->attributes[ 'href' ] = $preview->url;
 		$layout->page->html->head->content[] = $speeddial;
 		
@@ -61,11 +61,12 @@
 		if( $comments ){
 			$container = new htmlObject( 'div' );
 			$container->addClass( 'comments' );
+			$layout->all->addClass( 'has_comments' );
 			
 			foreach( $comments as $comment )
 				$container->content[] = $styler->comment( $comment, $post );
 			
-			$layout->main->content[] = $container;
+			$layout->all->content[] = $container;
 		}
 		
 		//Fill sidebar
