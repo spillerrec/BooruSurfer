@@ -37,6 +37,12 @@
 		$preview = $post->get_image( 'preview' );
 		$image = $post->get_image();
 		
+		//Add favicon
+		$favicon = new htmlObject( 'link' );
+		$favicon->attributes[ 'rel' ] = 'icon';
+		$favicon->attributes[ 'href' ] = '/style/post.png';
+		$layout->page->html->head->content[] = $favicon;
+		
 		//Add opera speeddial thumbnail
 		$speeddial = new htmlObject( 'link' );
 		$speeddial->attributes[ 'rel' ] = 'image_src';

@@ -36,6 +36,12 @@
 	
 	$layout = new mainLayout();
 	$layout->navigation = $styler->main_navigation( $search );
+		
+	//Add favicon
+	$favicon = new htmlObject( 'link' );
+	$favicon->attributes[ 'rel' ] = 'icon';
+	$favicon->attributes[ 'href' ] = '/style/index.png';
+	$layout->page->html->head->content[] = $favicon;
 	
 	//Set title
 	$title = "Index";
