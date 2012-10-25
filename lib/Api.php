@@ -20,6 +20,9 @@
 		abstract public function get_code();
 		public function get_refferer(){ return ''; }
 		
+		public function get_front_color(){ return 0xFFFFFF; }
+		public function get_back_color(){ return 0x000000; }
+		
 	//Post related stuff
 		//Retrive a single post based on id
 		//TODO: delete and replace functionallity in Index()?

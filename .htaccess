@@ -15,3 +15,6 @@ RewriteRule ^([a-zA-Z0-9]+)/index/([0-9]+)/(.*)              post_index.php?site
 RewriteRule ^([a-zA-Z0-9]+)/index/(.*)                       post_index.php?site=$1&page=1&search=$2 [L]
 
 RewriteRule ^([a-zA-Z0-9]+)/api/similar_tags/(.*)     api.php?site=$1&handler=similar_tags&query=$2 [L]
+
+RewriteRule ^([a-zA-Z0-9]+)/favicon/post/             icon.php?site=$1&type=post [L]
+RewriteRule ^([a-zA-Z0-9]+)/favicon/index/            icon.php?site=$1&type=index [L]

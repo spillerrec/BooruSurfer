@@ -128,6 +128,9 @@
 		
 		public function get_name(){ return "Gelbooru"; }
 		public function get_code(){ return "gel"; }
+		
+		public function get_front_color(){ return 0x006FFA; }
+		public function get_back_color(){ return 0xFFFFFF; }
 	}
 	
 	

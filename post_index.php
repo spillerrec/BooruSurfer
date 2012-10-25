@@ -40,7 +40,7 @@
 	//Add favicon
 	$favicon = new htmlObject( 'link' );
 	$favicon->attributes[ 'rel' ] = 'icon';
-	$favicon->attributes[ 'href' ] = '/style/index.png';
+	$favicon->attributes[ 'href' ] = '/' . $_GET['site'] . '/favicon/index/';
 	$layout->page->html->head->content[] = $favicon;
 	
 	//Set title

@@ -82,5 +82,8 @@
 		
 		public function get_name(){ return "Konachan"; }
 		public function get_code(){ return "kona"; }
+		
+		public function get_front_color(){ return 0x71575a; }
+		public function get_back_color(){ return 0xffecce; }
 	}
 ?>

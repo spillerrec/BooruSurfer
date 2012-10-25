@@ -23,5 +23,8 @@
 		}
 		public function get_name(){ return "Yande.re"; }
 		public function get_code(){ return "yandere"; }
+		
+		public function get_front_color(){ return 0xfab0b1; }
+		public function get_back_color(){ return 0xfff3e4; }
 	}
 ?>

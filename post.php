@@ -40,7 +40,7 @@
 		//Add favicon
 		$favicon = new htmlObject( 'link' );
 		$favicon->attributes[ 'rel' ] = 'icon';
-		$favicon->attributes[ 'href' ] = '/style/post.png';
+		$favicon->attributes[ 'href' ] = '/' . $_GET['site'] . '/favicon/post/';
 		$layout->page->html->head->content[] = $favicon;
 		
 		//Add opera speeddial thumbnail

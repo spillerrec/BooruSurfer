@@ -384,5 +384,8 @@
 		
 		public function get_name(){ return "Danbooru"; }
 		public function get_code(){ return "dan"; }
+		
+		public function get_front_color(){ return 0xa4815e; }
+		public function get_back_color(){ return 0xFFFFFFFF; }
 	}
 ?>
