@@ -28,9 +28,9 @@
 			$this->db->exec( "PRAGMA foreign_keys = ON" );
 			
 			//Cache existing tables
-			$stmt = $this->db->query( "SELECT * FROM sqlite_master" );
+			$stmt = $this->db->query( "SELECT name FROM sqlite_master WHERE type='table'" );
 			foreach( $stmt as $row )
-				$tables[ $row['name'] ] = true;
+				$this->tables[ $row[0] ] = true;
 		}
 		public static function get_instance(){
 			if( !Database::$instance )
