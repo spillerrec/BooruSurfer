@@ -251,7 +251,6 @@
 		//Returns a series of <p> which contains post info
 		public function post_info( $post, $extended=false ){
 			$info = array();
-			$image = $post->get_image();
 			
 			//create a p with em
 			$add = function( $title, $content ){
@@ -272,15 +271,15 @@
 				$info[] = $add( 'By', $user );
 			
 			//Add the dimentions
-			if( $image->width && $image->height )
+			if( $post->width() && $post->height() )
 				$info[] = $add( 'Dimensions'
-					,	$image->width . "x" . $image->height
+					,	$post->width() . "x" . $post->height()
 					);
 			
 			//Add the filesize
-			if( $image->filesize )
+			if( $post->filesize() )
 				$info[] = $add( 'Size'
-					,	$this->format_filesize( $image->filesize )
+					,	$this->format_filesize( $post->filesize() )
 					);
 			
 			//Add rating

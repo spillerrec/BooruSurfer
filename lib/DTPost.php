@@ -32,9 +32,12 @@
 		public function has_comments(){ return $this->get( 'has_comments' ); }
 		public function source(){ return $this->get( 'source' ); }
 		
-		
 		public function score(){ return $this->get( 'score' ); }
 		public function rating(){ return $this->get( 'rating' ); }
+		
+		public function width(){ return $this->get( 'width' ); }
+		public function height(){ return $this->get( 'height' ); }
+		public function filesize(){ return $this->get( 'filesize' ); }
 		
 		
 		public function __construct( $prefix, $data = NULL ){
