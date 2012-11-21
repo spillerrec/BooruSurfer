@@ -18,3 +18,6 @@ RewriteRule ^([a-zA-Z0-9]+)/api/similar_tags/(.*)     api.php?site=$1&handler=si
 
 RewriteRule ^([a-zA-Z0-9]+)/favicon/post/             icon.php?site=$1&type=post [L]
 RewriteRule ^([a-zA-Z0-9]+)/favicon/index/            icon.php?site=$1&type=index [L]
+
+
+RewriteRule ^tool/md5/([a-zA-Z0-9]+)/     getname.php?hash=$1 [L]

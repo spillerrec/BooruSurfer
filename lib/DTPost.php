@@ -176,11 +176,7 @@
 			return false;
 		}
 		
-		private function proxy_url( $url, $type ){
-			//Don't do anything for thumbnails
-			if( $type == 'thumb_' )
-				return $url;
-			
+		private function prepare_file_name( $url, $type ){
 			//create postfix for filename
 			$post = '.';
 			if( $type ){
@@ -196,9 +192,6 @@
 			
 			//Create prefix
 			$pre = $this->prefix . ' ' . $this->id() . ' - ';
-			
-			//avoid empty type
-			$type = ($type == '') ? 'original' : $type;
 			
 			//Get name and remove throublesome characters
 			$name = $this->name();
@@ -220,7 +213,19 @@
 			$name = str_replace( '#', '', $name );
 			
 			//Create full url
-			return "/$this->prefix/proxy/$type/$pre" . $name . $post;
+			return $pre . $name . $post;
+		}
+		
+		private function proxy_url( $url, $type ){
+			//Don't do anything for thumbnails
+			if( $type == 'thumb_' )
+				return $url;
+			
+			//avoid empty type and '_'
+			$type = ($type == '') ? 'original' : rtrim( $type, '_' );
+			
+			//Create full url
+			return "/$this->prefix/proxy/$type/" . $this->prepare_file_name( $url, $type );
 		}
 		
 		//Get all infomation about an image, with a specific prefix
@@ -243,7 +248,6 @@
 					'real_url'	=> $real_url
 				);
 		}
-		//TODO: Check for a certain type
 		public function get_image( $type = NULL ){
 			switch( $type ){
 				case 'thumb': return $this->get_to_image( "thumb_" );
@@ -263,6 +267,11 @@
 				case NULL:	return $this->get_to_image();
 				default:	return NULL;
 			}
+		}
+		
+		//Get full file name
+		public function get_filename(){
+			return $this->prepare_file_name( $this->get( "url" ), "" );
 		}
 		
 		
@@ -287,5 +296,13 @@
 			}
 			return $this->tags_cache;
 		}
+		
+		public function db_hash( $hash ){
+			$db = Database::get_instance()->db;
+			$result = $db->query( "SELECT * FROM $this->name WHERE hash = " . $db->quote( $hash ) );
+			return $this->read_row( $result->fetch( PDO::FETCH_ASSOC ) );
+		}
+		
+		
 	}
 ?>
