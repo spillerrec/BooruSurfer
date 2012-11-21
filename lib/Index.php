@@ -262,6 +262,7 @@
 			$pos = 0;
 			
 			//Save all posts
+			$stmt = $db->prepare( "REPLACE INTO $this->post VALUES ( :pid, :offset, :id )" );
 			foreach( $data as $post )
 				//Do not process extra properties like 'count'
 				if( gettype( $post ) == "array" ){
@@ -270,12 +271,13 @@
 					$p->db_save();
 					
 					//Save offset data
-					$db->query( "REPLACE INTO $this->post VALUES ( "
+					$stmt->execute( array( 'pid'=>$this->id, 'offset'=>($offset + $pos), 'id'=>$p->id() ) );
+					/* $db->query( "REPLACE INTO $this->post VALUES ( "
 						.	(int)$this->id . ", "
 						.	(int)($offset + $pos) . ", "
 						.	(int)$p->id() . " )"
 						);
-					
+					 */
 					//Increment offset
 					$pos++;
 				}
@@ -458,8 +460,7 @@
 			//Create all tags
 			foreach( $raw as $name => $count )
 				if( $name ){
-					$t = new DTTag( $this->prefix );
-					$t->db_read( $name );
+					$t = DTTag::get_tag( $this->prefix, $name );
 					$t->real_count = $count;
 					$tags[] = $t;
 				}

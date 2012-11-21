@@ -19,6 +19,7 @@
 	require_once "lib/Booru.php";
 	require_once "lib/SiteInfo.php";
 	require_once "lib/Index.php";
+	date_default_timezone_set( 'Europe/Copenhagen' ); //Set this at least once
 	
 	/* Styler creates the HTML markup for all basic objects.
 	 * In time you should be able to override this class
@@ -67,7 +68,6 @@
 		
 		//Format a date
 		public function format_date( $unix_time ){
-			date_default_timezone_set( 'Europe/Copenhagen' );
 			return date( 'H:i d/m/Y', $unix_time );
 		}
 		
@@ -132,17 +132,20 @@
 		
 		//Returns a link to a tag and possibly other info
 		public function tag( $tag ){
-			$url = $this->site->index_link( 1, $tag->name() );
+			$type = $tag->values['type'];//get_type();
+			$name = $tag->values['id'];//name();
 			
-			$title = str_replace( "_", " ", $tag->name() );
+			$url = $this->site->index_link( 1, $name );
+			
+			$title = str_replace( "_", " ", $name );
 			$count = $tag->real_count ? $tag->real_count : $tag->get_count();
 			if( $count )
 				$title .= " (" . $count . ")";
 			
 			$link = new htmlLink( $url, $title );
 			
-			if( $tag->get_type() )
-				$link->addClass( "tagtype" . $tag->get_type() );
+			if( $type )
+				$link->addClass( "tagtype" . $type );
 			
 			return $link;
 		}
@@ -169,10 +172,10 @@
 			$image = $post->get_image();
 			$block = new htmlObject( 'div' );
 			
-			$x = $note->x() / $image->width * 100;
-			$y = $note->y() / $image->height * 100;
-			$width = $note->width() / $image->width * 100;
-			$height = $note->height() / $image->height * 100;
+			$x = $note->x() / $image['width'] * 100;
+			$y = $note->y() / $image['height'] * 100;
+			$width = $note->width() / $image['width'] * 100;
+			$height = $note->height() / $image['height'] * 100;
 			$style = "left:$x%;top:$y%;width:$width%;height:$height%";
 			
 			$block->attributes['style'] = $style;
@@ -208,28 +211,27 @@
 		public function post_preview( $post ){
 			$preview = $post->get_image( 'preview' );
 			$image = $post->get_image();
-			if( pathinfo( $image->url, PATHINFO_EXTENSION ) == "swf" ){
+			if( pathinfo( $image['url'], PATHINFO_EXTENSION ) == "swf" ){
 				return array(
 						new htmlObject( 'object', " ", array(
 								'type'=>'application/x-shockwave-flash',
-								'data'=>$image->url,
-								'width'=>$image->width,
-								'height'=>$image->height
+								'data'=>$image['url'],
+								'width'=>$image['width'],
+								'height'=>$image['height']
 							) ),
-						new htmlLink( $image->url, "Direct link" )
+						new htmlLink( $image['url'], "Direct link" )
 					);
 			}
 			else{
-				$img = new htmlImage( $preview->url, 'preview' );
-				return new htmlLink( $image->url, $img );
+				$img = new htmlImage( $preview['url'], 'preview' );
+				return new htmlLink( $image['url'], $img );
 			}
 		}
 		
 		//Returns a link to the post with an image thumbnail of the post
 		public function post_thumb( $post ){
 			//Add link with thumbnail
-			$thumb = $post->get_image( 'thumb' );
-			$img = new htmlImage( $thumb->url, 'thumbnail' );
+			$img = new htmlImage( $post->values['thumb_url'], 'thumbnail' );
 			
 			//Create link
 			$url = $this->site->post_link( $post->id() );
@@ -303,18 +305,25 @@
 			//Add tags
 			$tag_details = new htmlObject( "p" );
 			$tag_details->content[] = new htmlObject( 'em', 'Tags:' );
+			$span = "";
 			foreach( $post->get_tags() as $tag ){
-				if( $tag->get_type() ){
+				$type = $tag->values['type'];//get_type();
+				$name = $tag->values['id'];//name();
+				if( $type ){
 					//Enclose it in a span
-					$t = new htmlObject( 'span', $tag->name() );
-					$t->addClass( "tagtype" . $tag->get_type() );
+					/* Optimized out
+					$t = new htmlObject( 'span', $name );
+					$t->addClass( "tagtype" . $type );
 					
 					$tag_details->content[] = $t;
-					$tag_details->content[] = new fakeObject( " " );
+					$tag_details->content[] = new fakeObject( ' ' ); */
+					$span .= '<span class="tagtype'.$type.'">'.htmlspecialchars( $name, ENT_NOQUOTES ).'</span> ';
 				}
 				else
-					$tag_details->content[] = new fakeObject( $tag->name() . ' ' );
+					//$tag_details->content[] = new fakeObject( $name . ' ' );
+					$span .= htmlspecialchars( $name, ENT_NOQUOTES ) . ' ';
 			}
+			$tag_details->content[] = new fakeObject( $span );
 			$details->content[] = $tag_details;
 			
 			return $details;

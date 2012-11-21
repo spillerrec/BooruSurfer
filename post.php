@@ -46,7 +46,7 @@
 		//Add opera speeddial thumbnail
 		$speeddial = new htmlObject( 'link' );
 		$speeddial->attributes[ 'rel' ] = 'image_src';
-		$speeddial->attributes[ 'href' ] = $preview->url;
+		$speeddial->attributes[ 'href' ] = $preview['url'];
 		$layout->page->html->head->content[] = $speeddial;
 		
 		$image_container = new htmlObject( 'div', NULL, toClass( 'container' ) );

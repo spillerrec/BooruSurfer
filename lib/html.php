@@ -88,12 +88,6 @@
 			$this->content = $content;
 		}
 		
-		private function escape( $text, $attribute=false ){
-			if( $attribute )
-				$text = str_replace( array('"', "'"), array( '&quot;', '&apos;' ), $text );
-			return str_replace( array('&', '<', '>'), array('&amp;', '&lt;', '&gt;'), $text );
-		}
-		
 		public function writeHtml(){
 		
 		}
@@ -104,7 +98,7 @@
 				if( $this->attributes ){
 					foreach( $this->attributes as $attribute=>$value )
 						if( $value )
-							echo ' ', $attribute, '="', $this->escape( $value, true ), '"';
+							echo ' ', $attribute, '="', htmlspecialchars( $value, ENT_QUOTES ), '"';
 				}
 				
 				//Write body of element
@@ -118,10 +112,10 @@
 							if( is_object( $item ) )
 								$item->writeXhtml();
 							else
-								echo $this->escape( $item );
+								echo htmlspecialchars( $item, ENT_NOQUOTES );
 						} );
 							else
-								echo $this->escape( $this->content );
+								echo htmlspecialchars( $this->content, ENT_NOQUOTES );
 					
 					echo '</', $this->type, '>';
 				}

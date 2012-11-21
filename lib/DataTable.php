@@ -19,17 +19,39 @@
 	
 	/*	Provides a data array which can be stored in a database table
 	**	
-	*/	
+	*/
 	abstract class DataTable implements JsonSerializable{
-		private $data = array();
 		protected $name; //Of the table
 		
+		public $values = array();
+		private $type = array();
+		private $required = array();
+		
+		private static $values_cache = array();
+		private static $type_cache = array();
+		private static $required_cache = array();
 		//This constructor MUST be called in subclasses
 		public function __construct( $table_name, $data ){
 			$this->name = $table_name;
 			
-			$this->create_data();
-			$this->read_row( $data );
+			//Create data and cache
+			//* 
+			if( isset( DataTable::$values_cache[ $table_name ] ) ){
+				$this->values = DataTable::$values_cache[ $table_name ];
+				$this->type = DataTable::$type_cache[ $table_name ];
+				$this->required = DataTable::$required_cache[ $table_name ];
+			}
+			else{
+				$this->create_data();
+				DataTable::$values_cache[ $table_name ] = $this->values;
+				DataTable::$type_cache[ $table_name ] = $this->type;
+				DataTable::$required_cache[ $table_name ] = $this->required;
+			}
+			/*/
+			$this->create_data();//*/
+			if( $data )
+				array_walk( $this->type, array( $this, 'read_row_internal' ), $data );
+			//$this->read_row( $data );
 			
 			$db = Database::get_instance();
 			if( !$db->table_exists( $this->name ) )
@@ -57,57 +79,50 @@
 		//$required specifies if the lack of this parameter should be treated as an error
 		//$type will cause the variable to be casted to this type
 		protected function add( $property, $required, $type = "string" ){
-			//Add the data
-			$this->data[ $property ] = (object) array(
-					'value' => NULL,
-					'modified' => false,
-					'original' => NULL,
-					'required' => $required,
-					'type' => $type
-				);
+			//Only add if it does not exist already
+			if( !isset( $this->values[ $property ] ) ){
+				$this->values[ $property ] = null;
+				$this->required[ $property ] = $required;
+				$this->type[ $property ] = $type;
+			}
+			else
+				die( "$property already exist in DataTable." );
 		}
 		public function get( $property ){
-			return $this->data[ $property ]->value;
+			return $this->values[ $property ];
 		}
 		protected function set( $property, $value ){
-			$data = $this->data[ $property ];
-			
-			//Save the original content if first edit
-			if( !$data->modified ){
-				$data->original = $data->value;
-				$data->modified = true;
-			}
-			
-			//Store the data
-			$data->value = $value;
-			$this->data[ $property ] = $data;
+			$this->values[ $property ] = $value;
 		}
 		
 		//Export as JSON, but don't show internal variables
 		public function jsonSerialize(){
 			$raw = array();
-			foreach( $this->data as $key => $value )
+			foreach( $this->values as $key => $value )
 				$raw[$key] = $value->value;
 			return $raw;
 		}
 		
 		public function prepare_array(){
 			$result = array();
-			foreach( $this->data as $key => $value )
-				$result[ ":$key" ] = $value->value;
+			reset( $this->values );
+			while( list( $key, $val ) = each( $this->values ) )
+				$result[ ":$key" ] = $val;
 			return $result;
 		}
 		
 		public function sql_columns( $type = false ){
 			$query = "";
-			foreach( $this->data as $key => $value ){
+			reset( $this->type );
+			foreach( $this->values as $key => $value ){
 				$query .= "$key";
 				if( $type ){
-					switch( $value->type ){
+					switch( current( $this->type ) ){
 						case 'bool':
 						case 'int': $query .= " INT"; break;
 						case 'string': $query .= " TEXT"; break;
 					}
+					next( $this->type );
 				}
 				$query .= ", ";
 			}
@@ -115,7 +130,8 @@
 		}
 		public function pdo_values(){
 			$query = "";
-			foreach( $this->data as $key => $value )
+			//TODO: use that array function instead!
+			foreach( $this->values as $key => $value )
 				$query .= ":$key, ";
 			return rtrim( $query, ", " );
 		}
@@ -154,34 +170,68 @@
 			return false;
 		}
 		
-		protected final function read_row( $row ){
-			if( $row ){
-				foreach( $this->data as $prop => $obj ){
-					
-					$content = NULL;
-					//Check if the data is available
-					if( isset( $row[ $prop ] ) ){
-						//Add the contents
-						$content = $row[ $prop ];
-						if( $obj->type == 'bool' )
-							//Casting with bool doesn't convert (string)"true" and similar as intended
-							$content = filter_var( $content, FILTER_VALIDATE_BOOLEAN );
-						else
-							settype( $content, $obj->type );
-					}
-					else
-						if( $obj->required ){ //Shall this be treated as a fatal error?
-							echo "Missing required property: $prop !";
-							die;
-						}
-					
-					//Fill data
-					$obj->value = $content;
-					$obj->modified = false;
-				}
-				return true;
+		protected function read_row_internal( $type, $prop, $input ){
+			//$prop = $key[$i];
+			$obj = NULL;
+			//Check if the data is available
+			if( isset( $input[ $prop ] ) ){
+				//Add the contents
+				$obj = $input[ $prop ];
+				if( $type === 'bool' )
+					//Casting with bool doesn't convert (string)"true" and similar as intended
+					$obj = filter_var( $obj, FILTER_VALIDATE_BOOLEAN );
+				else
+					settype( $obj, $type );
 			}
-			return false;
+			//else
+				//if( $required ){ //Shall this be treated as a fatal error?
+				//	echo "Missing required property: $prop !";
+				//	die;
+				//}
+			
+			//Fill data
+			$this->values[ $prop ] = $obj;
+		//	$required = next( $this->required );
+		}
+		
+		protected final function read_row( $row ){
+			if( !$row )
+				return false;
+			
+			array_walk( $this->type, array( $this, 'read_row_internal' ), $row );
+			/*/
+			//$key = array_keys($this->values);
+			//$size = sizeOf($key);
+			$type = reset( $this->type );
+		//	$required = reset( $this->required );
+			//for ($i=0; $i<$size; $i++){// $this->values[$key[$i]] .= "a";
+			//foreach( $this->values as $prop => $obj ){
+			foreach( array_keys( $this->values) as $prop ){
+				//$prop = $key[$i];
+				$obj = NULL;
+				//Check if the data is available
+				if( isset( $row[ $prop ] ) ){
+					//Add the contents
+					$obj = $row[ $prop ];
+					if( $type === 'bool' )
+						//Casting with bool doesn't convert (string)"true" and similar as intended
+						$obj = filter_var( $obj, FILTER_VALIDATE_BOOLEAN );
+					else
+						settype( $obj, $type );
+				}
+				//else
+					//if( $required ){ //Shall this be treated as a fatal error?
+					//	echo "Missing required property: $prop !";
+					//	die;
+					//}
+				
+				//Fill data
+				$this->values[ $prop ] = $obj;
+				$type = next( $this->type );
+			//	$required = next( $this->required );
+			}
+				//*/
+			return true;
 		}
 		
 		private static $read_prepares = array();
@@ -198,7 +248,16 @@
 			}
 			
 			//Read row, or return false on failure
-			return $stmt->execute( array( 'id' => $id ) ) ? $this->read_row( $stmt->fetch( PDO::FETCH_ASSOC ) ) : false;
+			//return $stmt->execute( array( 'id' => $id ) ) ? $this->read_row( $stmt->fetch( PDO::FETCH_ASSOC ) ) : false;
+			if( $stmt->execute( array( 'id' => $id ) ) ){
+				$row = $stmt->fetch( PDO::FETCH_ASSOC );
+				if( $row ){
+					array_walk( $this->type, array( $this, 'read_row_internal' ), $row );
+					return true;
+				}
+			}
+			
+			return false;
 		}
 		
 		//Save the contents in the database

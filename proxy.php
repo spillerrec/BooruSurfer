@@ -39,7 +39,7 @@
 			die( "Unknown image type!" );
 	}
 	$img = $post->get_image( $type );
-	$url = $img->real_url;
+	$url = $img['real_url'];
 	
 	//Fix caching
 	header( "Cache-Control: max-age=" . 60*60*24*365 );

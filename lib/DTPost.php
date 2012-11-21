@@ -234,11 +234,11 @@
 			$url = $this->proxy_url( $real_url, $prefix );
 			
 			//Create the full object
-			return (object)array(
+			return array(
 					'url'	=>	$url,
-					'width'	=>	$this->get( $prefix . 'width' ),
-					'height'	=>	$this->get( $prefix . 'height' ),
-					'filesize'	=>	$this->get( $prefix . 'filesize' ),
+					'width'	=>	$this->values[ $prefix . 'width' ],
+					'height'	=>	$this->values[ $prefix . 'height' ],
+					'filesize'	=>	$this->values[ $prefix . 'filesize' ],
 					'prefix'	=> $prefix,
 					'real_url'	=> $real_url
 				);

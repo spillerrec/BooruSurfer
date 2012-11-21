@@ -53,12 +53,8 @@
 			else{
 				//Create new one and add it
 				$temp = new DTTag( $prefix );
-				if( $temp->db_read( $id ) ){
-					DTTag::$cached_tags[ $id ] = $temp;
-					return $temp;
-				}
-				else
-					return NULL;
+				$temp->db_read( $id );
+				return (DTTag::$cached_tags[ $id ] = $temp);
 			}
 		}
 		
@@ -79,7 +75,7 @@
 		//Even if the read fails, we want to set the id
 		public function db_read( $id ){
 			if( !parent::db_read( $id ) ){
-				$this->set( 'id', $id );
+				$this->values['id'] = $id;
 				return false;
 			}
 			else
