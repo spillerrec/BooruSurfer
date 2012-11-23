@@ -18,6 +18,7 @@
 	require_once "plugins/sites/dan.php";
 	
 	abstract class SanApi extends DanApi{
+		public function supports_post_count(){ return 0; }
 		
 		public function index( $search=NULL, $page=1, $limit=NULL ){
 			//We need to overload this because we have to fetch
@@ -43,20 +44,15 @@
 			foreach( $data as $post_data )
 				$posts[] = $this->parse_post( $post_data );
 			
+			//TODO: fix
+			if( count( $posts ) > 20 )
+				$posts['more'] = true;
+			
 			//Return posts
 			return $posts;
 		}
 		
-		public function index_count( $search = NULL ){
-			//Fetch the index count from XML
-			$para = array();
-			$para['tags'] = $search;
-			
-			$url = $this->get_url( 'post', 'index', 'xml', $para );
-			$data = $this->get_xml( $url );
-			
-			return (int)$data['count'];
-		}
+		public function index_count( $search = NULL ){ return NULL; }
 		
 		protected function transform_date( &$date ){
 			//Stored as unix time in the 's' property

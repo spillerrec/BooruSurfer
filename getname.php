@@ -29,6 +29,8 @@
 	
 	
 	require 'lib/DTPost.php';
+	require 'lib/Index.php';
+	require 'lib/Booru.php';
 	
 	$hash = $_GET[ 'hash' ];
 	
@@ -46,8 +48,31 @@
 		$post = $san;
 	
 	if( $post === NULL ){
-		error( "Not in database :\\" );
 		
+		$site = new Booru( 'dan' );
+		$index = new Index( $site, "md5:$hash" );
+		$page = $index->get_page( 1 );
+		
+		if( $dan->db_hash( $hash ) )
+			$post = $dan;
+		else{
+			$site = new Booru( 'san' );
+			$index = new Index( $site, "md5:$hash" );
+			$page = $index->get_page( 1 );
+			
+			if( $san->db_hash( $hash ) )
+				$post = $san;
+			else{
+				$site = new Booru( 'gel' );
+				$index = new Index( $site, "md5:$hash" );
+				$page = $index->get_page( 1 );
+				
+				if( $gel->db_hash( $hash ) )
+					$post = $gel;
+				else
+					error( "Not in database :\\" );
+			}
+		}
 		//TODO: try to fetch it from API
 	}
 	
