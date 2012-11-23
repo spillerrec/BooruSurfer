@@ -176,25 +176,7 @@
 			return false;
 		}
 		
-		private function prepare_file_name( $url, $type ){
-			//create postfix for filename
-			$post = '.';
-			if( $type ){
-				$type = rtrim( $type, '_' ); //Avoid the '_'
-				$post .= $type . '.';
-			}
-			
-			//Fix the extension
-			$ext = pathinfo($url, PATHINFO_EXTENSION);
-			$ext = ($ext == 'jpeg') ? 'jpg' : $ext;
-			
-			$post .= $ext;
-			
-			//Create prefix
-			$pre = $this->prefix . ' ' . $this->id() . ' - ';
-			
-			//Get name and remove throublesome characters
-			$name = $this->name();
+		private function sanitise_filename( $name ){
 			//Windows illegal characters, from
 			//http://msdn.microsoft.com/en-us/library/windows/desktop/aa365247(v=vs.85).aspx#naming_conventions
 			$name = str_replace( '<', '', $name );
@@ -212,8 +194,15 @@
 			$name = str_replace( '}', '', $name );
 			$name = str_replace( '#', '', $name );
 			
-			//Create full url
-			return $pre . $name . $post;
+			return $name;
+		}
+		
+		private function prepare_base_name( $url ){
+			//Create prefix
+			$pre = $this->prefix . ' ' . $this->id() . ' - ';
+			
+			//Get name and remove throublesome characters
+			return $pre . $this->sanitise_filename( $this->name() );;
 		}
 		
 		private function proxy_url( $url, $type ){
@@ -221,11 +210,24 @@
 			if( $type == 'thumb_' )
 				return $url;
 			
-			//avoid empty type and '_'
-			$type = ($type == '') ? 'original' : rtrim( $type, '_' );
+			//create postfix for filename
+			$post = '.';
+			if( $type ){
+				$type = rtrim( $type, '_' ); //Avoid the '_'
+				$post .= $type . '.';
+			}
+			
+			//Fix the extension
+			$ext = pathinfo($url, PATHINFO_EXTENSION);
+			$ext = ($ext == 'jpeg') ? 'jpg' : $ext;
+			
+			$post .= $ext;
+			
+			//avoid empty type in url
+			$type = ($type == '') ? 'original' : $type;
 			
 			//Create full url
-			return "/$this->prefix/proxy/$type/" . $this->prepare_file_name( $url, $type );
+			return "/$this->prefix/proxy/$type/" . $this->prepare_base_name( $url ) . $post;
 		}
 		
 		//Get all infomation about an image, with a specific prefix
@@ -271,7 +273,7 @@
 		
 		//Get full file name
 		public function get_filename(){
-			return $this->prepare_file_name( $this->get( "url" ), "" );
+			return $this->prepare_base_name( $this->get( "url" ) );
 		}
 		
 		
