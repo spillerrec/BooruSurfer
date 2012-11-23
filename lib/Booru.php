@@ -69,6 +69,17 @@
 			}
 		}
 		
+		public function post_hash( $hash ){
+			//Not in database, fetch it from site
+			$data = $this->api->index( "md5:$hash" );
+			if( !isset( $data[0] ) )
+				return NULL;
+			
+			$post = new DTPost( $this->code, $data[0] );
+			$post->db_save();
+			return $post;
+		}
+		
 		public function notes( $post ){
 			if( !$post->has_notes() )
 				return array();

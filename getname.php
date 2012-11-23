@@ -48,32 +48,15 @@
 		$post = $san;
 	
 	if( $post === NULL ){
-		
+		//Start trying to check the sites
 		$site = new Booru( 'dan' );
-		$index = new Index( $site, "md5:$hash" );
-		$page = $index->get_page( 1 );
-		
-		if( $dan->db_hash( $hash ) )
-			$post = $dan;
-		else{
+		if( !( $post = $site->post_hash( $hash ) ) ){
 			$site = new Booru( 'san' );
-			$index = new Index( $site, "md5:$hash" );
-			$page = $index->get_page( 1 );
-			
-			if( $san->db_hash( $hash ) )
-				$post = $san;
-			else{
+			if( !( $post = $site->post_hash( $hash ) ) ){
 				$site = new Booru( 'gel' );
-				$index = new Index( $site, "md5:$hash" );
-				$page = $index->get_page( 1 );
-				
-				if( $gel->db_hash( $hash ) )
-					$post = $gel;
-				else
-					error( "Not in database :\\" );
+				$post = $site->post_hash( $hash );
 			}
 		}
-		//TODO: try to fetch it from API
 	}
 	
 	if( $post !== NULL ){
