@@ -60,7 +60,7 @@
 			else{
 				//Not in database, fetch it from site
 				$data = $this->api->post( $id );
-				if( !isset( $data['url'] ) )
+				if( !isset( $data['url'] ) && $this->code != 'san' ) //Quick workaround for sankaku
 					return NULL; //Post has been deleted : \
 				
 				$post = new DTPost( $this->code, $data );
