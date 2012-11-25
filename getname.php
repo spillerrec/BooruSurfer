@@ -32,34 +32,47 @@
 	require 'lib/Index.php';
 	require 'lib/Booru.php';
 	
-	$hash = $_GET[ 'hash' ];
-	
-	$dan = new DTPost( 'dan' );
-	$gel = new DTPost( 'gel' );
-	$san = new DTPost( 'san' );
-	
 	$post = NULL;
 	
-	if( $dan->db_hash( $hash ) )
-		$post = $dan;
-	else if( $gel->db_hash( $hash ) )
-		$post = $gel;
-	else if( $san->db_hash( $hash ) )
-		$post = $san;
-	
-	if( $post === NULL ){
-		//Start trying to check the sites
-		$site = new Booru( 'dan' );
-		if( !( $post = $site->post_hash( $hash ) ) ){
-			$site = new Booru( 'san' );
+	if( isset( $_GET[ 'hash' ] ) ){
+		//Try to get from hash
+		$hash = $_GET[ 'hash' ];
+		
+		$dan = new DTPost( 'dan' );
+		$gel = new DTPost( 'gel' );
+		$san = new DTPost( 'san' );
+		
+		//Check DB by hash
+		if( $dan->db_hash( $hash ) )
+			$post = $dan;
+		else if( $gel->db_hash( $hash ) )
+			$post = $gel;
+		else if( $san->db_hash( $hash ) )
+			$post = $san;
+		
+		if( $post === NULL ){
+			//If it was not found in the DB,
+			//start trying to check the sites
+			$site = new Booru( 'dan' );
 			if( !( $post = $site->post_hash( $hash ) ) ){
-				$site = new Booru( 'gel' );
-				$post = $site->post_hash( $hash );
+				$site = new Booru( 'san' );
+				if( !( $post = $site->post_hash( $hash ) ) ){
+					$site = new Booru( 'gel' );
+					$post = $site->post_hash( $hash );
+				}
 			}
 		}
 	}
+	else if( isset( $_GET[ 'site' ] ) && isset( $_GET[ 'id' ] ) ){
+		//Get by '$site' + '$id'
+		$site = new Booru( $_GET[ 'site' ] );
+		$post = $site->post( $_GET[ 'id' ] );
+	}
+	else
+		error( "Wrong or missing paramters surplied" );
 	
 	if( $post !== NULL ){
+		//Post found, create response
 		start_xml();
 		echo '<post>';
 			element( 'id', $post->get( 'id' ) );
@@ -71,5 +84,4 @@
 	}
 	else
 		error( "No post was found with a matching hash" );
-	
 ?>

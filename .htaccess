@@ -20,4 +20,5 @@ RewriteRule ^([a-zA-Z0-9]+)/favicon/post/             icon.php?site=$1&type=post
 RewriteRule ^([a-zA-Z0-9]+)/favicon/index/            icon.php?site=$1&type=index [L]
 
 
-RewriteRule ^tool/md5/([a-zA-Z0-9]+)/     getname.php?hash=$1 [L]
+RewriteRule ^tool/md5/([a-zA-Z0-9]+)/                 getname.php?hash=$1 [L]
+RewriteRule ^tool/filename/([a-zA-Z0-9]+)/([0-9]+)/   getname.php?site=$1&id=$2 [L]
