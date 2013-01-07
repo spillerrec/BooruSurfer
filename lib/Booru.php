@@ -128,6 +128,9 @@
 					$comments[] = $comment;
 				}
 				
+				//Sort comments by time
+				usort( $comments, 'DTCommentSort' );
+				
 				return $comments;
 			}
 		}

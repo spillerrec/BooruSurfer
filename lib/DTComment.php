@@ -45,8 +45,7 @@
 		//Fetch all comments with a specified post id
 		public function post( $id ){
 			$db = Database::get_instance()->db;
-			$result = $db->query( "SELECT * FROM $this->name WHERE post_id = " . (int)$id );
-			//TODO: sort
+			$result = $db->query( "SELECT * FROM $this->name WHERE post_id = " . (int)$id . " ORDER BY created_at" );
 			
 			//Fetch
 			$notes = array();
@@ -55,5 +54,12 @@
 			
 			return $notes;
 		}
+	}
+	
+	
+	function DTCommentSort( $a, $b ){
+		if(  $a->values['created_at'] ==  $b->values['created_at'] )
+			return 0 ;
+		return ( $a->values['created_at'] < $b->values['created_at'] ) ? -1 : 1;
 	}
 ?>
