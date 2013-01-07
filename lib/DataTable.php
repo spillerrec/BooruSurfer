@@ -22,6 +22,7 @@
 	*/
 	abstract class DataTable implements JsonSerializable{
 		protected $name; //Of the table
+		protected $table_created = false;
 		
 		public $values = array();
 		private $type = array();
@@ -54,8 +55,7 @@
 			//$this->read_row( $data );
 			
 			$db = Database::get_instance();
-			if( !$db->table_exists( $this->name ) )
-				$this->create_table();
+			$this->table_created = $db->table_exists( $this->name );
 		}
 		
 		abstract protected function create_data();
@@ -147,20 +147,28 @@
 			
 			$db->db->exec( $query );
 			$db->table_created( $this->name );
+			$this->table_created = true;
 		}
 		public function delete_table(){
-			$db = Database::get_instance()->db;
-			$db->exec( "DROP TABLE $this->name" );
+			if( !$this->table_created ){
+				$db = Database::get_instance	()->db;
+				$db->exec( "DROP TABLE $this->name" );
+			}
 		}
 		
 		public function delete_contents(){
-			$db = Database::get_instance()->db;
-			$db->exec( "DELETE FROM $this->name" );
+			if( !$this->table_created ){
+				$db = Database::get_instance()->db;
+				$db->exec( "DELETE FROM $this->name" );
+			}
 		}
 		
 		//Check if the data with the id '$id' is already stored
 		//TODO: return insertion time?
 		public function db_contains( $id ){
+			if( !$this->table_created )
+				return false;
+			
 			$db = Database::get_instance()->db;
 			$result = $db->query( "SELECT * FROM $this->name WHERE id = " . $db->quote( $id ) );
 			if( $result->fetch( PDO::FETCH_ASSOC ) ){
@@ -237,6 +245,9 @@
 		private static $read_prepares = array();
 		//Retrive the contents with the id = '$id'
 		public function db_read( $id ){
+			if( !$this->table_created )
+				return false;
+			
 			$stmt = NULL;
 			if( isset( DataTable::$read_prepares[ $this->name ] ) )
 				$stmt = DataTable::$read_prepares[ $this->name ];
@@ -262,6 +273,9 @@
 		
 		//Save the contents in the database
 		public function db_save( $overwrite = true ){
+			if( !$this->table_created )
+				$this->create_table();
+			
 			$con = Database::get_instance();
 			$db = $con->db;
 			

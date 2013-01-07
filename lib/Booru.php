@@ -87,9 +87,7 @@
 			//Check database
 			$db = new DTNote( $this->code );
 			$notes = $db->post( $post->id() );
-			if( $notes )
-				return $notes;
-			else{
+			if( !$notes ){
 				//Not in database, fetch it from site
 				$data = $this->api->notes( $post->id() );
 				
@@ -101,12 +99,11 @@
 					$notes[] = $note;
 				}
 				
-				return $notes;
 			}
+			
+			return $notes;
 		}
 		
-		//TODO: don't create a DTNote/DTComment if no API support
-		//in order to avoid creating an empty DB
 		public function comments( $post ){
 			if( !$post->has_comments() )
 				return array();
@@ -114,9 +111,7 @@
 			//Check database
 			$db = new DTComment( $this->code );
 			$comments = $db->post( $post->id() );
-			if( $comments )
-				return $comments;
-			else{
+			if( !$comments ){
 				//Not in database, fetch it from site
 				$data = $this->api->comments( $post->id() );
 				
@@ -131,8 +126,9 @@
 				//Sort comments by time
 				usort( $comments, 'DTCommentSort' );
 				
-				return $comments;
 			}
+			
+			return $comments;
 		}
 		
 		

@@ -53,6 +53,9 @@
 		
 		//Fetch all notes with a specified post id
 		public function post( $id ){
+			if( !$this->table_created  )
+				return array();
+			
 			$db = Database::get_instance()->db;
 			$result = $db->query( "SELECT * FROM $this->name WHERE post_id = " . (int)$id );
 			

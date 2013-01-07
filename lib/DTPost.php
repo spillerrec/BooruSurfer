@@ -300,6 +300,9 @@
 		}
 		
 		public function db_hash( $hash ){
+			if( !$this->table_created  )
+				return NULL;
+			
 			$db = Database::get_instance()->db;
 			$result = $db->query( "SELECT * FROM $this->name WHERE hash = " . $db->quote( $hash ) );
 			return $this->read_row( $result->fetch( PDO::FETCH_ASSOC ) );

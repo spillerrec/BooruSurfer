@@ -83,6 +83,9 @@
 		}
 		
 		public function most_used(){
+			if( !$this->table_created  )
+				return array();
+			
 			$db = Database::get_instance()->db;
 			$result = $db->query( "SELECT * FROM $this->name ORDER BY count DESC LIMIT 30" );
 			
@@ -95,6 +98,9 @@
 		}
 		
 		public function similar_tags( $search ){
+			if( !$this->table_created  )
+				return array();
+			
 			$db = Database::get_instance()->db;
 			$result = $db->query( "SELECT * FROM $this->name WHERE id LIKE " . $db->quote('%'.$search.'%') . " ORDER BY count DESC LIMIT 10" );
 			
