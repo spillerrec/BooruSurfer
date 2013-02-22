@@ -260,7 +260,7 @@
 				//We have no way of telling how many pages there are
 				$pre_count = $this->get_count();
 				$count = $page * $limit + 1;
-				if( !( $pre_count && $pre_count < $count ) ){
+				if( !( $pre_count && $pre_count > $count ) ){
 					$this->change_field( 'count', (int)$count );
 					$updated = true;
 				}
