@@ -220,7 +220,8 @@
 				$posts[] = $this->parse_post( $post_data );
 			
 			//Get amount of posts total
-			$posts['count'] = (string)$data['count'];
+			if( $data['count'] )
+				$posts['count'] = (string)$data['count'];
 			
 			//Return posts
 			return $posts;
@@ -340,7 +341,7 @@
 	class DanbooruApi extends DanApi{
 		public function __construct(){
 			$this->url = "http://danbooru.donmai.us/";
-			$this->always_login = true;
+			$this->always_login = false;
 		}
 		
 		protected function get_post_mapping(){ return DanbooruApi::$post_mapping; }
@@ -387,5 +388,8 @@
 		
 		public function get_front_color(){ return 0xa4815e; }
 		public function get_back_color(){ return 0xFFFFFFFF; }
+		
+		public function supports_post_count(){ return 0; }
+		public function supports_related_tags(){ return false; }
 	}
 ?>

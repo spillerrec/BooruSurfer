@@ -250,11 +250,20 @@
 				$updated = true;
 				$this->set_count( $data['count'] );
 			}
-			if( isset( $data['more'] ) ){
+			else if( isset( $data['more'] ) ){
 				$updated = true;
 				$count = ($page + 1) * abs( $this->api->supports_post_limit() );
 				if( $this->index['count'] < $count )
 					$this->change_field( 'count', (int)$count );
+			}
+			else{
+				//We have no way of telling how many pages there are
+				$pre_count = $this->get_count();
+				$count = $page * $limit + 1;
+				if( !( $pre_count && $pre_count < $count ) ){
+					$this->change_field( 'count', (int)$count );
+					$updated = true;
+				}
 			}
 			
 			//Calculate initial offset
@@ -288,7 +297,7 @@
 				$this->change_field( 'count', (int)($offset+$pos) );
 			
 			//Set new update time, if count was refreshed
-			if( isset( $data['count'] ) )
+			if( $updated )
 				$this->refresh_next_update();
 			
 			$db->commit();
