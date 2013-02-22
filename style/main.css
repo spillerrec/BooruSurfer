@@ -17,6 +17,7 @@ body {
 	float: left;
 	width: 200px;          /* LC width */
 	right: 208px;          /* LC width */
+	margin-right: -208px; /* seems to fix issue with this box affecting .comments*/
 	margin-left: -100%;
 }
 footer { clear: both; }
@@ -30,8 +31,9 @@ footer { clear: both; }
 	#container div.comments{
 		position: relative;
 		float: left;
-		width: 300px;          /* LC width */
+		width: 292px;          /* LC width */
 		margin-right: -300px;
+		margin-left: 8px;
 	}
 }
 /********** HOLY GRAIL END **********/
