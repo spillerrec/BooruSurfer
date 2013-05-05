@@ -1,7 +1,9 @@
 RewriteEngine on
 
-RewriteCond   %{QUERY_STRING}    ^tags=(.*)$
-RewriteRule ^([a-zA-Z0-9]+)/$    /$1/index/%1? [R]
+# remove "www" from urls
+# http://stackoverflow.com/questions/6515081/htaccess-remove-www-from-url-directories
+RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+RewriteRule ^(.*)$ http://%1%{REQUEST_URI} [R=301,QSA,NC,L]
 
 RewriteRule ^manage/                        manage.php [L]
 RewriteRule ^([a-zA-Z0-9]+)/manage/set/     manage.php?site=$1&set=1 [L]
