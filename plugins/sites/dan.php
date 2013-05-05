@@ -341,7 +341,7 @@
 	class DanbooruApi extends DanApi{
 		public function __construct(){
 			$this->url = "http://danbooru.donmai.us/";
-			$this->always_login = false;
+			$this->always_login = true;
 		}
 		
 		protected function get_post_mapping(){ return DanbooruApi::$post_mapping; }
