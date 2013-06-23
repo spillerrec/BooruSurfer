@@ -55,11 +55,11 @@
 			//start trying to check the sites
 			$site = new Booru( 'dan' );
 			if( !( $post = $site->post_hash( $hash ) ) ){
-				$site = new Booru( 'san' );
-				if( !( $post = $site->post_hash( $hash ) ) ){
+			//	$site = new Booru( 'san' );
+			//	if( !( $post = $site->post_hash( $hash ) ) ){
 					$site = new Booru( 'gel' );
 					$post = $site->post_hash( $hash );
-				}
+			//	}
 			}
 		}
 	}
@@ -67,6 +67,10 @@
 		//Get by '$site' + '$id'
 		$site = new Booru( $_GET[ 'site' ] );
 		$post = $site->post( $_GET[ 'id' ] );
+		if( $post->get( 'id' ) != $_GET[ 'id' ] ){
+			$post = NULL;
+			error( "Couldn't get post with this ID :\\" );
+		}
 	}
 	else
 		error( "Wrong or missing paramters surplied" );
