@@ -63,6 +63,9 @@
 		return strlen( $header );
 	}	);
 	
+	//Enable redirection-following
+	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+	
 	curl_exec( $ch );
 	
 	curl_close( $ch );
